@@ -28,7 +28,11 @@ buildkonfig {
     exposeObjectWithName = "KmmNetwork"
 
     defaultConfigs {
-
+        buildConfigField(
+            com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            "Foo",
+            "Bar"
+        )
     }
 }
 ```

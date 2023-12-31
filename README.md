@@ -54,6 +54,31 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 ```
+
+build.gradle
+```kotlin
+
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            api(libs.ktor.client.okhttp)
+            api(libs.kotlinx.coroutines.android)
+        }
+        commonMain.dependencies {
+            api(libs.ktor.client.core)
+            api(libs.kotlinx.coroutines.core)
+            api(libs.ktor.client.logging)
+        }
+        iosMain.dependencies {
+            api(libs.ktor.client.darwin)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+    }
+}
+```
+
 androidMain
 ```kotlin
 actual fun getClient(

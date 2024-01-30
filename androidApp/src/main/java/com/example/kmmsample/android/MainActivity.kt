@@ -3,38 +3,56 @@ package com.example.kmmsample.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.kmmsample.Greeting
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.abhijith.foundation.activity.ProvideActivity
+import com.example.auth.setupAuthNavigation
+import com.example.forum.setUpForumNavigation
+class Test:Fragment(){
 
-class MainActivity : ComponentActivity() {
+}
+class TMainAc: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MyApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    GreetingView(Greeting().greet())
-                }
-            }
-        }
+        supportFragmentManager.beginTransaction().apply {
+            replace(0, Fragment().apply {
+                this.arguments = bundleOf(
+                    "screenArgs" to ""
+                )
+            })
+        }.commitNow()
     }
 }
 
-@Composable
-fun GreetingView(text: String) {
-    Text(text = text)
-}
+class MainActivity : ComponentActivity() {
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        GreetingView("Hello, Android!")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            ProvideActivity {
+                MyApplicationTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        val navController = rememberNavController()
+                        NavHost(
+                            navController = navController,
+                            startDestination = "/forum"
+                        ) {
+                            setupAuthNavigation(navController)
+                            setUpForumNavigation(navController)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

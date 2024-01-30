@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    kotlin("kapt")
 }
 
 android {
@@ -39,10 +40,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.shared)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.material3)
-    implementation(libs.androidx.activity.compose)
-    debugImplementation(libs.compose.ui.tooling)
+    implementation(project(":shared:foundation"))
+    implementation(project(":androidApp:auth"))
+    implementation(project(":androidApp:forum"))
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
 }

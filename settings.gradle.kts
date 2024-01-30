@@ -16,4 +16,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "KMMSample"
 include(":androidApp")
-include(":shared")
+include(":shared:auth")
+include(":shared:foundation")
+include(":shared:fourm")
+include(":androidApp:auth")
+include(":androidApp:forum")

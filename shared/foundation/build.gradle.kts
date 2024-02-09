@@ -27,6 +27,7 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.koin.android)
             api(libs.ktor.client.okhttp)
             api(libs.kotlinx.coroutines.android)
             api(libs.core.ktx)
@@ -39,6 +40,7 @@ kotlin {
             val nav_version = "2.7.6"
             api("androidx.navigation:navigation-compose:$nav_version")
             api("io.coil-kt:coil-compose:2.5.0")
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             api(libs.ktor.client.core)
@@ -48,6 +50,8 @@ kotlin {
             api(libs.arrow.fx.corutine)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.ktor.client.content.negotiation)
+            //koin di
+            implementation(libs.koin.core)
         }
         iosMain.dependencies {
             api(libs.ktor.client.darwin)

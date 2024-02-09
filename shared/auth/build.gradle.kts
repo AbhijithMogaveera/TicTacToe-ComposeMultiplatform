@@ -25,8 +25,13 @@ kotlin {
     }
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.koin.android)
+        }
         commonMain.dependencies {
             implementation(project(":shared:foundation"))
+            //koin di
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

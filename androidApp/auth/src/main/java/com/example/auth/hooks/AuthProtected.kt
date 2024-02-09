@@ -3,32 +3,38 @@ package com.example.auth.hooks
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.abhijith.foundation.activity.LocalActivity
+import androidx.compose.runtime.collectAsState
+import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
+import com.abhijith.auth.viewmodel.ViewModelAuth
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AuthProtected(
+    vm: ViewModelAuth = koinViewModel(),
     ifNotLogin:()->Unit = {},
     protected: Boolean = true,
     loading: @Composable () -> Unit = { CircularProgressIndicator() },
-    content: @Composable () -> Unit = {},
+    content: @Composable () -> Unit = {}
 ) {
     if (protected) {
-        val activity = LocalActivity.current
         LaunchedEffect(key1 = Unit, block = {
-           /* vm.shared.getLoginState().collectLatest { state ->
+            vm.getLoginState().collectLatest { state ->
                 when (state) {
-                    is AccountDetailsUseCase.Response.LoggedInUser -> {}
-                    AccountDetailsUseCase.Response.NoLogin -> ifNotLogin()
+                    is UseCaseAccountActivityMonitor.Response.LoggedInUser -> {
+
+                    }
+                    UseCaseAccountActivityMonitor.Response.NoLogin -> {
+                        ifNotLogin()
+                    }
                 }
-            }*/
-        })
-       /* when (vm.shared.getLoginState().collectAsState(initial = null).value) {
-            null -> {
-                loading()
             }
-            is AccountDetailsUseCase.Response.LoggedInUser -> content()
-            AccountDetailsUseCase.Response.NoLogin -> {}
-        }*/
+        })
+        when (vm.getLoginState().collectAsState(initial = null).value) {
+            is UseCaseAccountActivityMonitor.Response.LoggedInUser -> {content()}
+            null -> {loading()}
+            UseCaseAccountActivityMonitor.Response.NoLogin -> {}
+        }
     } else content()
 }
 

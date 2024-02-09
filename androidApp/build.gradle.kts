@@ -44,4 +44,6 @@ dependencies {
     implementation(project(":androidApp:auth"))
     implementation(project(":androidApp:forum"))
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
 }

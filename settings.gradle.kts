@@ -4,6 +4,7 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+        maven(url = "https://dl.bintray.com/ekito/koin")
     }
 }
 
@@ -11,6 +12,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://dl.bintray.com/ekito/koin")
     }
 }
 

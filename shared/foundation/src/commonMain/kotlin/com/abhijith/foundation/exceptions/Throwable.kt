@@ -17,13 +17,19 @@ class RequestFailure(
             action(exception)
     }
 
-    inline fun isIOEException(action: (IOException) -> Unit): RequestFailure = apply {
+    inline fun isIOEException(action: (IOException) -> Unit) = apply {
         if (exception is IOException)
             exception.apply(action)
     }
 
-    inline fun onException(action: Throwable.() -> Unit): RequestFailure = apply {
-        exception.apply(action)
+    inline fun isUnKnownError(action: Throwable.() -> Unit) = apply {
+        if (
+            exception !is ServerSideError
+            && exception !is ClientSideError
+            && exception !is IOException
+        ) {
+            exception.apply(action)
+        }
     }
 
 

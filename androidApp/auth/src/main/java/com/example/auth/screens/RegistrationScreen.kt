@@ -1,5 +1,6 @@
 package com.example.auth.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,31 +17,49 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-
-@OptIn(ExperimentalMaterial3Api::class)
+import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
+import com.abhijith.auth.viewmodel.ViewModelAuth
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RegistrationScreen(
     onLoginBtnClick: () -> Unit = {},
-    onRegistrationSuccessFul: () -> Unit
+    onRegistrationSuccessFul: () -> Unit,
+    viewModelAuth: ViewModelAuth = koinViewModel()
 ) {
     Scaffold(
         topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = "Registration"
-                    )
-                }
-            )
+            RegistrationTopAppBar()
         }
     ) {
+        LaunchedEffect(key1 = Unit, block = {
+            viewModelAuth.getLoginState().collect {
+                when (it) {
+                    is UseCaseAccountActivityMonitor.Response.LoggedInUser -> {
+                        onRegistrationSuccessFul()
+                    }
+
+                    UseCaseAccountActivityMonitor.Response.NoLogin -> {
+                    }
+                }
+            }
+        })
+        var userName: String by remember {
+            mutableStateOf("")
+        }
+        var password: String by remember {
+            mutableStateOf("")
+        }
         Box(
             Modifier
                 .padding(it)
@@ -51,9 +70,11 @@ fun RegistrationScreen(
             ) {
                 Spacer(modifier = Modifier.height(50.dp))
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = {
-
+                    value = userName,
+                    onValueChange = remember {
+                        { value ->
+                            userName = value
+                        }
                     },
                     placeholder = {
                         Text(text = "User name")
@@ -62,8 +83,11 @@ fun RegistrationScreen(
                     shape = CircleShape
                 )
                 OutlinedTextField(
-                    value = "",
-                    onValueChange = {
+                    value = password,
+                    onValueChange = remember {
+                        { value ->
+                            password = value
+                        }
                     },
                     placeholder = {
                         Text(text = "Password")
@@ -78,8 +102,10 @@ fun RegistrationScreen(
                     Text(text = "Already have an account?")
                 }
                 Button(
-                    onClick = {
-
+                    onClick = remember {
+                        {
+                            viewModelAuth.register(userName, password)
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -89,4 +115,16 @@ fun RegistrationScreen(
             }
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun RegistrationTopAppBar() {
+    LargeTopAppBar(
+        title = {
+            Text(
+                text = "Registration"
+            )
+        }
+    )
 }

@@ -13,7 +13,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
 class AuthApisDefaultImpl constructor(
-    httpClient: HttpClient
+    val httpClient: HttpClient
 ) : AuthApis {
 
     override suspend fun login(

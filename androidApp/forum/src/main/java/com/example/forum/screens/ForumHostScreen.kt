@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,13 +26,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.auth.hooks.AuthProtected
+import com.abhijith.auth.viewmodel.ViewModelAuth
 import com.example.forum.components.Post
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun ForumHostScreen(
-    onPostCreationCLick: () -> Unit = {}
+    onPostCreationCLick: () -> Unit = {},
+    viewModelAuth: com.abhijith.auth.viewmodel.ViewModelAuth = koinViewModel(),
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         rememberTopAppBarState()
@@ -48,6 +52,11 @@ fun ForumHostScreen(
                             imageVector = Icons.Filled.Create,
                             contentDescription = "Create new post"
                         )
+                    }
+                    IconButton(onClick = {
+                        viewModelAuth.logout()
+                    }) {
+                        Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = "Logout")
                     }
                 },
                 scrollBehavior = scrollBehavior

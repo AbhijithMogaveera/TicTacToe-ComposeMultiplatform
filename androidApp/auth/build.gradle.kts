@@ -42,10 +42,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared:auth"))
+    api(project(":shared:auth"))
     implementation(project(":shared:foundation"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation (libs.koin.compose.android)
 }

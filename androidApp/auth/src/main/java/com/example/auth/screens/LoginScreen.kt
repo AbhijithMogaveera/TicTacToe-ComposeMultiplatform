@@ -26,31 +26,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.abhijith.foundation.activity.LocalActivity
-import com.abhijith.auth.viewmodel.SharedAuthViewModel
-import com.abhijith.auth.viewmodel.usecases.AccountDetailsUseCase
-import com.example.auth.viewmodel.AuthViewModel
+import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
+import com.abhijith.auth.viewmodel.ViewModelAuth
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onRegistrationBtnClicked: () -> Unit = {},
-    onLoginSuccessful: () -> Unit
+    onLoginSuccessful: () -> Unit,
+    viewModel: ViewModelAuth = koinViewModel()
 ) {
     val activity = LocalActivity.current
-//    val viewModel = hiltViewModel<AuthViewModel>()
     LaunchedEffect(key1 = Unit, block = {
-       /* viewModel.shared.toastChannel.consumeEach {
+        viewModel.toastChannel.consumeEach {
             Toast.makeText(activity, it ?: let { "Unknown: he he " }, Toast.LENGTH_SHORT).show()
-        }*/
+        }
     })
     LaunchedEffect(key1 = Unit, block = {
-        /*viewModel.shared.getLoginState().collectLatest {
-            if (it is AccountDetailsUseCase.Response.LoggedInUser) {
+        viewModel.getLoginState().collectLatest {
+            if (it is UseCaseAccountActivityMonitor.Response.LoggedInUser) {
                 onLoginSuccessful()
             }
-        }*/
+        }
     })
     var userName by rememberSaveable {
         mutableStateOf("")
@@ -109,10 +109,10 @@ fun LoginScreen(
                 }
                 Button(
                     onClick = {
-                      /*  viewModel.shared.login(
-                            userName = userName,
-                            password = password
-                        )*/
+                          viewModel.login(
+                              userName = userName,
+                              password = password
+                          )
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {

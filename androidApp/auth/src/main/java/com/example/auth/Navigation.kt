@@ -32,6 +32,7 @@ fun NavGraphBuilder.setupAuthNavigation(mainNavController: NavController) {
                             authNavyController.navigateUp()
                         },
                         onRegistrationSuccessFul = {
+                            println("hehe we are here buddyy")
                             mainNavController.navigateUp()
                         }
                     )

@@ -15,21 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.abhijith.foundation.activity.ProvideActivity
 import com.example.auth.setupAuthNavigation
 import com.example.forum.setUpForumNavigation
-class Test:Fragment(){
-
-}
-class TMainAc: AppCompatActivity(){
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction().apply {
-            replace(0, Fragment().apply {
-                this.arguments = bundleOf(
-                    "screenArgs" to ""
-                )
-            })
-        }.commitNow()
-    }
-}
 
 class MainActivity : ComponentActivity() {
 

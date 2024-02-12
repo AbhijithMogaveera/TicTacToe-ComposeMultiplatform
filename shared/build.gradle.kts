@@ -4,6 +4,9 @@ plugins {
 }
 
 kotlin {
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -20,12 +23,18 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
+            transitiveExport = true
+            export(project(":shared:auth"))
+            export(project(":shared:foundation"))
+            export(project(":shared:fourm"))
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            //put your multiplatform dependencies here
+            api(project(":shared:auth"))
+            api(project(":shared:foundation"))
+            api(project(":shared:fourm"))
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

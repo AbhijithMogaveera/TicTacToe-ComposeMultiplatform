@@ -1,4 +1,4 @@
-package com.example.auth
+package com.example.shared
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

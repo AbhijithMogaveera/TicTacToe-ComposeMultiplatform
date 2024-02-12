@@ -1,6 +1,5 @@
-package com.example.auth.screens
+package com.example.shared.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,58 +19,47 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.abhijith.foundation.activity.LocalActivity
 import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
 import com.abhijith.auth.viewmodel.ViewModelAuth
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
-    onRegistrationBtnClicked: () -> Unit = {},
-    onLoginSuccessful: () -> Unit,
-    viewModel: ViewModelAuth = koinViewModel()
+fun RegistrationScreen(
+    onLoginBtnClick: () -> Unit = {},
+    onRegistrationSuccessFul: () -> Unit,
+    viewModelAuth: ViewModelAuth = koinViewModel()
 ) {
-    val activity = LocalActivity.current
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel.toastChannel.consumeEach {
-            Toast.makeText(activity, it ?: let { "Unknown: he he " }, Toast.LENGTH_SHORT).show()
-        }
-    })
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel.getLoginState().collectLatest {
-            if (it is UseCaseAccountActivityMonitor.Response.LoggedInUser) {
-                onLoginSuccessful()
-            }
-        }
-    })
-    var userName by rememberSaveable {
-        mutableStateOf("")
-    }
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
     Scaffold(
         topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = "Login"
-                    )
-                }
-            )
+            RegistrationTopAppBar()
         }
-    ) {
+    ) { paddingValues ->
+        LaunchedEffect(key1 = Unit, block = {
+            viewModelAuth.getLoginState().collect { response ->
+                when (response) {
+                    is UseCaseAccountActivityMonitor.Response.LoggedInUser -> {
+                        onRegistrationSuccessFul()
+                    }
+
+                    UseCaseAccountActivityMonitor.Response.NoLogin -> {
+                    }
+                }
+            }
+        })
+        var userName: String by remember {
+            mutableStateOf("")
+        }
+        var password: String by remember {
+            mutableStateOf("")
+        }
         Box(
             Modifier
-                .padding(it)
+                .padding(paddingValues)
         ) {
             Column(
                 modifier = Modifier.padding(10.dp),
@@ -80,8 +68,10 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(50.dp))
                 OutlinedTextField(
                     value = userName,
-                    onValueChange = {
-                        userName = it
+                    onValueChange = remember {
+                        { value ->
+                            userName = value
+                        }
                     },
                     placeholder = {
                         Text(text = "User name")
@@ -89,11 +79,12 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = CircleShape
                 )
-
                 OutlinedTextField(
                     value = password,
-                    onValueChange = {
-                        password = it
+                    onValueChange = remember {
+                        { value ->
+                            password = value
+                        }
                     },
                     placeholder = {
                         Text(text = "Password")
@@ -102,24 +93,35 @@ fun LoginScreen(
                     shape = CircleShape
                 )
                 TextButton(
-                    onClick = onRegistrationBtnClicked,
+                    onClick = onLoginBtnClick,
                     modifier = Modifier.align(Alignment.End)
                 ) {
-                    Text(text = "New to here..?")
+                    Text(text = "Already have an account?")
                 }
                 Button(
-                    onClick = {
-                          viewModel.login(
-                              userName = userName,
-                              password = password
-                          )
+                    onClick = remember {
+                        {
+                            viewModelAuth.register(userName, password)
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Login")
+                    Text(text = "Register & login")
                 }
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun RegistrationTopAppBar() {
+    LargeTopAppBar(
+        title = {
+            Text(
+                text = "Registration"
+            )
+        }
+    )
 }

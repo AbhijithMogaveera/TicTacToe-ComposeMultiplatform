@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,10 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.auth.hooks.AuthProtected
-import com.abhijith.auth.viewmodel.ViewModelAuth
 import com.example.forum.components.Post
 import org.koin.androidx.compose.koinViewModel
 

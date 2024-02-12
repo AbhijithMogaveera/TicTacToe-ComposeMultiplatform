@@ -1,4 +1,4 @@
-package com.example.auth
+package com.example.shared
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,8 +8,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.auth.screens.LoginScreen
-import com.example.auth.screens.RegistrationScreen
+import com.example.shared.screens.LoginScreen
+import com.example.shared.screens.RegistrationScreen
 
 fun NavGraphBuilder.setupAuthNavigation(mainNavController: NavController) {
     composable("/auth") {

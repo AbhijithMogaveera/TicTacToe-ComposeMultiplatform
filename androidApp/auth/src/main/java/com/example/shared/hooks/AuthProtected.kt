@@ -1,4 +1,4 @@
-package com.example.auth.hooks
+package com.example.shared.hooks
 
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable

@@ -10,6 +10,7 @@ import SwiftUI
 import shared
 
 struct LoginScreen: View {
+    let vm : IosViewModelAuth = IosViewModelAuth()
     let greet = Greeting().greet()
     @State private var email: String = ""
     @State private var password: String = ""
@@ -18,7 +19,13 @@ struct LoginScreen: View {
             TextField("Email", text: $email)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            
+            Button(action:{
+                if(true){
+                    print(vm.specialMessage)
+                }
+            }){
+                Text("click me")
+            }
             SecureField("Password", text: $password)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())

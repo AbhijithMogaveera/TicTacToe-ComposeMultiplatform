@@ -5,13 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
-import com.abhijith.auth.viewmodel.ViewModelAuth
+import com.abhijith.auth.viewmodel.AndroidViewModelAuth
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AuthProtected(
-    vm: ViewModelAuth = koinViewModel(),
+    vm: AndroidViewModelAuth = koinViewModel(),
     ifNotLogin:()->Unit = {},
     protected: Boolean = true,
     loading: @Composable () -> Unit = { CircularProgressIndicator() },

@@ -25,14 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
-import com.abhijith.auth.viewmodel.ViewModelAuth
+import com.abhijith.auth.viewmodel.AndroidViewModelAuth
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RegistrationScreen(
     onLoginBtnClick: () -> Unit = {},
     onRegistrationSuccessFul: () -> Unit,
-    viewModelAuth: ViewModelAuth = koinViewModel()
+    androidViewModelAuth: AndroidViewModelAuth = koinViewModel()
 ) {
     Scaffold(
         topBar = {
@@ -40,7 +40,7 @@ fun RegistrationScreen(
         }
     ) { paddingValues ->
         LaunchedEffect(key1 = Unit, block = {
-            viewModelAuth.getLoginState().collect { response ->
+            androidViewModelAuth.getLoginState().collect { response ->
                 when (response) {
                     is UseCaseAccountActivityMonitor.Response.LoggedInUser -> {
                         onRegistrationSuccessFul()
@@ -101,7 +101,7 @@ fun RegistrationScreen(
                 Button(
                     onClick = remember {
                         {
-                            viewModelAuth.register(userName, password)
+                            androidViewModelAuth.register(userName, password)
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

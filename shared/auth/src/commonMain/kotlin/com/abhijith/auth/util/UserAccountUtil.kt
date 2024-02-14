@@ -20,7 +20,7 @@ sealed class UserDetails {
     class Found(val user: User) : UserDetails()
 }
 
-class UserAccountUtil(
+class UserAccountUtil constructor(
     private val preference: KmmPreference,
     private val authApis: AuthApis,
     private val appScope:CoroutineScope

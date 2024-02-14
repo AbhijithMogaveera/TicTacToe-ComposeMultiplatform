@@ -1,4 +1,4 @@
-package com.abhijith.foundation.module_config
+package com.abhijith.foundation.koin
 
 import org.koin.core.KoinApplication
 import org.koin.core.module.Module

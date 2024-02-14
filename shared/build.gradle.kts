@@ -35,9 +35,15 @@ kotlin {
             api(project(":shared:auth"))
             api(project(":shared:foundation"))
             api(project(":shared:fourm"))
+            api(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        iosMain.dependencies {
+            api(project(":shared:auth"))
+            api(project(":shared:foundation"))
+            api(project(":shared:fourm"))
         }
     }
 }

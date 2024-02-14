@@ -6,7 +6,8 @@ import com.abhijith.auth.di.UtilityProvider
 import com.abhijith.foundation.module_config.ModuleConfig
 import org.koin.core.KoinApplication
 
-object SharedAuthModuleConfigCommon:ModuleConfig {
+abstract class SharedAuthModuleConfig:ModuleConfig {
+
     override fun configKoinModules(koinApplication: KoinApplication) {
         koinApplication.modules(
             UseCaseProvider,

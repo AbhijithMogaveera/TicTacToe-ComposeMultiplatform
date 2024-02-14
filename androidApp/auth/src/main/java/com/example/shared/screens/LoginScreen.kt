@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.abhijith.foundation.activity.LocalActivity
 import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
-import com.abhijith.auth.viewmodel.ViewModelAuth
+import com.abhijith.auth.viewmodel.AndroidViewModelAuth
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -37,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LoginScreen(
     onRegistrationBtnClicked: () -> Unit = {},
     onLoginSuccessful: () -> Unit,
-    viewModel: ViewModelAuth = koinViewModel()
+    viewModel: AndroidViewModelAuth = koinViewModel()
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(key1 = Unit, block = {

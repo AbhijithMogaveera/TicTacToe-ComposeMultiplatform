@@ -30,7 +30,7 @@ import org.koin.androidx.compose.koinViewModel
 @Preview
 fun ForumHostScreen(
     onPostCreationCLick: () -> Unit = {},
-    viewModelAuth: com.abhijith.auth.viewmodel.ViewModelAuth = koinViewModel(),
+    androidViewModelAuth: com.abhijith.auth.viewmodel.AndroidViewModelAuth = koinViewModel(),
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         rememberTopAppBarState()
@@ -49,7 +49,7 @@ fun ForumHostScreen(
                         )
                     }
                     IconButton(onClick = {
-                        viewModelAuth.logout()
+                        androidViewModelAuth.logout()
                     }) {
                         Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = "Logout")
                     }

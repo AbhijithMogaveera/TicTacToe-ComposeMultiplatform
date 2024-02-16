@@ -1,5 +1,5 @@
-import SwiftUI
 import shared
+import SwiftUI
 
 struct RegistrationScreen: View {
     let greet = Greeting().greet()
@@ -22,7 +22,7 @@ struct RegistrationScreen: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView{
+        NavigationView {
             RegistrationScreen()
         }
     }

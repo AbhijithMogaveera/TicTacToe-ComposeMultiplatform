@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":shared:foundation"))
     implementation(project(":androidApp:auth"))
     implementation(project(":androidApp:forum"))
+    implementation(project(":shared:tic_tac_toe"))
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
     implementation(libs.koin.core)
     implementation(libs.koin.android)

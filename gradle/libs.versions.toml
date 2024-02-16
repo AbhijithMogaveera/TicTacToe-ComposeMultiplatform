@@ -19,6 +19,7 @@ appcompat = "1.6.1"
 material = "1.11.0"
 uiTooling = "1.5.4"
 koin-bom = "3.5.3"
+compose-plugin = "1.6.0-rc01"
 
 #<!----------------------------librARIES--------------------------->
 [libraries]
@@ -68,3 +69,4 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 buildkonfig = {id = "com.codingfeline.buildkonfig"}
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }

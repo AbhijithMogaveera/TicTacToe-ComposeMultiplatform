@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.ComposeCompilerKotlinSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
@@ -10,9 +11,6 @@ plugins {
 }
 
 kotlin {
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -27,36 +25,38 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
+            baseName = "tic_tac_toe"
             isStatic = true
-            export(projects.shared.auth)
-            export(projects.shared.foundation)
-            export(projects.shared.fourm)
-            export(projects.shared.ticTacToe)
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            api(projects.shared.auth)
-            api(projects.shared.foundation)
-            api(projects.shared.fourm)
-            api(projects.shared.ticTacToe)
-            api(libs.koin.core)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material)
+            implementation(compose.ui)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+
+        iosMain.dependencies {
+            implementation(compose.foundation)
         }
     }
 }
 
 android {
-    namespace = "com.example.shared"
+    namespace = "com.abhijith.tic_tac_toe"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
     }
 }
+
 plugins.removeAll { it is ComposeCompilerKotlinSupportPlugin }
 class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompilerKotlinSupportPlugin() {
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {

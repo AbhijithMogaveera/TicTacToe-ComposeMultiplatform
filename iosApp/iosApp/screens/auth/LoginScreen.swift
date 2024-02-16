@@ -21,7 +21,6 @@ struct LoginScreen: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             Button(action:{
                 if(true){
-                    print(vm.specialMessage)
                 }
             }){
                 Text("click me")
@@ -56,8 +55,6 @@ struct LoginScreen: View {
                 }
             }
         }
-        
-        
     }
 }
 

@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import com.abhijith.foundation.activity.LocalActivity
 import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
 import com.abhijith.auth.viewmodel.AndroidViewModelAuth
@@ -39,11 +40,12 @@ fun LoginScreen(
     onLoginSuccessful: () -> Unit,
     viewModel: AndroidViewModelAuth = koinViewModel()
 ) {
+    "".toColorInt()
     val activity = LocalActivity.current
     LaunchedEffect(key1 = Unit, block = {
-        viewModel.toastChannel.consumeEach {
-            Toast.makeText(activity, it ?: let { "Unknown: he he " }, Toast.LENGTH_SHORT).show()
-        }
+//        viewModel.toastChannel.consumeEach {
+//            Toast.makeText(activity, it ?: let { "Unknown: he he " }, Toast.LENGTH_SHORT).show()
+//        }
     })
     LaunchedEffect(key1 = Unit, block = {
         viewModel.getLoginState().collectLatest {
@@ -122,4 +124,16 @@ fun LoginScreen(
             }
         }
     }
+}
+
+fun<T> Iterable<T>.printEach(){
+    val iterator = iterator()
+    while (iterator.hasNext()){
+        println(iterator)
+        iterator.next()
+    }
+}
+
+fun main(){
+    println(mapOf("" to ""))
 }

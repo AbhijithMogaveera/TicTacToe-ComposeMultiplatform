@@ -1,4 +1,4 @@
-package com.abhijith.foundation.exceptions
+package com.abhijith.foundation.ktor.exceptions
 
 import com.abhijith.foundation.ktor.ClientSideError
 import com.abhijith.foundation.ktor.ServerSideError

@@ -10,6 +10,7 @@ class UseCaseRegistrationDefaultImpl(
     companion object {
         private const val INVALID_USER_ID = "invalid_user_id"
         private const val USER_ALREADY_EXISTS = "user_already_exists"
+        private const val INVALID_PASSWORD = "invalid_password"
     }
 
     override suspend fun register(
@@ -24,6 +25,9 @@ class UseCaseRegistrationDefaultImpl(
                 }
                 if (clientSideError.issue.key == INVALID_USER_ID) {
                     return UseCaseRegistration.Result.INVALID_EMAIL_ID
+                }
+                if(clientSideError.issue.key == INVALID_PASSWORD){
+                    return UseCaseRegistration.Result.INVALID_PASSWORD
                 }
             }.isServerSideError {
                 return UseCaseRegistration.Result.SERVER_SIDE_ISSUE

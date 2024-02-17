@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    kotlin("plugin.serialization")
+    alias(libs.plugins.jetbrainsCompose)
 }
 
 kotlin {
@@ -19,23 +19,31 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "fourm"
+            baseName = "material3"
             isStatic = true
         }
     }
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.shared.foundation)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            api(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+
+        iosMain.dependencies {
+            implementation(compose.foundation)
         }
     }
 }
 
 android {
-    namespace = "com.example.fourm"
+    namespace = "androidx.compose.material3"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

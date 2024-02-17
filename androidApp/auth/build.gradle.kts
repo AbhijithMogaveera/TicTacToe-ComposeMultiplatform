@@ -44,6 +44,7 @@ android {
 dependencies {
     api(project(":shared:auth"))
     implementation(project(":shared:foundation"))
+    implementation(projects.shared.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

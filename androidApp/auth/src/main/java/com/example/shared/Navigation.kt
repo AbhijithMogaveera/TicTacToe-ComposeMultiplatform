@@ -15,8 +15,8 @@ fun NavGraphBuilder.setupAuthNavigation(mainNavController: NavController) {
     composable("/auth") {
         Box(modifier = Modifier.fillMaxSize()) {
             val authNavyController = rememberNavController()
-            NavHost(navController = authNavyController, startDestination = "/login"){
-                composable("/login"){
+            NavHost(navController = authNavyController, startDestination = "/login") {
+                composable("/login") {
                     LoginScreen(
                         onRegistrationBtnClicked = {
                             authNavyController.navigate("/registration")
@@ -26,20 +26,18 @@ fun NavGraphBuilder.setupAuthNavigation(mainNavController: NavController) {
                         }
                     )
                 }
-                composable("/registration"){
-                    RegistrationScreen(
-                        onLoginBtnClick = {
-                            authNavyController.navigateUp()
-                        },
-                        onRegistrationSuccessFul = {
-                            println("hehe we are here buddyy")
-                            mainNavController.navigateUp()
-                        }
-                    )
+                composable("/registration") {
+                    RegistrationScreen(onLoginBtnClick = {
+                        authNavyController.navigateUp()
+                    }, onRegistrationSuccessFul = {
+                        mainNavController.navigateUp()
+                    })
                 }
             }
         }
 
-    }
 
+    }
 }
+
+

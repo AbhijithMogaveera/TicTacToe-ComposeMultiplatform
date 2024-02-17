@@ -28,15 +28,14 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        TicTacToeComponent()
-                        /*val navController = rememberNavController()
+                        val navController = rememberNavController()
                         NavHost(
                             navController = navController,
                             startDestination = "/forum"
                         ) {
                             setupAuthNavigation(navController)
                             setUpForumNavigation(navController)
-                        }*/
+                        }
                     }
                 }
             }

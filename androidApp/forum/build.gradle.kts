@@ -11,7 +11,6 @@ android {
 
     defaultConfig {
         minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -42,14 +41,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":androidApp:auth"))
-    implementation(project(":shared:foundation"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    //Dependency management lib
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation (libs.koin.compose.android)
+    implementation(projects.shared.material3)
+    implementation(projects.androidApp.auth)
+    implementation(projects.shared.foundation)
 }

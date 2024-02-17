@@ -10,7 +10,7 @@ import org.koin.core.component.inject
 
 class IosViewModelAuth constructor(): KoinComponent, SharedAuthViewModel {
 
-    val sharedAuthViewModel by inject<SharedAuthViewModelImpl>()
+    private val sharedAuthViewModel by inject<SharedAuthViewModelImpl>()
 
     override val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 

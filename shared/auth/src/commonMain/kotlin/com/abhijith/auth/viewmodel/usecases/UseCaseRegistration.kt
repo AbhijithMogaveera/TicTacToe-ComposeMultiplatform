@@ -7,7 +7,8 @@ interface UseCaseRegistration {
         CLIENT_SIDE_ERROR,
         SERVER_SIDE_ISSUE,
         UNKNOWN_ERROR,
-        USER_ALREADY_EXISTS
+        USER_ALREADY_EXISTS,
+        INVALID_PASSWORD
     }
     suspend fun register(userName:String, password:String):Result
 }

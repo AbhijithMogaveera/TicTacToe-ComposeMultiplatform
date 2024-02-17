@@ -2,7 +2,7 @@ package com.example.fourm
 
 import arrow.core.Either
 import com.abhijith.foundation.arrow.action
-import com.abhijith.foundation.exceptions.RequestFailure
+import com.abhijith.foundation.ktor.exceptions.RequestFailure
 import com.abhijith.foundation.ktor.ensureSuccessfulRequest
 import com.example.fourm.models.PostCreationResponse
 import com.example.fourm.models.PostsResponse

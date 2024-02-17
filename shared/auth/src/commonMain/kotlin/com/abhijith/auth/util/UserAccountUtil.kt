@@ -6,7 +6,7 @@ import arrow.core.raise.either
 import com.abhijith.auth.apis.AuthApis
 import com.abhijith.auth.apis.JwtToken
 import com.abhijith.auth.model.User
-import com.abhijith.foundation.exceptions.RequestFailure
+import com.abhijith.foundation.ktor.exceptions.RequestFailure
 import com.abhijith.foundation.prefrence.KmmPreference
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow

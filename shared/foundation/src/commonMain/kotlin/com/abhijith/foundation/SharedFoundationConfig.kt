@@ -1,8 +1,8 @@
 package com.abhijith.foundation
 
-import com.abhijith.foundation.coroutines.CoroutineScopeProvider
+import com.abhijith.foundation.coroutines.di.CoroutineScopeProvider
 import com.abhijith.foundation.module_config.ModuleConfig
-import com.abhijith.foundation.prefrence.PreferenceProvide
+import com.abhijith.foundation.prefrence.di.PreferenceProvide
 import org.koin.core.KoinApplication
 
 object SharedFoundationConfig : ModuleConfig {

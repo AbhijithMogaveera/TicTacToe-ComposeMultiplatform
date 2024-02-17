@@ -10,12 +10,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 interface SharedAuthViewModel : SharedViewModel {
     fun getLoginState(): Flow<UseCaseAccountActivityMonitor.Response>
-    fun login(userName: String, password: String)
-    fun register(userName: String, password: String)
+    fun login(userName: String, password: String): Flow<UseCaseLogin.Result>
+    fun register(userName: String, password: String): Flow<UseCaseRegistration.Result>
     fun logout()
 }
 
@@ -35,29 +36,18 @@ class SharedAuthViewModelImpl constructor(
     override fun login(
         userName: String,
         password: String
-    ) {
-        coroutineScope.launch {
-            val message = when (useCaseLogin.login(userName, password)) {
-                UseCaseLogin.Result.SUCCESS -> "Login successful"
-                UseCaseLogin.Result.INVALID_PASSWORD -> "Please enter valid password"
-                UseCaseLogin.Result.INVALID_EMAIL_ID -> "Please enter valid email id"
-                UseCaseLogin.Result.CLIENT_SIDE_ERROR -> "Oops! something went wrong. " +
-                        "please check your internet connection and try again"
-                UseCaseLogin.Result.SERVER_SIDE_ISSUE,
-                UseCaseLogin.Result.UNKNOWN_ERROR -> "Oops! something went wrong " +
-                        "try after some time"
-            }
-        }
+    ): Flow<UseCaseLogin.Result> = flow {
+        val login = useCaseLogin.login(userName.trim(), password.trim())
+        emit(login)
     }
 
-    override fun register(userName: String, password: String) {
-        coroutineScope.launch {
+    override fun register(userName: String, password: String): Flow<UseCaseRegistration.Result> =
+        flow {
             val it = userCaseRegistration.register(
                 userName, password
             )
-            println(it)
+            emit(it)
         }
-    }
 
     override fun logout() {
         coroutineScope.launch {

@@ -2,7 +2,7 @@ package com.abhijith.auth.viewmodel.usecases
 
 interface UseCaseLogin {
     enum class Result {
-        SUCCESS,
+        LoginSuccessful,
         INVALID_PASSWORD,
         INVALID_EMAIL_ID,
         CLIENT_SIDE_ERROR,

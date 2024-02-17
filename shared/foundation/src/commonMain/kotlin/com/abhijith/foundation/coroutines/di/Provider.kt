@@ -1,4 +1,4 @@
-package com.abhijith.foundation.coroutines
+package com.abhijith.foundation.coroutines.di
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

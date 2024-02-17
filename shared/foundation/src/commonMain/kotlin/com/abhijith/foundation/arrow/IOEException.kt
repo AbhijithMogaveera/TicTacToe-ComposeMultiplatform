@@ -2,7 +2,7 @@ package com.abhijith.foundation.arrow
 
 import arrow.core.Either
 import arrow.core.raise.either
-import com.abhijith.foundation.exceptions.RequestFailure
+import com.abhijith.foundation.ktor.exceptions.RequestFailure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

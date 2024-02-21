@@ -1,6 +1,8 @@
 package com.abhijith.auth.viewmodel
 
 import com.abhijith.auth.viewmodel.usecases.UseCaseAccountActivityMonitor
+import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
+import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
 import com.abhijith.foundation.flow.CommonFlow
 import com.abhijith.foundation.flow.toCommonFlow
 import kotlinx.coroutines.CoroutineScope
@@ -22,13 +24,17 @@ class IosViewModelAuth constructor(): KoinComponent, SharedAuthViewModel {
     override fun login(
         userName: String,
         password: String
-    ) = sharedAuthViewModel.login(userName, password)
+    ): CommonFlow<UseCaseLogin.Result> {
+        return sharedAuthViewModel.login(userName, password).toCommonFlow()
+    }
 
 
     override fun register(
         userName: String,
         password: String
-    ) = sharedAuthViewModel.register(userName, password)
+    ): CommonFlow<UseCaseRegistration.Result> {
+        return sharedAuthViewModel.register(userName, password).toCommonFlow()
+    }
 
 
     override fun logout() = sharedAuthViewModel.logout()

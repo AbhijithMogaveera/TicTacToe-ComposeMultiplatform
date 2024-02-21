@@ -4,6 +4,7 @@ import android.app.Application
 import com.abhijith.foundation.SharedFoundationConfig
 import com.abhijith.foundation.module_config.ModuleConfig
 import com.abhijith.foundation.platform.KMMContextProvider
+import com.abhijith.tic_tac_toe.TicTacToeConfig
 import com.example.shared.AuthModuleConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,6 +20,7 @@ class App : Application() {
         super.onCreate()
         moduleConfigs.add(AuthModuleConfig)
         moduleConfigs.add(SharedFoundationConfig)
+        moduleConfigs.add(TicTacToeConfig)
         startKoin {
             androidLogger()
             androidContext(this@App)

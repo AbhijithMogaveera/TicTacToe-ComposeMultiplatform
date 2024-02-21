@@ -1,4 +1,5 @@
 import org.jetbrains.compose.ComposeCompilerKotlinSupportPlugin
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
@@ -30,12 +31,20 @@ kotlin {
     }
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(projects.androidApp.auth)
+        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
+            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
+
+            implementation(projects.shared.foundation)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -55,13 +64,13 @@ android {
     }
 }
 
-plugins.removeAll { it is ComposeCompilerKotlinSupportPlugin }
-class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompilerKotlinSupportPlugin() {
-    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
-        return when (kotlinCompilation.target.platformType) {
-            KotlinPlatformType.native -> false
-            else -> true
-        }
-    }
-}
-apply<ComposeNoNativePlugin>()
+//plugins.removeAll { it is ComposeCompilerKotlinSupportPlugin }
+//class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompilerKotlinSupportPlugin() {
+//    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
+//        return when (kotlinCompilation.target.platformType) {
+//            KotlinPlatformType.native -> false
+//            else -> true
+//        }
+//    }
+//}
+//apply<ComposeNoNativePlugin>()

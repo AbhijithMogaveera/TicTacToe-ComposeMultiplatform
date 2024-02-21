@@ -23,6 +23,7 @@ val httpClient: HttpClient by lazy {
             defaultRequest {
                 headers["Content-Type"] = "application/json"
                 host = "10.0.2.2"
+//                host = "192.168.133.246"
                 port = 8000
             }
             installContentNegotiation()

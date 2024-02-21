@@ -10,6 +10,9 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		41F2C36F2B80F6F00044717A /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F2C36E2B80F6F00044717A /* colors.swift */; };
+		41F2C3A82B83BC3F0044717A /* TicTacToe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F2C3A72B83BC3F0044717A /* TicTacToe.swift */; };
+		41F2C3AB2B83BD610044717A /* Compose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F2C3AA2B83BD610044717A /* Compose.swift */; };
 		41FBEB832B77B6F200DC59CC /* RegistrationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FBEB822B77B6F200DC59CC /* RegistrationScreen.swift */; };
 		41FBEB882B77DA3000DC59CC /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FBEB872B77DA3000DC59CC /* LoginScreen.swift */; };
 		41FBEB8B2B77DAB700DC59CC /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41FBEB8A2B77DAB700DC59CC /* PrimaryButton.swift */; };
@@ -35,6 +38,9 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		41F2C36E2B80F6F00044717A /* colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = colors.swift; sourceTree = "<group>"; };
+		41F2C3A72B83BC3F0044717A /* TicTacToe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToe.swift; sourceTree = "<group>"; };
+		41F2C3AA2B83BD610044717A /* Compose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compose.swift; sourceTree = "<group>"; };
 		41FBEB822B77B6F200DC59CC /* RegistrationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationScreen.swift; sourceTree = "<group>"; };
 		41FBEB872B77DA3000DC59CC /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		41FBEB8A2B77DAB700DC59CC /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
@@ -64,9 +70,34 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		41F2C36D2B80F6DD0044717A /* extenstions */ = {
+			isa = PBXGroup;
+			children = (
+				41F2C36E2B80F6F00044717A /* colors.swift */,
+			);
+			path = extenstions;
+			sourceTree = "<group>";
+		};
+		41F2C3A62B83BC1B0044717A /* tic_tac_toe */ = {
+			isa = PBXGroup;
+			children = (
+				41F2C3A72B83BC3F0044717A /* TicTacToe.swift */,
+			);
+			path = tic_tac_toe;
+			sourceTree = "<group>";
+		};
+		41F2C3A92B83BD4C0044717A /* compose */ = {
+			isa = PBXGroup;
+			children = (
+				41F2C3AA2B83BD610044717A /* Compose.swift */,
+			);
+			path = compose;
+			sourceTree = "<group>";
+		};
 		41FBEB852B77D9E600DC59CC /* screens */ = {
 			isa = PBXGroup;
 			children = (
+				41F2C3A62B83BC1B0044717A /* tic_tac_toe */,
 				41FBEB8F2B79231A00DC59CC /* home */,
 				41FBEB8E2B7922F900DC59CC /* auth */,
 			);
@@ -76,6 +107,7 @@
 		41FBEB892B77DAA500DC59CC /* components */ = {
 			isa = PBXGroup;
 			children = (
+				41F2C3A92B83BD4C0044717A /* compose */,
 				41FBEB922B79235C00DC59CC /* auth */,
 				41FBEB8A2B77DAB700DC59CC /* PrimaryButton.swift */,
 				41FBEB8C2B77E31300DC59CC /* InputField.swift */,
@@ -128,6 +160,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				41F2C36D2B80F6DD0044717A /* extenstions */,
 				41FBEB892B77DAA500DC59CC /* components */,
 				41FBEB852B77D9E600DC59CC /* screens */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
@@ -238,7 +271,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				41FBEB832B77B6F200DC59CC /* RegistrationScreen.swift in Sources */,
+				41F2C3A82B83BC3F0044717A /* TicTacToe.swift in Sources */,
+				41F2C36F2B80F6F00044717A /* colors.swift in Sources */,
 				41FBEB942B79238800DC59CC /* AuthProtected.swift in Sources */,
+				41F2C3AB2B83BD610044717A /* Compose.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				41FBEB912B79235300DC59CC /* HomeScreen.swift in Sources */,
 				41FBEB8B2B77DAB700DC59CC /* PrimaryButton.swift in Sources */,

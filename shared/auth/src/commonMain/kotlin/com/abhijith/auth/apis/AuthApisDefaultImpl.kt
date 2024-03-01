@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.abhijith.foundation.arrow.action
 import com.abhijith.foundation.ktor.exceptions.RequestFailure
 import com.abhijith.foundation.ktor.ensureSuccessfulRequest
-import com.abhijith.foundation.network.httpClient
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post

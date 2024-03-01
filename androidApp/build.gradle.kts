@@ -40,12 +40,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared:foundation"))
-    implementation(project(":androidApp:auth"))
-    implementation(project(":androidApp:forum"))
-    implementation(project(":shared:tic_tac_toe"))
+    implementation(projects.shared.foundation)
     implementation(projects.shared.ticTacToe)
-    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
+    implementation(projects.shared.auth)
+    implementation(projects.shared.profile)
+    debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.compose.material3)
 }

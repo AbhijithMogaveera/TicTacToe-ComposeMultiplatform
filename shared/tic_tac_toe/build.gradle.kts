@@ -31,20 +31,11 @@ kotlin {
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(projects.androidApp.auth)
-        }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            @OptIn(ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
-
-            implementation(projects.shared.foundation)
-
-            implementation(libs.koin.core)
+            projects.shared.apply {
+                implementation(foundationMultiplatformCompose)
+                implementation(auth)
+            }
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

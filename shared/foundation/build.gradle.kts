@@ -50,8 +50,8 @@ kotlin {
             api(libs.arrow.fx.corutine)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.ktor.client.content.negotiation)
-            //koin di
-            implementation(libs.koin.core)
+            api(libs.koin.core)
+            api("com.rickclephas.kmm:kmm-viewmodel-core:1.0.0-ALPHA-19")
         }
         iosMain.dependencies {
             api(libs.ktor.client.darwin)

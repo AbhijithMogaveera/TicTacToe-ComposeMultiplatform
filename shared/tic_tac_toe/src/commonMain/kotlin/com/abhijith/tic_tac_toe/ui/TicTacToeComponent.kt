@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -27,7 +29,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -42,53 +47,91 @@ import androidx.compose.ui.window.DialogProperties
 import arrow.core.None
 import com.abhijith.tic_tac_toe.domain.models.Player
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun TicTacToeComponent() {
-    if (!TicTacToeViewModel.isGameIsStarted) {
-        LaunchedEffect(key1 = Unit) {
-            TicTacToeViewModel.fetchPlayers(searchKey = None)
+    if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
+        if(TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended){
+            GoForNextMatch()
+        }else {
+            PartnerPlayerConnectionStatePopUp()
+            ChoosePlayer()
         }
-        PlayerListingScreen(
-            players = TicTacToeViewModel.player.collectAsState().value,
-            onPlayerSelected = {},
-            searchValue = "",
-            onSearchValueChange = {}
-        )
     } else {
-        SquareBoard()
+        TTTGame()
     }
 }
 
 @Composable
-fun PlayerListingScreen(
-    players: List<Player>,
-    onPlayerSelected: (Player) -> Unit,
-    searchValue: String,
-    onSearchValueChange: (String) -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = {},
-        confirmButton = {
-            TextButton(
-                onClick = {}
-            ) {
-                Text(text = "Cancel")
-            }
-        },
-        title = {
-            Text("Waiting for Abhijeet to accept your request")
-        },
-        properties = DialogProperties(),
-        modifier = Modifier.shadow(
-            elevation = 10.dp, shape = RoundedCornerShape(10.dp)
-        )
+fun GoForNextMatch() {
+    Box(modifier = Modifier.fillMaxSize()){
+        Button(
+            onClick = {
+                TicTacToeViewModel.lookForNextMatch()
+            },
+            modifier = Modifier.align(Alignment.Center)
+        ){
+            Text("Go for next match")
+        }
+    }
+}
 
-    )
+@Composable
+private fun PartnerPlayerConnectionStatePopUp() {
+    val showAlertDialog by remember {
+        derivedStateOf {
+            TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Waiting
+                    || TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Error
+                    || TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Declined
+        }
+    }
+    if (showAlertDialog) {
+        AlertDialog(
+            onDismissRequest = {},
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        TicTacToeViewModel.lookForNextMatch()
+                    }
+                ) {
+                    Text(text = "Cancel")
+                }
+            },
+            title = {
+                when (TicTacToeViewModel.requestState) {
+                    TicTacToeViewModel.PlayRequestState.Waiting -> Text("Waiting for player to accept your request")
+                    TicTacToeViewModel.PlayRequestState.Declined -> Text("Player declined your request")
+                    TicTacToeViewModel.PlayRequestState.Error -> Text("Oops! something went wrong")
+                    else -> {/*Do nothing*/
+                    }
+                }
+            },
+            properties = DialogProperties(),
+            modifier = Modifier.shadow(
+                elevation = 10.dp, shape = RoundedCornerShape(10.dp)
+            )
+
+        )
+    }
+}
+
+
+@Composable
+fun ChoosePlayer(
+    players: List<Player> =  TicTacToeViewModel.player.collectAsState().value,
+    onPlayerSelected: (Player) -> Unit = {},
+    onSearchValueChange: (String) -> Unit = {}
+) {
+    LaunchedEffect(key1 = Unit) {
+        TicTacToeViewModel.fetchPlayers(searchKey = None)
+    }
+
     Column {
         Spacer(Modifier.height(20.dp))
         SearchBar(
-            value = searchValue,
+            value = "",
             onValueChange = onSearchValueChange
         )
         Spacer(Modifier.height(10.dp))
@@ -98,7 +141,7 @@ fun PlayerListingScreen(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp),
                     shape = RoundedCornerShape(15.dp),
                     onClick = {
-
+                        TicTacToeViewModel.requestToPlayerToPlay(it)
                     }
                 ) {
                     Box(modifier = Modifier.padding(10.dp)) {
@@ -132,7 +175,11 @@ fun PlayerListingScreen(
 }
 
 @Composable
-fun SquareBoard() {
+fun TTTGame() {
+    LaunchedEffect(key1 = Unit){
+        delay(5.seconds)
+        TicTacToeViewModel.endGame()
+    }
     Box(modifier = Modifier.padding(10.dp).drawBehind {
         drawRoundRect(
             color = Color("#E78895".toColorInt()),

@@ -7,16 +7,25 @@ import com.abhijith.tic_tac_toe.TicTacToeConfig
 import org.koin.core.context.startKoin
 import platform.Foundation.NSUserDefaults
 
-class KMMIosApplication constructor(){
+class KMMIosApplication constructor() {
+
+    val modules = mutableListOf(
+        SharedFoundationConfig,
+        SharedAuthModuleConfigIos,
+        TicTacToeConfig
+    )
 
     fun initApp() {
         startKoin {
             KMMContextProvider.setNSObject(
                 NSUserDefaults.standardUserDefaults()
             )
-            SharedFoundationConfig.configKoinModules(this)
-            SharedAuthModuleConfigIos.configKoinModules(this)
-            TicTacToeConfig.configKoinModules(this)
+            modules.forEach {
+                it.configKoinModules(this)
+            }
+            modules.forEach {
+                it.onKoinConfigurationFinish()
+            }
         }
     }
 

@@ -8,7 +8,6 @@ val  UtilityProvider = module {
         UserAccountUtil(
             authApis = get(),
             preference = get(),
-            appScope = get()
         )
     }
 }

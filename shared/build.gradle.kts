@@ -31,7 +31,6 @@ kotlin {
             isStatic = true
             export(projects.shared.auth)
             export(projects.shared.foundation)
-            export(projects.shared.fourm)
             export(projects.shared.ticTacToe)
         }
     }
@@ -40,7 +39,6 @@ kotlin {
         commonMain.dependencies {
             api(projects.shared.auth)
             api(projects.shared.foundation)
-            api(projects.shared.fourm)
             api(projects.shared.ticTacToe)
             api(libs.koin.core)
         }

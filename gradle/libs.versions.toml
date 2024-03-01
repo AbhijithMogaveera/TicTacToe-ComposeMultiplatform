@@ -17,12 +17,15 @@ androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
 material = "1.11.0"
+navigationCompose = "2.7.0-rc01"
+sqldelight = "2.0.0"
 uiTooling = "1.5.4"
 koin-bom = "3.5.3"
 compose-plugin = "1.6.0-rc02"
-
+mf-file-picker = "3.1.0"
 #<!----------------------------librARIES--------------------------->
 [libraries]
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 buildkonfig-gradle-plugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfigGradlePlugin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -61,7 +64,11 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 koin-core = { module = "io.insert-koin:koin-core", version.ref="koin-bom"}
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-bom" }
 koin-compose-android = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-bom" }
-
+#https://github.com/Wavesonics/compose-multiplatform-file-picker
+file-picker = {module = "com.darkrockstudios:mpfilepicker", version.ref = "mf-file-picker"}
+cashsqldeligh-native = {module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight"}
+cashsqldeligh-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight"}
+cashsqldeligh-coroutine = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight"}
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
@@ -70,3 +77,4 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 buildkonfig = {id = "com.codingfeline.buildkonfig"}
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+cashsqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

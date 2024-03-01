@@ -1,0 +1,14 @@
+CREATE TABLE TProfileDetails (
+user_name TEXT NOT NULL PRIMARY KEY,
+bio TEXT NOT NULL,
+profilePicture TEXT
+);
+
+saveProfileDetails:
+INSERT OR REPLACE  INTO TProfileDetails VALUES (?, ?, ?);
+
+getProfileDetails:
+SELECT * FROM TProfileDetails;
+
+clearProfileDetails:
+DELETE FROM TProfileDetails;

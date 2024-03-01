@@ -1,10 +1,22 @@
 import SwiftUI
+import shared
 
 @main
 struct iOSApp: App {
-	var body: some Scene {
-		WindowGroup {
-			ContentView()
-		}
-	}
+    
+    init() {
+        KMMIosApplication().doInitApp()
+        UINavigationBar
+            .appearance()
+            .titleTextAttributes = [.foregroundColor: UIColor.red]
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            NavigationView{
+                TicTacToeContentView()
+            }
+        }
+    }
+    
 }

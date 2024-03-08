@@ -3,7 +3,7 @@ package com.abhijith.auth.apis
 import arrow.core.Either
 import com.abhijith.foundation.ktor.exceptions.RequestFailure
 
-interface AuthApis {
+internal interface AuthApis {
 
     suspend fun login(
         userName:String,

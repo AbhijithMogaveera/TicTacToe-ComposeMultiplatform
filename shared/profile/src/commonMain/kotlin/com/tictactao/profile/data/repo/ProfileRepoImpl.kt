@@ -5,7 +5,7 @@ import arrow.core.Eval.Companion.raise
 import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.some
-import com.abhijith.foundation.arrow.action
+import com.abhijith.foundation.arrow.apiCallScope
 import com.abhijith.foundation.file.getBytes
 import com.abhijith.foundation.ktor.ensureSuccessfulRequest
 import com.abhijith.foundation.ktor.exceptions.RequestFailure
@@ -26,7 +26,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.core.component.KoinComponent
 
 class ProfileRepoImpl(
     val profileDao: ProfileDao
@@ -41,7 +40,7 @@ class ProfileRepoImpl(
     }
 
     override suspend fun syncProfileDetailsWithServer(
-    ): Either<RequestFailure, Unit> = action {
+    ): Either<RequestFailure, Unit> = apiCallScope {
         httpClient.get(urlString = "/app/v1/profile") {
         }.apply {
             syncProfileDetailsWithDB(ensureSuccessfulRequest()).getOrElse(::raise)
@@ -51,7 +50,7 @@ class ProfileRepoImpl(
     override suspend fun updateProfileDetails(
         bio: Option<String>,
         profileImage: Option<MPFile<Any>>
-    ): Either<RequestFailure, Unit> = action {
+    ): Either<RequestFailure, Unit> = apiCallScope {
         val fileByteArray = profileImage.map {
             it.getBytes()
         }

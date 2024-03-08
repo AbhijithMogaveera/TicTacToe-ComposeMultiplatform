@@ -6,7 +6,7 @@ import com.abhijith.auth.viewmodel.usecases.UseCaseGetAuthToken
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class UseCaseGetAuthTokenDefaultImpl(
+internal class UseCaseGetAuthTokenDefaultImpl(
     val authManger: UserAccountUtil
 ):UseCaseGetAuthToken {
     override fun getToken(): StateFlow<Option<String>> {

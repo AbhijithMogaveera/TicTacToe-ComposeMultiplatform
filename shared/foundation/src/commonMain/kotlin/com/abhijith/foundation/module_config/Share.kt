@@ -1,0 +1,3 @@
+package com.abhijith.foundation.module_config
+
+annotation class SharedWithOtherModule

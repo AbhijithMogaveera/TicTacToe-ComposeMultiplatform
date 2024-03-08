@@ -38,6 +38,7 @@ import androidx.core.graphics.toColorInt
 import arrow.core.None
 import arrow.core.Some
 import com.abhijith.auth.viewmodel.AndroidViewModelAuth
+import com.abhijith.auth.viewmodel.usecases.RegistrationResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -56,6 +57,7 @@ fun RegistrationScreen(
                 when(response){
                     None -> {}
                     is Some -> onRegistrationSuccessFul()
+                    else -> {}
                 }
             }
     })
@@ -184,15 +186,15 @@ fun RegistrationScreen(
     }
 }
 
-private fun mapToStringMessage(res: UseCaseRegistration.Result): String {
+private fun mapToStringMessage(res: RegistrationResult): String {
     val msg = when (res) {
-        UseCaseRegistration.Result.SUCCESS -> "Registration successful"
-        UseCaseRegistration.Result.INVALID_EMAIL_ID -> "Please Enter valid email id"
-        UseCaseRegistration.Result.CLIENT_SIDE_ERROR -> "Opps! something went wrong"
-        UseCaseRegistration.Result.SERVER_SIDE_ISSUE -> "Oops! its us please try again later"
-        UseCaseRegistration.Result.UNKNOWN_ERROR -> "Oops! something went wrong please try again later"
-        UseCaseRegistration.Result.USER_ALREADY_EXISTS -> "User with email id already exits, please re validate your user id"
-        UseCaseRegistration.Result.INVALID_PASSWORD -> "Please enter valid password"
+        RegistrationResult.SUCCESS -> "Registration successful"
+        RegistrationResult.INVALID_EMAIL_ID -> "Please Enter valid email id"
+        RegistrationResult.CLIENT_SIDE_ERROR -> "Opps! something went wrong"
+        RegistrationResult.SERVER_SIDE_ISSUE -> "Oops! its us please try again later"
+        RegistrationResult.UNKNOWN_ERROR -> "Oops! something went wrong please try again later"
+        RegistrationResult.USER_ALREADY_EXISTS -> "User with email id already exits, please re validate your user id"
+        RegistrationResult.INVALID_PASSWORD -> "Please enter valid password"
     }
     return msg
 }

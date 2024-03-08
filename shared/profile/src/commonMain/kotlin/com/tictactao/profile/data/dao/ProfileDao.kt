@@ -2,10 +2,6 @@ package com.tictactao.profile.data.dao
 
 import app.cash.sqldelight.coroutines.asFlow
 import arrow.core.Either
-import arrow.core.Eval.Companion.always
-import arrow.core.Eval.Companion.defer
-import arrow.core.Eval.Companion.later
-import arrow.core.Eval.Companion.now
 import arrow.core.Eval.Companion.raise
 import arrow.core.None
 import arrow.core.Option
@@ -13,21 +9,13 @@ import arrow.core.getOrElse
 import arrow.core.left
 import arrow.core.right
 import com.example.DBProfileDetailsQueries
-import com.example.TProfileDetails
 import com.tictactao.profile.db.DriverFactory
 import com.tictactao.profile.domain.models.User
-import com.tictactao.profile.domain.models.UserDetails
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 

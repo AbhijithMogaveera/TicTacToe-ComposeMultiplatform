@@ -39,6 +39,7 @@ import androidx.core.graphics.toColorInt
 import arrow.core.None
 import arrow.core.Some
 import com.abhijith.auth.viewmodel.AndroidViewModelAuth
+import com.abhijith.auth.viewmodel.usecases.LoginResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -177,14 +178,14 @@ fun LoginScreen(
     }
 }
 
-private fun mapToMessage(it: UseCaseLogin.Result): String {
+private fun mapToMessage(it: LoginResult): String {
     val msg = when (it) {
-        UseCaseLogin.Result.LoginSuccessful -> "Login successful"
-        UseCaseLogin.Result.INVALID_PASSWORD -> "Please enter valid password"
-        UseCaseLogin.Result.INVALID_EMAIL_ID -> "Please enter valid email id"
-        UseCaseLogin.Result.CLIENT_SIDE_ERROR -> "Oops! something went please check your internet connection and try again"
-        UseCaseLogin.Result.SERVER_SIDE_ISSUE -> "Oops! its us.... please try again later"
-        UseCaseLogin.Result.UNKNOWN_ERROR -> "Oops! something went wrong"
+        LoginResult.LoginSuccessful -> "Login successful"
+        LoginResult.INVALID_PASSWORD -> "Please enter valid password"
+        LoginResult.INVALID_EMAIL_ID -> "Please enter valid email id"
+        LoginResult.CLIENT_SIDE_ERROR -> "Oops! something went please check your internet connection and try again"
+        LoginResult.SERVER_SIDE_ISSUE -> "Oops! its us.... please try again later"
+        LoginResult.UNKNOWN_ERROR -> "Oops! something went wrong"
     }
     return msg
 }

@@ -1,6 +1,7 @@
 package com.tictactao.profile.domain.use_case
 
 import com.abhijith.auth.viewmodel.usecases.UseCaseGetAuthToken
+import com.abhijith.foundation.module_config.SharedWithOtherModule
 import com.tictactao.profile.domain.models.User
 import com.tictactao.profile.domain.repo.ProfileRepo
 import kotlinx.coroutines.CoroutineScope
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-class UseCaseGetProfileDetails(
+internal class UseCaseGetProfileDetails(
     val profileRepo: ProfileRepo,
     val useCaseGetAuthToken: UseCaseGetAuthToken,
     val appScope:CoroutineScope

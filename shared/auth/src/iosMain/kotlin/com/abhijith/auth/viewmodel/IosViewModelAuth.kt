@@ -1,6 +1,8 @@
 package com.abhijith.auth.viewmodel
 
 import arrow.core.Option
+import com.abhijith.auth.viewmodel.usecases.LoginResult
+import com.abhijith.auth.viewmodel.usecases.RegistrationResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
 import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
 import com.abhijith.foundation.flow.CommonFlow
@@ -26,7 +28,7 @@ class IosViewModelAuth constructor(): KoinComponent, SharedAuthViewModel {
     override fun login(
         userName: String,
         password: String
-    ): CommonFlow<UseCaseLogin.Result> {
+    ): CommonFlow<LoginResult> {
         return sharedAuthViewModel.login(userName, password).toCommonFlow()
     }
 
@@ -34,7 +36,7 @@ class IosViewModelAuth constructor(): KoinComponent, SharedAuthViewModel {
     override fun register(
         userName: String,
         password: String
-    ): CommonFlow<UseCaseRegistration.Result> {
+    ): CommonFlow<RegistrationResult> {
         return sharedAuthViewModel.register(userName, password).toCommonFlow()
     }
 

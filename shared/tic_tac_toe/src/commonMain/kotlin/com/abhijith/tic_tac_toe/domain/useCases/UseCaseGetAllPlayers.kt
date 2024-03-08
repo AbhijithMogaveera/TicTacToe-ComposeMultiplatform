@@ -7,7 +7,7 @@ import arrow.core.right
 import com.abhijith.tic_tac_toe.domain.models.Player
 import com.abhijith.tic_tac_toe.domain.repo.TicTacToeRepo
 
-class UseCaseGetAllPlayers(
+internal class UseCaseGetAllPlayers(
     private val repo: TicTacToeRepo
 ) {
 

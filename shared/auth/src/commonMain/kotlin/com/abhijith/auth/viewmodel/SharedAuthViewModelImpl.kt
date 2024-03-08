@@ -1,5 +1,7 @@
 package com.abhijith.auth.viewmodel
 import arrow.core.Option
+import com.abhijith.auth.viewmodel.usecases.LoginResult
+import com.abhijith.auth.viewmodel.usecases.RegistrationResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogout
 import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
@@ -13,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
-class SharedAuthViewModelImpl constructor(
+internal class SharedAuthViewModelImpl constructor(
     private val useCaseLogin: UseCaseLogin,
     private val userCaseRegistration: UseCaseRegistration,
     private val useCaseGetAuthToken: UseCaseGetAuthToken,
@@ -29,12 +31,12 @@ class SharedAuthViewModelImpl constructor(
     override fun login(
         userName: String,
         password: String
-    ): Flow<UseCaseLogin.Result> = flow {
+    ): Flow<LoginResult> = flow {
         val login = useCaseLogin.login(userName.trim(), password.trim())
         emit(login)
     }
 
-    override fun register(userName: String, password: String): Flow<UseCaseRegistration.Result> =
+    override fun register(userName: String, password: String): Flow<RegistrationResult> =
         flow {
             val it = userCaseRegistration.register(
                 userName, password

@@ -1,10 +1,7 @@
 package com.abhijith.tic_tac_toe.domain.viewmodels
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import arrow.core.None
 import arrow.core.Option
@@ -17,14 +14,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
-object TicTacToeViewModel : SharedViewModel, KoinComponent {
+internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
 
     var requestState: PlayRequestState by mutableStateOf(PlayRequestState.NotInitiated)
 

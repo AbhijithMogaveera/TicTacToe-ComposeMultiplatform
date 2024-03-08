@@ -51,7 +51,7 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun TicTacToeComponent() {
+internal fun TicTacToeComponent() {
     if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
         if(TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended){
             GoForNextMatch()
@@ -65,7 +65,7 @@ fun TicTacToeComponent() {
 }
 
 @Composable
-fun GoForNextMatch() {
+internal fun GoForNextMatch() {
     Box(modifier = Modifier.fillMaxSize()){
         Button(
             onClick = {
@@ -119,7 +119,7 @@ private fun PartnerPlayerConnectionStatePopUp() {
 
 
 @Composable
-fun ChoosePlayer(
+internal fun ChoosePlayer(
     players: List<Player> =  TicTacToeViewModel.player.collectAsState().value,
     onPlayerSelected: (Player) -> Unit = {},
     onSearchValueChange: (String) -> Unit = {}

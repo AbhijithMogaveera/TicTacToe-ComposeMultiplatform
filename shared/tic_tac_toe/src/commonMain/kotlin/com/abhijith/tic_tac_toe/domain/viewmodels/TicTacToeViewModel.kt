@@ -7,13 +7,15 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.some
 import com.abhijith.foundation.viewmodel.SharedViewModel
-import com.abhijith.tic_tac_toe.domain.models.Player
+import com.abhijith.tic_tac_toe.domain.models.Participant
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseGetAllPlayers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -27,7 +29,7 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
     override val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
     private val getAllPlayerUseCase: UseCaseGetAllPlayers by inject<UseCaseGetAllPlayers>()
 
-    private val _player: MutableStateFlow<List<Player>> = MutableStateFlow(emptyList())
+    private val _player: MutableStateFlow<List<Participant>> = MutableStateFlow(emptyList())
     private val _onPlayerFetchingIssue =
         MutableStateFlow<Option<UseCaseGetAllPlayers.Failure>>(None)
 
@@ -36,15 +38,19 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
 
     fun fetchPlayers(searchKey: Option<String>) {
         coroutineScope.launch {
+            println("fetching user ------------------------")
             getAllPlayerUseCase
                 .execute(searchKey)
-                .onRight {
-                    _player.emit(it)
-                    _onPlayerFetchingIssue.emit(None)
-                }.onLeft {
-                    _player.emit(emptyList())
-                    _onPlayerFetchingIssue.emit(it.some())
+                .collect {
+                    it.onRight {
+                        _player.emit(it)
+                        _onPlayerFetchingIssue.emit(None)
+                    }.onLeft {
+                        _player.emit(emptyList())
+                        _onPlayerFetchingIssue.emit(it.some())
+                    }
                 }
+            println("collection done ------------------------")
         }
     }
 
@@ -52,7 +58,7 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
         Waiting, PlayStarted, Declined, Error, Ended, NotInitiated
     }
 
-    fun requestToPlayerToPlay(player: Player) {
+    fun requestToPlayerToPlay(player: Participant) {
         coroutineScope.launch {
             requestState = PlayRequestState.Waiting
             delay(3.seconds)

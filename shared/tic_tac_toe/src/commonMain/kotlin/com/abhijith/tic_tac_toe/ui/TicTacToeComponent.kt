@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import arrow.core.None
-import com.abhijith.tic_tac_toe.domain.models.Player
+import com.abhijith.tic_tac_toe.domain.models.Participant
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
@@ -120,8 +120,8 @@ private fun PartnerPlayerConnectionStatePopUp() {
 
 @Composable
 internal fun ChoosePlayer(
-    players: List<Player> =  TicTacToeViewModel.player.collectAsState().value,
-    onPlayerSelected: (Player) -> Unit = {},
+    players: List<Participant> =  TicTacToeViewModel.player.collectAsState().value,
+    onPlayerSelected: (Participant) -> Unit = {},
     onSearchValueChange: (String) -> Unit = {}
 ) {
     LaunchedEffect(key1 = Unit) {
@@ -158,13 +158,12 @@ internal fun ChoosePlayer(
                             Spacer(modifier = Modifier.width(10.dp))
                             Column {
                                 Text(
-                                    it.name, style = TextStyle(
+                                    it.user_name, style = TextStyle(
                                         color = Color.Black,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 16.sp
                                     )
                                 )
-                                Text(if (it.isAvailableToPlay) "Available" else "Not available")
                             }
                         }
                     }

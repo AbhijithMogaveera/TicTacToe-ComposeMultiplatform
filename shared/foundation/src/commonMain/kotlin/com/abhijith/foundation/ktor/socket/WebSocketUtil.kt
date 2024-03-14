@@ -1,5 +1,6 @@
-package com.abhijith.foundation.ktor.exceptions
+package com.abhijith.foundation.ktor.socket
 
+import com.abhijith.foundation.ktor.logger.logOf
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.readText
@@ -7,7 +8,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -15,11 +15,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 
 enum class EventType {
     OFF,
@@ -34,6 +30,14 @@ interface SocketMessage {
 val serializer = Json {
     ignoreUnknownKeys = true
 }
+
+@Serializable
+data class EmissionPayload<T>(
+    @SerialName("event")
+    val event: String,
+    @SerialName("payload")
+    val payLoad: T
+)
 
 interface EventPayLoad {
     @SerialName(value = "event")
@@ -59,15 +63,6 @@ private data class OnOffEventPayload constructor(
     }
 }
 
-private data class EventFrame<T>(
-    val event: String,
-    val message: T,
-) : SocketMessage {
-    override fun toFrame(): Frame {
-        return Frame.Text(serializer.encodeToString(this))
-    }
-}
-
 @Serializable
 data class Event(
     val event: String
@@ -78,23 +73,28 @@ interface WebSocketUtil {
     fun getIncoming(): Channel<Frame>
 
     suspend fun WebSocketSession.on(event: String): Flow<JsonObject> {
+        event logOf "ON"
         send(OnOffEventPayload(event, EventType.ON).toFrame())
         return getIncoming()
             .receiveAsFlow()
             .onEach {
-                println((it as? Frame.Text)?.readText())
+                if (it is Frame.Text) {
+                    event logOf it.readText()
+                }
             }
             .filterIsInstance<Frame.Text>()
             .filter {
                 try {
                     serializer.decodeFromString<Event>(it.readText()).event == event
                 } catch (e: Exception) {
+                    event logOf e
                     false
                 }
-            }.mapNotNull {
+            }.mapNotNull { frame ->
                 try {
-                    serializer.decodeFromString<JsonObject>(it.readText())
+                    serializer.decodeFromString<JsonObject>(frame.readText())
                 } catch (e: Exception) {
+                    event logOf e
                     null
                 }
             }

@@ -2,14 +2,16 @@ package com.abhijith.tic_tac_toe.domain.useCases
 
 import arrow.core.Either
 import com.abhijith.auth.viewmodel.usecases.UseCaseGetAuthToken
-import com.abhijith.foundation.ktor.exceptions.WebSocketUtil
+import com.abhijith.foundation.ktor.logger.logOf
+import com.abhijith.foundation.ktor.socket.EmissionPayload
+import com.abhijith.foundation.ktor.socket.WebSocketUtil
+import com.abhijith.foundation.ktor.socket.serializer
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.websocket.ClientWebSocketSession
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.ws
 import io.ktor.websocket.Frame
-import io.ktor.websocket.readText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -22,14 +24,17 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.JsonObject
 import kotlin.time.Duration.Companion.seconds
 
 private enum class ConnectionState {
-    NotConnected, Connected, Connecting
+    NotConnected,
+    Connected,
+    Connecting
 }
 
-internal class UseCaseSocketToUseCaseMediator(
+class UseCaseSocketToUseCaseMediator(
     private val useCaseGetAuthToken: UseCaseGetAuthToken
 ) : WebSocketUtil {
     private var scope = CoroutineScope(Dispatchers.IO+ SupervisorJob())
@@ -41,64 +46,64 @@ internal class UseCaseSocketToUseCaseMediator(
             requestTimeoutMillis = 5.seconds.inWholeMicroseconds
         }
     }
-    private var session: ClientWebSocketSession? = null
+     var session: ClientWebSocketSession? = null
     private var framesFlow: Channel<Frame> = Channel()
-    suspend fun sendMessage() {
-        session?.send(Frame.Text(""))
+    suspend inline fun<reified T> emmit(event: String, payload: T) {
+        event logOf payload
+        val encodeToString = serializer.encodeToString(EmissionPayload(event, payload))
+        session?.send(Frame.Text(encodeToString))
     }
 
     suspend fun on(event: String): Flow<JsonObject> {
         awaitConnect()
-        println("added watcher for event $event")
         return session?.on(event) ?: errorInActiveSocket()
     }
 
     private suspend fun awaitConnect() {
-        println("awaiting for connect")
         if (isConnected.value == ConnectionState.NotConnected) {
             connect()
         }
         isConnected.first { state ->
-            println("awaiting $state")
             state == ConnectionState.Connected
         }
-        println("awaiting finish")
     }
 
     suspend fun off(event: String) {
+        event logOf ">>> OFF <<<"
         session?.off(event)
     }
 
     private fun connect() {
         scope.launch {
             useCaseGetAuthToken.getToken().collectLatest { optionOption ->
+                var retryCount:Int = 0
                 optionOption.onSome { token ->
-                    Either.catch {
-                        isConnected.emit(ConnectionState.Connecting)
-                        println("socket status: not connecting")
-                        client.ws(
-                            urlString = "ws://10.0.2.2:5036/",
-                            request = {
-                                headers["Authorization"] = "Bearer $token"
-                            }
-                        ) {
-                            session = this
-                            isConnected.emit(ConnectionState.Connected)
-                            println("socket status: connected")
-                            while (true) {
-                                val received = incoming.receive() as? Frame ?: break
-                                println(received)
-                                launch {
-                                    framesFlow.send(received)
+                    while (true) {
+                        Either.catch {
+                            isConnected.emit(ConnectionState.Connecting)
+                            client.ws(
+                                urlString = "ws://10.0.2.2:5036/",
+                                request = {
+                                    headers["Authorization"] = "Bearer $token"
+                                }
+                            ) {
+                                println("WS: connected")
+                                session = this
+                                isConnected.emit(ConnectionState.Connected)
+                                while (true) {
+                                    val received = incoming.receive() as? Frame ?: break
+                                    println(received)
+                                    launch {
+                                        framesFlow.send(received)
+                                    }
                                 }
                             }
-                            framesFlow.close()
-                            delay(10000)
-                            session = null
+                        }.onLeft {
+                            println("WS: disconnected retry: ${retryCount++}"+it.stackTraceToString())
+                            it.printStackTrace()
                         }
-                    }.onLeft {
-                        println("socket status: error ${it.stackTraceToString()}")
-                        it.printStackTrace()
+                        session = null
+                        delay( /*retryDelay = */1000)
                     }
                 }
             }

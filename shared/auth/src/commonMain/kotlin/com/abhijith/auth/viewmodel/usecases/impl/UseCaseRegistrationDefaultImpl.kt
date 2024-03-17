@@ -1,7 +1,7 @@
 package com.abhijith.auth.viewmodel.usecases.impl
 
 import com.abhijith.auth.util.UserAccountUtil
-import com.abhijith.auth.viewmodel.usecases.RegistrationResult
+import com.abhijith.auth.models.RegistrationResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
 
 internal class UseCaseRegistrationDefaultImpl(

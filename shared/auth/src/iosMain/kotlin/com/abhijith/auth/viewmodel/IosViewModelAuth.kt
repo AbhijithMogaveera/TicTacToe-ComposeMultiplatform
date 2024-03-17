@@ -1,10 +1,8 @@
 package com.abhijith.auth.viewmodel
 
 import arrow.core.Option
-import com.abhijith.auth.viewmodel.usecases.LoginResult
-import com.abhijith.auth.viewmodel.usecases.RegistrationResult
-import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
-import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
+import com.abhijith.auth.models.LoginResult
+import com.abhijith.auth.models.RegistrationResult
 import com.abhijith.foundation.flow.CommonFlow
 import com.abhijith.foundation.flow.CommonStateFlow
 import com.abhijith.foundation.flow.toCommonFlow

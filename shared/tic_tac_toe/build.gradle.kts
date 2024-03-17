@@ -30,6 +30,7 @@ kotlin {
             projects.shared.apply {
                 implementation(foundationMultiplatformCompose)
                 implementation(auth)
+                implementation(profile)
             }
         }
         commonTest.dependencies {

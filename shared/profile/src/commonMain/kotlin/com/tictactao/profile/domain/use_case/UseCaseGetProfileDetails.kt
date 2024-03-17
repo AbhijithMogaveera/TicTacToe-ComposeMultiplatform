@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-internal class UseCaseGetProfileDetails(
+class UseCaseGetProfileDetails(
     val profileRepo: ProfileRepo,
     val useCaseGetAuthToken: UseCaseGetAuthToken,
     val appScope:CoroutineScope

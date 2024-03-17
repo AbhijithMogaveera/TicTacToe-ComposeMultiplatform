@@ -2,7 +2,7 @@ package com.abhijith.tic_tac_toe.domain.useCases
 
 import arrow.core.Either
 import com.abhijith.auth.viewmodel.usecases.UseCaseGetAuthToken
-import com.abhijith.foundation.ktor.logger.logOf
+import com.abhijith.foundation.ktor.logger.asTagAndLog
 import com.abhijith.foundation.ktor.socket.EmissionPayload
 import com.abhijith.foundation.ktor.socket.WebSocketUtil
 import com.abhijith.foundation.ktor.socket.serializer
@@ -16,9 +16,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -47,9 +47,9 @@ class UseCaseSocketToUseCaseMediator(
         }
     }
      var session: ClientWebSocketSession? = null
-    private var framesFlow: Channel<Frame> = Channel()
+    private var framesFlow: MutableSharedFlow<Frame> = MutableSharedFlow()
     suspend inline fun<reified T> emmit(event: String, payload: T) {
-        event logOf payload
+        event asTagAndLog payload
         val encodeToString = serializer.encodeToString(EmissionPayload(event, payload))
         session?.send(Frame.Text(encodeToString))
     }
@@ -69,7 +69,7 @@ class UseCaseSocketToUseCaseMediator(
     }
 
     suspend fun off(event: String) {
-        event logOf ">>> OFF <<<"
+        event asTagAndLog ">>> OFF <<<"
         session?.off(event)
     }
 
@@ -92,9 +92,9 @@ class UseCaseSocketToUseCaseMediator(
                                 isConnected.emit(ConnectionState.Connected)
                                 while (true) {
                                     val received = incoming.receive() as? Frame ?: break
-                                    println(received)
+                                    println("SocketMediator => $received")
                                     launch {
-                                        framesFlow.send(received)
+                                        framesFlow.emit(received)
                                     }
                                 }
                             }
@@ -114,7 +114,7 @@ class UseCaseSocketToUseCaseMediator(
         return client.isActive
     }
 
-    override fun getIncoming(): Channel<Frame> {
+    override fun getIncoming(): Flow<Frame> {
         return framesFlow
     }
 }

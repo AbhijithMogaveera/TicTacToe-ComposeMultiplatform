@@ -38,8 +38,7 @@ import androidx.core.graphics.toColorInt
 import arrow.core.None
 import arrow.core.Some
 import com.abhijith.auth.viewmodel.AndroidViewModelAuth
-import com.abhijith.auth.viewmodel.usecases.RegistrationResult
-import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
+import com.abhijith.auth.models.RegistrationResult
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

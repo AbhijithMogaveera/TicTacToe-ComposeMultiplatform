@@ -1,12 +1,21 @@
 package com.abhijith.foundation.ktor.logger
 
-infix fun String.logOf(message:String){
+infix fun String.asTagAndLog(message:String){
+    if(this != "ask_to_play"){
+        return
+    }
     println("$this : $message")
 }
-infix fun String.logOf(throwable: Throwable){
+infix fun String.asTagAndLog(throwable: Throwable){
+    if(this != "ask_to_play"){
+        return
+    }
     println("$this : ${throwable.stackTraceToString()}")
 }
 
-infix fun<T> String.logOf(message:T){
-    this logOf message.toString()
+infix fun<T> String.asTagAndLog(message:T){
+    if(this != "ask_to_play"){
+        return
+    }
+    this asTagAndLog message.toString()
 }

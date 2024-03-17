@@ -1,7 +1,7 @@
 package com.abhijith.auth.viewmodel
 import arrow.core.Option
-import com.abhijith.auth.viewmodel.usecases.LoginResult
-import com.abhijith.auth.viewmodel.usecases.RegistrationResult
+import com.abhijith.auth.models.LoginResult
+import com.abhijith.auth.models.RegistrationResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogout
 import com.abhijith.auth.viewmodel.usecases.UseCaseRegistration
@@ -10,7 +10,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch

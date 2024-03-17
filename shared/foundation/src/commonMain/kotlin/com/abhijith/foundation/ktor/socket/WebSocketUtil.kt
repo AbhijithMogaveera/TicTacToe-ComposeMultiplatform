@@ -1,6 +1,6 @@
 package com.abhijith.foundation.ktor.socket
 
-import com.abhijith.foundation.ktor.logger.logOf
+import com.abhijith.foundation.ktor.logger.asTagAndLog
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.readText
@@ -35,8 +35,8 @@ val serializer = Json {
 data class EmissionPayload<T>(
     @SerialName("event")
     val event: String,
-    @SerialName("payload")
-    val payLoad: T
+    @SerialName("data")
+    val data: T
 )
 
 interface EventPayLoad {
@@ -70,31 +70,36 @@ data class Event(
 
 interface WebSocketUtil {
 
-    fun getIncoming(): Channel<Frame>
+    fun getIncoming(): Flow<Frame>
 
     suspend fun WebSocketSession.on(event: String): Flow<JsonObject> {
-        event logOf "ON"
+        event asTagAndLog "ON"
         send(OnOffEventPayload(event, EventType.ON).toFrame())
         return getIncoming()
-            .receiveAsFlow()
+            .onEach {
+                if(it is Frame.Text){
+                  println(it.readText())
+                } else println(it.toString())
+            }
             .onEach {
                 if (it is Frame.Text) {
-                    event logOf it.readText()
+                    event asTagAndLog it.readText()
                 }
             }
             .filterIsInstance<Frame.Text>()
             .filter {
                 try {
+                    event asTagAndLog "isMatch ${serializer.decodeFromString<Event>(it.readText()).event == event}"
                     serializer.decodeFromString<Event>(it.readText()).event == event
                 } catch (e: Exception) {
-                    event logOf e
+                    event asTagAndLog e
                     false
                 }
             }.mapNotNull { frame ->
                 try {
                     serializer.decodeFromString<JsonObject>(frame.readText())
                 } catch (e: Exception) {
-                    event logOf e
+                    event asTagAndLog e
                     null
                 }
             }

@@ -1,7 +1,7 @@
 package com.abhijith.auth.viewmodel.usecases.impl
 
 import com.abhijith.auth.util.UserAccountUtil
-import com.abhijith.auth.viewmodel.usecases.LoginResult
+import com.abhijith.auth.models.LoginResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
 
 internal class UseCaseLoginDefaultImpl(
@@ -16,7 +16,7 @@ internal class UseCaseLoginDefaultImpl(
 
     override suspend fun login(
         userName: String, password: String
-    ):LoginResult {
+    ): LoginResult {
         userAccountUtil.login(
             userName, password
         ).onLeft {

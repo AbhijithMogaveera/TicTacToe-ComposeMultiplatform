@@ -39,8 +39,7 @@ import androidx.core.graphics.toColorInt
 import arrow.core.None
 import arrow.core.Some
 import com.abhijith.auth.viewmodel.AndroidViewModelAuth
-import com.abhijith.auth.viewmodel.usecases.LoginResult
-import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
+import com.abhijith.auth.models.LoginResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
@@ -157,7 +156,7 @@ fun LoginScreen(
                             if (!isLoginIsInProgress) {
                                 isLoginIsInProgress = true
                                 delay(2000)
-                                val it = viewModel.login(
+                                val it: LoginResult = viewModel.login(
                                     userName = userName,
                                     password = password
                                 ).first()

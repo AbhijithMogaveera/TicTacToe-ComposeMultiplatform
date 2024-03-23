@@ -87,6 +87,11 @@ fun PendingRequestBottomSheet() {
     var showSheet by remember {
         mutableStateOf(false)
     }
+    LaunchedEffect(key1 = pendingRequests){
+        if(pendingRequests.isEmpty()){
+            showSheet = false
+        }
+    }
     AnimatedVisibility(
         visible = pendingRequests.isNotEmpty()
     ) {
@@ -110,15 +115,15 @@ fun PendingRequestBottomSheet() {
             LazyColumn(
                 modifier = Modifier.defaultMinSize(minHeight = 400.dp)
             ) {
-                items(pendingRequests) {(participant, accept, reject)->
+                items(pendingRequests) { (participant, accept, reject) ->
                     ProfileCard(
                         participant,
-                        onClick ={},
+                        onClick = {},
                         actions = {
-                            TextButton(onClick = accept){
+                            TextButton(onClick = accept) {
                                 Text("Accept")
                             }
-                            TextButton(onClick = reject){
+                            TextButton(onClick = reject) {
                                 Text("Reject")
                             }
                         }
@@ -158,7 +163,9 @@ private fun PartnerPlayerConnectionStatePopUp() {
             confirmButton = {
                 TextButton(
                     onClick = {
-                        TicTacToeViewModel.lookForNextMatch()
+                        if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Waiting) {
+                            TicTacToeViewModel.revokeOnGoingReq()
+                        } else TicTacToeViewModel.lookForNextMatch()
                     }
                 ) {
                     Text(text = "Cancel")
@@ -204,7 +211,7 @@ internal fun ChoosePlayer(
             items(players) {
                 ProfileCard(
                     it,
-                    onClick = remember{
+                    onClick = remember {
                         {
                             TicTacToeViewModel.requestToPlayerToPlay(it)
                         }

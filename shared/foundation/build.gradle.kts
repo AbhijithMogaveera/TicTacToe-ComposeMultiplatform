@@ -80,4 +80,3 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
-

@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.decodeFromJsonElement
 
 class UseCaseGameSession(
-    private val mediator: UseCaseSocketToUseCaseMediator
+    private val socketMediator: UseCaseSocketToUseCaseMediator
 ) {
     suspend fun execute(): Flow<GameEventData> {
-        return mediator
+        return socketMediator
             .on("game")
             .map {
                 serializer.decodeFromJsonElement(it)

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.decodeFromJsonElement
 
 internal class UseCaseGetAllPlayers(
-    private val useCaseSocketToUseCaseMediator: UseCaseSocketToUseCaseMediator,
+    private val socketMediator: UseCaseSocketToUseCaseMediator,
     private val profileDetails: UseCaseGetProfileDetails
 ) {
 
@@ -25,7 +25,7 @@ internal class UseCaseGetAllPlayers(
     suspend fun execute(
         searchKey: Option<String>
     ): Flow<Either<Failure, List<ParticipantDTO>>> {
-        val map = useCaseSocketToUseCaseMediator
+        val map = socketMediator
             .on("activeParticipants")
             .map{
                 serializer.decodeFromJsonElement<ActiveParticipantsEvent>(it).data.filter {

@@ -1,7 +1,5 @@
 package com.tictactao.profile.di
 
-import com.abhijith.foundation.coroutines.appScope
-import com.abhijith.foundation.platform.KMMContextProvider
 import com.tictactao.profile.domain.use_case.UseCaseGetProfileDetails
 import com.tictactao.profile.domain.use_case.UseCaseSyncProfileDetailsWIthServer
 import com.tictactao.profile.domain.use_case.UseCaseUpdateProfileDetails

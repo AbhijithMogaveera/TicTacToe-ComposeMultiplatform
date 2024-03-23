@@ -1,9 +1,10 @@
 package com.abhijith.auth.viewmodel.usecases.impl
 
 import com.abhijith.auth.util.UserAccountUtil
+import com.abhijith.auth.models.LoginResult
 import com.abhijith.auth.viewmodel.usecases.UseCaseLogin
 
-class UseCaseLoginDefaultImpl(
+internal class UseCaseLoginDefaultImpl(
     private val userAccountUtil: UserAccountUtil
 ) : UseCaseLogin {
 
@@ -15,7 +16,7 @@ class UseCaseLoginDefaultImpl(
 
     override suspend fun login(
         userName: String, password: String
-    ): UseCaseLogin.Result {
+    ): LoginResult {
         userAccountUtil.login(
             userName, password
         ).onLeft {
@@ -24,19 +25,19 @@ class UseCaseLoginDefaultImpl(
                     clientSideError.issue.key == INVALID_USER_ID ||
                     clientSideError.issue.key == USER_NAME_REQUIRED
                 ) {
-                    return UseCaseLogin.Result.INVALID_EMAIL_ID
+                    return LoginResult.INVALID_EMAIL_ID
                 }
                 if (clientSideError.issue.key == INVALID_PASSWORD) {
-                    return UseCaseLogin.Result.INVALID_PASSWORD
+                    return LoginResult.INVALID_PASSWORD
                 }
-                return UseCaseLogin.Result.CLIENT_SIDE_ERROR
+                return LoginResult.CLIENT_SIDE_ERROR
             }.isServerSideError { _ ->
-                return UseCaseLogin.Result.SERVER_SIDE_ISSUE
+                return LoginResult.SERVER_SIDE_ISSUE
             }.isUnKnownError {
                 printStackTrace()
             }
         }
-        return UseCaseLogin.Result.LoginSuccessful
+        return LoginResult.LoginSuccessful
     }
 
 }

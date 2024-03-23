@@ -19,12 +19,12 @@ import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-abstract class SharedAuthModuleConfig : ModuleConfig, RequestResponseInterceptor, KoinComponent {
+abstract class SharedAuthModuleConfig (
+): ModuleConfig, RequestResponseInterceptor, KoinComponent {
     private val useCaseGetAuthToken: UseCaseGetAuthToken by lazy { get() }
     override fun configKoinModules(
         koinApplication: KoinApplication
     ) {
-        println("SharedAuthModuleConfigured")
         koinApplication.modules(
             UseCaseProvider,
             AuthApiProvider,

@@ -60,7 +60,7 @@ import com.tictactao.profile.domain.models.User
 import com.tictactao.profile.domain.use_case.UseCaseUpdateProfileDetails
 import kotlinx.coroutines.flow.collectLatest
 
-val LocalProfileViewModel = staticCompositionLocalOf<ProfileViewModel?> { null }
+private val LocalProfileViewModel = staticCompositionLocalOf<ProfileViewModel?> { null }
 
 private enum class ProfileComponentSection {
     MainScreen,
@@ -144,7 +144,6 @@ private fun ProfileDetails(onShowProfileEditOptionRequest: () -> Unit) {
         profileViewModel
             .getProfileDetails()
             .collectLatest {
-                println("Profile details collected :) ${it}")
                 user = it
             }
     }
@@ -295,7 +294,7 @@ private fun PickProfileImage() {
 }
 
 @Composable
-fun PrimaryCTAButton(
+private fun PrimaryCTAButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -342,7 +341,7 @@ fun PrimaryCTAButton(
     }
 }
 
-fun String.toColorInt(): Int {
+private fun String.toColorInt(): Int {
     if (this[0] == '#') {
         var color = substring(1).toLong(16)
         if (length == 7) {

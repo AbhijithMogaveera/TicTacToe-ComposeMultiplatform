@@ -1,15 +1,8 @@
 package com.abhijith.auth.viewmodel.usecases
 
-interface UseCaseLogin {
-    enum class Result {
-        LoginSuccessful,
-        INVALID_PASSWORD,
-        INVALID_EMAIL_ID,
-        CLIENT_SIDE_ERROR,
-        SERVER_SIDE_ISSUE,
-        UNKNOWN_ERROR
-    }
+import com.abhijith.auth.models.LoginResult
 
-    suspend fun login(userName: String, password: String): Result
+internal interface UseCaseLogin {
+    suspend fun login(userName: String, password: String): LoginResult
 }
 

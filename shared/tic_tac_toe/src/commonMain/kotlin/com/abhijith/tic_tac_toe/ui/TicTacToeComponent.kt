@@ -1,11 +1,16 @@
 package com.abhijith.tic_tac_toe.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,22 +21,29 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,34 +57,87 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import arrow.core.None
-import com.abhijith.tic_tac_toe.domain.models.Player
+import coil3.compose.AsyncImage
+import com.abhijith.tic_tac_toe.domain.models.dto.ParticipantDTO
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
-fun TicTacToeComponent() {
-    if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
-        if(TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended){
-            GoForNextMatch()
-        }else {
-            PartnerPlayerConnectionStatePopUp()
-            ChoosePlayer()
+internal fun TicTacToeComponent() {
+    Column {
+        PendingRequestBottomSheet()
+        if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
+            if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended) {
+                GoForNextMatch()
+            } else {
+                ChoosePlayer()
+                PartnerPlayerConnectionStatePopUp()
+            }
+        } else {
+            TTTGame()
         }
-    } else {
-        TTTGame()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PendingRequestBottomSheet() {
+    val pendingRequests = TicTacToeViewModel.pendingRequest.collectAsState(emptyList()).value
+    var showSheet by remember {
+        mutableStateOf(false)
+    }
+    AnimatedVisibility(
+        visible = pendingRequests.isNotEmpty()
+    ) {
+        TextButton(
+            onClick = {
+                showSheet = true
+            }
+        ) {
+            Text("${pendingRequests.size} Pending requests for play, tap here..!")
+        }
+    }
+    val modalBottomSheetState = rememberModalBottomSheetState(true)
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showSheet = false
+            },
+            sheetState = modalBottomSheetState,
+            dragHandle = { BottomSheetDefaults.DragHandle() },
+        ) {
+            LazyColumn(
+                modifier = Modifier.defaultMinSize(minHeight = 400.dp)
+            ) {
+                items(pendingRequests) {(participant, accept, reject)->
+                    ProfileCard(
+                        participant,
+                        onClick ={},
+                        actions = {
+                            TextButton(onClick = accept){
+                                Text("Accept")
+                            }
+                            TextButton(onClick = reject){
+                                Text("Reject")
+                            }
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun GoForNextMatch() {
-    Box(modifier = Modifier.fillMaxSize()){
+internal fun GoForNextMatch() {
+    Box(modifier = Modifier.fillMaxSize()) {
         Button(
             onClick = {
                 TicTacToeViewModel.lookForNextMatch()
             },
             modifier = Modifier.align(Alignment.Center)
-        ){
+        ) {
             Text("Go for next match")
         }
     }
@@ -119,9 +184,9 @@ private fun PartnerPlayerConnectionStatePopUp() {
 
 
 @Composable
-fun ChoosePlayer(
-    players: List<Player> =  TicTacToeViewModel.player.collectAsState().value,
-    onPlayerSelected: (Player) -> Unit = {},
+internal fun ChoosePlayer(
+    players: List<ParticipantDTO> = TicTacToeViewModel.player.collectAsState().value,
+    onPlayerSelected: (ParticipantDTO) -> Unit = {},
     onSearchValueChange: (String) -> Unit = {}
 ) {
     LaunchedEffect(key1 = Unit) {
@@ -137,38 +202,57 @@ fun ChoosePlayer(
         Spacer(Modifier.height(10.dp))
         LazyColumn {
             items(players) {
-                Card(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp),
-                    shape = RoundedCornerShape(15.dp),
-                    onClick = {
-                        TicTacToeViewModel.requestToPlayerToPlay(it)
-                    }
-                ) {
-                    Box(modifier = Modifier.padding(10.dp)) {
-                        Row {
-                            Box(
-                                Modifier.size(40.dp).drawBehind {
-                                    drawCircle(
-                                        color = Color.Red
-                                    )
-                                }
-                            ) {
-
-                            }
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Column {
-                                Text(
-                                    it.name, style = TextStyle(
-                                        color = Color.Black,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 16.sp
-                                    )
-                                )
-                                Text(if (it.isAvailableToPlay) "Available" else "Not available")
-                            }
+                ProfileCard(
+                    it,
+                    onClick = remember{
+                        {
+                            TicTacToeViewModel.requestToPlayerToPlay(it)
                         }
                     }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileCard(
+    profileDetails: ParticipantDTO,
+    onClick: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp),
+        shape = RoundedCornerShape(15.dp),
+        onClick = onClick
+    ) {
+        Box(modifier = Modifier.padding(10.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.padding(10.dp).clip(CircleShape).border(
+                        border = BorderStroke(2.dp, Color.White),
+                        shape = CircleShape
+                    ).size(40.dp).align(Alignment.CenterVertically).background(color = Color.Black)
+                ) {
+                    AsyncImage(
+                        model = profileDetails.profile_image,
+                        contentDescription = null,
+                    )
                 }
+                Spacer(modifier = Modifier.width(10.dp))
+                Column() {
+                    Text(
+                        profileDetails.user_name, style = TextStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                actions()
             }
         }
     }
@@ -176,10 +260,6 @@ fun ChoosePlayer(
 
 @Composable
 fun TTTGame() {
-    LaunchedEffect(key1 = Unit){
-        delay(5.seconds)
-        TicTacToeViewModel.endGame()
-    }
     Box(modifier = Modifier.padding(10.dp).drawBehind {
         drawRoundRect(
             color = Color("#E78895".toColorInt()),

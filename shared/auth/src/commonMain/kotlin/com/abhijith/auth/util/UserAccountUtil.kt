@@ -10,12 +10,10 @@ import com.abhijith.auth.apis.AuthApis
 import com.abhijith.auth.apis.JwtToken
 import com.abhijith.foundation.ktor.exceptions.RequestFailure
 import com.abhijith.foundation.prefrence.KmmPreference
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
-class UserAccountUtil constructor(
+internal class UserAccountUtil constructor(
     private val preference: KmmPreference,
     private val authApis: AuthApis,
 ) {

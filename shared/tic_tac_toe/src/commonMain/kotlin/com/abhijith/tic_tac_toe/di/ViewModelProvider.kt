@@ -6,11 +6,9 @@ import com.abhijith.tic_tac_toe.domain.useCases.UseCaseGetAllPlayers
 import org.koin.dsl.module
 
 val ViewModelProvider = module {
-    single<UseCaseGetAllPlayers> {
-        UseCaseGetAllPlayers(
-            repo = get()
+    single<TicTacToeRepo> {
+        TicTacToeRepoImpl(
+            get()
         )
     }
-
-    single<TicTacToeRepo> { TicTacToeRepoImpl() }
 }

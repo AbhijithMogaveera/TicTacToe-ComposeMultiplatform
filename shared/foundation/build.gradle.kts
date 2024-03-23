@@ -52,6 +52,7 @@ kotlin {
             api(libs.ktor.client.content.negotiation)
             api(libs.koin.core)
             api("com.rickclephas.kmm:kmm-viewmodel-core:1.0.0-ALPHA-19")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
         }
         iosMain.dependencies {
             api(libs.ktor.client.darwin)

@@ -2,6 +2,7 @@ package com.tictactao.profile.domain.use_case
 
 import arrow.core.Either
 import arrow.core.some
+import com.abhijith.foundation.module_config.SharedWithOtherModule
 import com.darkrockstudios.libraries.mpfilepicker.MPFile
 import com.tictactao.profile.domain.repo.ProfileRepo
 import kotlinx.coroutines.delay
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
+@SharedWithOtherModule
 class UseCaseUpdateProfileDetails(
     val profileRepo: ProfileRepo,
 ) {

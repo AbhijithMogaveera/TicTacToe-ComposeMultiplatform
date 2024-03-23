@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class UseCaseSyncProfileDetailsWIthServer(
+internal class UseCaseSyncProfileDetailsWIthServer(
     val useCaseGetAuthToken: UseCaseGetAuthToken,
     val appScope: CoroutineScope,
     val profileRepo: ProfileRepo

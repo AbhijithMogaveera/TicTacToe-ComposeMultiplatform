@@ -1,7 +1,7 @@
 package com.abhijith.auth.apis
 
 import arrow.core.Either
-import com.abhijith.foundation.arrow.action
+import com.abhijith.foundation.arrow.apiCallScope
 import com.abhijith.foundation.ktor.exceptions.RequestFailure
 import com.abhijith.foundation.ktor.ensureSuccessfulRequest
 import io.ktor.client.HttpClient
@@ -11,14 +11,14 @@ import io.ktor.client.request.setBody
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-class AuthApisDefaultImpl constructor(
+internal class AuthApisDefaultImpl constructor(
     val httpClient: HttpClient
 ) : AuthApis {
 
     override suspend fun login(
         userName: String,
         password: String
-    ): Either<RequestFailure, JwtToken> = action {
+    ): Either<RequestFailure, JwtToken> = apiCallScope {
         httpClient.post("/app/v1/auth/login") {
             val content = mapOf(
                 "user_name" to JsonPrimitive(userName),
@@ -31,7 +31,7 @@ class AuthApisDefaultImpl constructor(
     override suspend fun registration(
         userName: String,
         password: String
-    ): Either<RequestFailure, JwtToken> = action {
+    ): Either<RequestFailure, JwtToken> = apiCallScope {
         httpClient.post("/app/v1/auth/registration") {
             val content = mapOf(
                 "user_name" to JsonPrimitive(userName),

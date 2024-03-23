@@ -55,13 +55,9 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
                 .execute(searchKey)
                 .collect {
                     it.onRight { participants ->
-                        println("abhijith" + participants.size)
-                        println(participants.joinToString())
                         _player.emit(participants)
                         _onPlayerFetchingIssue.emit(None)
                     }.onLeft {
-                        println("mogavera")
-                        println(it)
                         _player.emit(emptyList())
                         _onPlayerFetchingIssue.emit(it.some())
                     }
@@ -154,9 +150,6 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
                         playRequest.invitationID != revokedInvitationID
                     }
                 }
-                println("--------------------------------------")
-                println("Hehe => ${revokedInvitationID == lastAskToPlayReqID}")
-                println("--------------------------------------")
                 if (revokedInvitationID == lastAskToPlayReqID) {
                     requestState = PlayRequestState.NotInitiated
                     lastAskToPlayReqID = null

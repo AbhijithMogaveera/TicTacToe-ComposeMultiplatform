@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.decodeFromJsonElement
 
 class UseCaseRespondToPlayWithMeRequest(
-    val mediator: UseCaseSocketToUseCaseMediator
+    val socketMediator: UseCaseSocketToUseCaseMediator
 ) {
     suspend fun onNewRequest(
         onNewRequest: suspend (
@@ -16,7 +16,7 @@ class UseCaseRespondToPlayWithMeRequest(
         ) -> Unit
     ) {
         coroutineScope {
-            mediator
+            socketMediator
                 .on("play_request")
                 .collect {
                     val requestDTO = serializer.decodeFromJsonElement<PlayRequestDTO>(it)
@@ -25,7 +25,7 @@ class UseCaseRespondToPlayWithMeRequest(
                             participantDTO = requestDTO.participant,
                             accept = {
                                 launch {
-                                    mediator.emmit(
+                                    socketMediator.emmit(
                                         event = "play_request_accept",
                                         payload = requestDTO.invitationID
                                     )
@@ -33,7 +33,7 @@ class UseCaseRespondToPlayWithMeRequest(
                             },
                             reject = {
                                 launch {
-                                    mediator.emmit(
+                                    socketMediator.emmit(
                                         event = "play_request_reject",
                                         payload = requestDTO.invitationID
                                     )

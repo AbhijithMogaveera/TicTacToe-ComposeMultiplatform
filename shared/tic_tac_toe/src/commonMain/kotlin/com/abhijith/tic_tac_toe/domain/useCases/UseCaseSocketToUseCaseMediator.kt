@@ -35,7 +35,7 @@ private enum class ConnectionState {
 }
 
 class UseCaseSocketToUseCaseMediator(
-    private val useCaseGetAuthToken: UseCaseGetAuthToken
+    private val socketMediator: UseCaseGetAuthToken
 ) : WebSocketUtil {
     private var scope = CoroutineScope(Dispatchers.IO+ SupervisorJob())
     private var isConnected: MutableStateFlow<ConnectionState> =
@@ -75,7 +75,7 @@ class UseCaseSocketToUseCaseMediator(
 
     private fun connect() {
         scope.launch {
-            useCaseGetAuthToken.getToken().collectLatest { optionOption ->
+            socketMediator.getToken().collectLatest { optionOption ->
                 var retryCount:Int = 0
                 optionOption.onSome { token ->
                     while (true) {

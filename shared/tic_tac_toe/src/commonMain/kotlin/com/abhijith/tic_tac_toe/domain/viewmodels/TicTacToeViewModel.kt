@@ -14,6 +14,7 @@ import com.abhijith.tic_tac_toe.domain.useCases.UseCaseReqPlayerPlayWithMe
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseGetAllPlayers
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseNotifyRejectedPlayRequest
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRespondToPlayWithMeRequest
+import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -31,11 +32,12 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
 
     override val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-    private val ucGetAllPlayer: UseCaseGetAllPlayers by inject<UseCaseGetAllPlayers>()
-    private val ucReqPlayerToPlayWithMe: UseCaseReqPlayerPlayWithMe by inject<UseCaseReqPlayerPlayWithMe>()
+    private val ucGetAllPlayer: UseCaseGetAllPlayers by inject()
+    private val ucReqPlayerToPlayWithMe: UseCaseReqPlayerPlayWithMe by inject()
     private val ucRespondToPlayRequest: UseCaseRespondToPlayWithMeRequest by inject()
     private val ucGameSession: UseCaseGameSession by inject()
     private val ucNotifyRejectedPlayRequest: UseCaseNotifyRejectedPlayRequest by inject()
+    private val ucRevokePlayRequest: UseCaseRevokePlayRequest by inject()
 
     private val _player: MutableStateFlow<List<ParticipantDTO>> = MutableStateFlow(emptyList())
     private val _onPlayerFetchingIssue =
@@ -49,7 +51,6 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
 
     fun fetchPlayers(searchKey: Option<String>) {
         coroutineScope.launch {
-            println("fetching user ------------------------")
             ucGetAllPlayer
                 .execute(searchKey)
                 .collect {
@@ -61,7 +62,6 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
                         _onPlayerFetchingIssue.emit(it.some())
                     }
                 }
-            println("collection done ------------------------")
         }
     }
 
@@ -69,10 +69,16 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
         Waiting, PlayStarted, Declined, Error, Ended, NotInitiated
     }
 
+    private var lastAskToPlayReqID: String? = null
     fun requestToPlayerToPlay(player: ParticipantDTO) {
         coroutineScope.launch {
             requestState = PlayRequestState.Waiting
-            ucReqPlayerToPlayWithMe.ask(player)
+            ucReqPlayerToPlayWithMe.ask(
+                player,
+                onIdGenerated = {
+                    lastAskToPlayReqID = it
+                }
+            )
         }
     }
 
@@ -84,6 +90,16 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
 
     fun endGame() {
         requestState = PlayRequestState.Ended
+    }
+
+    fun revokeOnGoingReq() {
+        coroutineScope.launch {
+            lastAskToPlayReqID?.let {
+                ucRevokePlayRequest.revoke(it);
+            }
+            lastAskToPlayReqID = null
+            requestState = PlayRequestState.NotInitiated
+        }
     }
 
     init {
@@ -118,8 +134,33 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
                         playRequest.invitationID != rejectedInvitationId
                     }
                 }
+                if (rejectedInvitationId == lastAskToPlayReqID) {
+                    requestState = PlayRequestState.Declined
+                    lastAskToPlayReqID = null
+                }
             }
         }
     }
 
+    init {
+        coroutineScope.launch {
+            ucRevokePlayRequest.onRevoke().collectLatest { revokedInvitationID ->
+                _pendingPlayRequest.update { playRequests ->
+                    playRequests.filter { playRequest ->
+                        playRequest.invitationID != revokedInvitationID
+                    }
+                }
+                if (revokedInvitationID == lastAskToPlayReqID) {
+                    requestState = PlayRequestState.NotInitiated
+                    lastAskToPlayReqID = null
+                }
+            }
+        }
+    }
+
+    fun stopOnGoingGame(){
+        coroutineScope.launch {
+
+        }
+    }
 }

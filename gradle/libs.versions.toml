@@ -23,6 +23,7 @@ uiTooling = "1.6.2"
 koin-bom = "3.5.3"
 compose-plugin = "1.6.0-rc02"
 mf-file-picker = "3.1.0"
+org-jetbrains-kotlin-jvm = "1.9.22"
 #<!----------------------------librARIES--------------------------->
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -78,3 +79,4 @@ kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = 
 buildkonfig = {id = "com.codingfeline.buildkonfig"}
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 cashsqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }

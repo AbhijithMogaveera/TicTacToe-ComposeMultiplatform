@@ -6,44 +6,49 @@ import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRespondToPlayWithMeReques
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseSocketToUseCaseMediator
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseGameSession
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseNotifyRejectedPlayRequest
+import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
 import org.koin.dsl.module
 
 val UseCaseProvider = module {
 
     single<UseCaseSocketToUseCaseMediator> {
         UseCaseSocketToUseCaseMediator(
-            useCaseGetAuthToken = get()
+            socketMediator = get()
         )
+    }
+
+    single<UseCaseRevokePlayRequest> {
+        UseCaseRevokePlayRequest(socketMediator = get())
     }
 
     single<UseCaseGetAllPlayers> {
         UseCaseGetAllPlayers(
-            useCaseSocketToUseCaseMediator = get(),
+            socketMediator = get(),
             profileDetails = get()
         )
     }
 
     single<UseCaseReqPlayerPlayWithMe> {
         UseCaseReqPlayerPlayWithMe(
-            socketToUseCaseMediator = get()
+            socketMediator = get()
         )
     }
 
     single<UseCaseRespondToPlayWithMeRequest> {
         UseCaseRespondToPlayWithMeRequest(
-            mediator = get()
+            socketMediator = get()
         )
     }
 
     single<UseCaseGameSession> {
         UseCaseGameSession(
-            mediator = get()
+            socketMediator = get()
         )
     }
 
     single<UseCaseNotifyRejectedPlayRequest> {
         UseCaseNotifyRejectedPlayRequest(
-            mediator = get()
+            socketMediator = get()
         )
     }
 }

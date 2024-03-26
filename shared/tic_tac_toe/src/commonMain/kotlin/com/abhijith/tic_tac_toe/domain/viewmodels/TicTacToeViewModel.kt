@@ -18,6 +18,7 @@ import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.time.Duration.Companion.seconds
 
 internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
 
@@ -66,7 +68,7 @@ internal object TicTacToeViewModel : SharedViewModel, KoinComponent {
     }
 
     enum class PlayRequestState {
-        Waiting, PlayStarted, Declined, Error, Ended, NotInitiated
+        Waiting, PlayStarted, Declined, Ended, NotInitiated
     }
 
     private var lastAskToPlayReqID: String? = null

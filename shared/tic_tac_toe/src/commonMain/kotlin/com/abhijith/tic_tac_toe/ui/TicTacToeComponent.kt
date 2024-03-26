@@ -2,8 +2,10 @@ package com.abhijith.tic_tac_toe.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,17 +26,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +60,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -60,15 +70,27 @@ import arrow.core.None
 import coil3.compose.AsyncImage
 import com.abhijith.tic_tac_toe.domain.models.dto.ParticipantDTO
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
-import kotlinx.coroutines.delay
-import kotlin.time.Duration.Companion.seconds
+import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel.PlayRequestState.*
+import kmmsample.shared.tic_tac_toe.generated.resources.Res
+import kmmsample.shared.tic_tac_toe.generated.resources.no_content
+import kmmsample.shared.tic_tac_toe.generated.resources.not_found
+import kmmsample.shared.tic_tac_toe.generated.resources.waiting
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 
+val borderColor = Color("#DDE6ED".toColorInt())
+
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun TicTacToeComponent() {
-    Column {
+    Column(
+        modifier = Modifier.background(color = Color("#27374D".toColorInt()))
+    ) {
+
         PendingRequestBottomSheet()
-        if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
-            if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended) {
+        if (TicTacToeViewModel.requestState != PlayStarted) {
+            if (TicTacToeViewModel.requestState == Ended) {
                 GoForNextMatch()
             } else {
                 ChoosePlayer()
@@ -87,8 +109,8 @@ fun PendingRequestBottomSheet() {
     var showSheet by remember {
         mutableStateOf(false)
     }
-    LaunchedEffect(key1 = pendingRequests){
-        if(pendingRequests.isEmpty()){
+    LaunchedEffect(key1 = pendingRequests) {
+        if (pendingRequests.isEmpty()) {
             showSheet = false
         }
     }
@@ -100,7 +122,16 @@ fun PendingRequestBottomSheet() {
                 showSheet = true
             }
         ) {
-            Text("${pendingRequests.size} Pending requests for play, tap here..!")
+            Icon(
+                imageVector = Icons.Outlined.Notifications,
+                contentDescription = null,
+                tint = Color.Yellow
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                "${pendingRequests.size} Pending requests for play, tap here..!",
+                color = Color.White
+            )
         }
     }
     val modalBottomSheetState = rememberModalBottomSheetState(true)
@@ -126,7 +157,10 @@ fun PendingRequestBottomSheet() {
                             TextButton(onClick = reject) {
                                 Text("Reject")
                             }
-                        }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
                     )
                 }
             }
@@ -148,44 +182,51 @@ internal fun GoForNextMatch() {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun PartnerPlayerConnectionStatePopUp() {
     val showAlertDialog by remember {
         derivedStateOf {
-            TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Waiting
-                    || TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Error
-                    || TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Declined
+            TicTacToeViewModel.requestState == Waiting
+                    || TicTacToeViewModel.requestState == Declined
         }
     }
     if (showAlertDialog) {
-        AlertDialog(
-            onDismissRequest = {},
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Waiting) {
+        when(TicTacToeViewModel.requestState){
+            Waiting -> {
+                QuickDialog(
+                    res = Res.drawable.waiting,
+                    title = "Waiting..",
+                    message = "Waiting for other player to accept your request",
+                    actions = {
+                        AssistChip(onClick = {
                             TicTacToeViewModel.revokeOnGoingReq()
-                        } else TicTacToeViewModel.lookForNextMatch()
-                    }
-                ) {
-                    Text(text = "Cancel")
-                }
-            },
-            title = {
-                when (TicTacToeViewModel.requestState) {
-                    TicTacToeViewModel.PlayRequestState.Waiting -> Text("Waiting for player to accept your request")
-                    TicTacToeViewModel.PlayRequestState.Declined -> Text("Player declined your request")
-                    TicTacToeViewModel.PlayRequestState.Error -> Text("Oops! something went wrong")
-                    else -> {/*Do nothing*/
-                    }
-                }
-            },
-            properties = DialogProperties(),
-            modifier = Modifier.shadow(
-                elevation = 10.dp, shape = RoundedCornerShape(10.dp)
-            )
+                        }, label = {
+                            Text("Withdraw request..! 🙂", color = Color.White)
+                        }, shape = CircleShape)
+                    },
+                    onDismissRequest = {}
+                )
+            }
+            Declined -> {
+                QuickDialog(
+                    res = Res.drawable.not_found,
+                    title = "Request Rejected",
+                    message = "Your play request got rejected",
+                    actions = {
+                        AssistChip(onClick = {
+                            TicTacToeViewModel.lookForNextMatch()
+                        }, label = {
+                            Text("Dismiss 😢", color = Color.White)
+                        }, shape = CircleShape)
+                    },
+                    onDismissRequest = {}
+                )
+            }
+            else->{}
+        }
 
-        )
+
     }
 }
 
@@ -201,23 +242,69 @@ internal fun ChoosePlayer(
     }
 
     Column {
-        Spacer(Modifier.height(20.dp))
-        SearchBar(
-            value = "",
-            onValueChange = onSearchValueChange
-        )
-        Spacer(Modifier.height(10.dp))
-        LazyColumn {
-            items(players) {
-                ProfileCard(
-                    it,
-                    onClick = remember {
-                        {
-                            TicTacToeViewModel.requestToPlayerToPlay(it)
+        Column(
+            modifier = Modifier.background(color = Color("#526D82".toColorInt()))
+        ) {
+            Text(
+                text = "Players",
+                fontStyle = FontStyle.Normal,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(15.dp),
+                color = Color.White,
+                fontSize = 25.sp
+            )
+            SearchBar(
+                value = "",
+                onValueChange = onSearchValueChange
+            )
+            Spacer(Modifier.height(1.dp))
+        }
+        if (players.isEmpty()) {
+            NoPlayerPresents()
+        } else {
+            LazyColumn {
+                items(players) {
+                    ProfileCard(
+                        it,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 0.dp, vertical = 0.dp),
+                        actions = {
+                            AssistChip(
+                                onClick = remember {
+                                    {
+                                        TicTacToeViewModel.requestToPlayerToPlay(it)
+                                    }
+                                },
+                                label = {
+                                    Text("Play")
+                                },
+                                shape = CircleShape
+                            )
                         }
-                    }
-                )
+                    )
+                }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+fun NoPlayerPresents() {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.TopCenter).padding(top = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.no_content),
+                contentDescription = null,
+                modifier = Modifier
+            )
+            Text("No active here player,\n Visit a bit later", color = Color.White)
         }
     }
 }
@@ -225,42 +312,55 @@ internal fun ChoosePlayer(
 @Composable
 private fun ProfileCard(
     profileDetails: ParticipantDTO,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
+    modifier: Modifier
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 5.dp),
-        shape = RoundedCornerShape(15.dp),
-        onClick = onClick
+        modifier = modifier,
+        shape = RoundedCornerShape(0.dp),
+        onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = Color("#DDE6ED".toColorInt()))
     ) {
-        Box(modifier = Modifier.padding(10.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(5.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .clip(CircleShape)
+                    .border(border = BorderStroke(2.dp, Color.White), shape = CircleShape)
+                    .size(45.dp)
+                    .align(Alignment.CenterVertically)
+                    .background(color = Color.Black)
             ) {
-                Box(
-                    modifier = Modifier.padding(10.dp).clip(CircleShape).border(
-                        border = BorderStroke(2.dp, Color.White),
-                        shape = CircleShape
-                    ).size(40.dp).align(Alignment.CenterVertically).background(color = Color.Black)
-                ) {
-                    AsyncImage(
-                        model = profileDetails.profile_image,
-                        contentDescription = null,
-                    )
-                }
-                Spacer(modifier = Modifier.width(10.dp))
-                Column() {
-                    Text(
-                        profileDetails.user_name, style = TextStyle(
-                            color = Color.Black,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
-                    )
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                actions()
+                AsyncImage(
+                    model = profileDetails.profile_image,
+                    contentDescription = null,
+                )
             }
+            Spacer(modifier = Modifier.width(5.dp))
+            Column() {
+                Text(
+                    text = profileDetails.user_name,
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                )
+                Text(
+                    profileDetails.user_name,
+                    style = TextStyle(
+                        color = Color.Black.copy(alpha = 0.7f),
+                        fontSize = 16.sp
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            actions()
+            Spacer(modifier = Modifier.width(5.dp))
         }
     }
 }
@@ -313,7 +413,7 @@ fun SearchBar(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth().padding(10.dp),
-        shape = RoundedCornerShape(20.dp),
+        shape = CircleShape,
         leadingIcon = {
             Icon(
                 imageVector = Icons.Outlined.Search,
@@ -322,6 +422,44 @@ fun SearchBar(
         },
         placeholder = {
             Text("Your friend name...")
-        }
+        },
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = borderColor,
+            unfocusedIndicatorColor = borderColor
+        )
     )
+}
+
+@Composable
+@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
+fun QuickDialog(
+    res: DrawableResource? = null,
+    title: String,
+    message: String,
+    actions: @Composable RowScope.() -> Unit = {},
+    onDismissRequest: () -> Unit
+) {
+    BasicAlertDialog(onDismissRequest = onDismissRequest) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color("#000000".toColorInt())),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(all = 20.dp).fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(title, color = Color.White, fontSize = 25.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(10.dp))
+                Text(message, color = Color.White.copy(alpha = 0.7f), fontSize = 18.sp, textAlign = TextAlign.Center, modifier = Modifier.padding(10.dp))
+                res?.let { res ->
+                    Image(painterResource(res), contentDescription = null)
+                }
+                Row(
+                    content = actions,
+                    modifier = Modifier.align(Alignment.End),
+                )
+            }
+
+        }
+    }
 }

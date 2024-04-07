@@ -28,7 +28,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.JsonObject
 import kotlin.time.Duration.Companion.seconds
 
-private enum class ConnectionState {
+enum class ConnectionState {
     NotConnected,
     Connected,
     Connecting
@@ -49,6 +49,7 @@ class UseCaseSocketToUseCaseMediator(
     var session: ClientWebSocketSession? = null
     private var framesFlow: MutableSharedFlow<Frame> = MutableSharedFlow()
     suspend inline fun <reified T> emmit(event: String, payload: T) {
+        awaitConnect()
         event asTagAndLog payload
         val encodeToString = serializer.encodeToString(EmissionPayload(event, payload))
         session?.send(Frame.Text(encodeToString))
@@ -59,7 +60,7 @@ class UseCaseSocketToUseCaseMediator(
         return session?.on(event) ?: errorInActiveSocket()
     }
 
-    private suspend fun awaitConnect() {
+    suspend fun awaitConnect() {
         if (isConnected.value == ConnectionState.NotConnected) {
             connect()
         }
@@ -115,6 +116,7 @@ class UseCaseSocketToUseCaseMediator(
                     println("ConnectionState: disconnected retry: ${retryCount++}")
                 }
             session = null
+            isConnected.emit(ConnectionState.NotConnected)
             delay( /*retryDelay = */1000)
         }
     }

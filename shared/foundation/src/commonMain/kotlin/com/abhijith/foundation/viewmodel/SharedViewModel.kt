@@ -2,10 +2,11 @@ package com.abhijith.foundation.viewmodel
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import org.koin.core.component.KoinComponent
 
-interface SharedViewModel {
-    val coroutineScope:CoroutineScope
-    fun dispose(){
+interface SharedViewModel : KoinComponent {
+    val coroutineScope: CoroutineScope
+    fun dispose() {
         coroutineScope.cancel()
     }
 }

@@ -12,7 +12,6 @@ import com.abhijith.tic_tac_toe.ui.components.invitations.ChoosePlayer
 import com.abhijith.tic_tac_toe.ui.components.invitations.GoForNextMatch
 import com.abhijith.tic_tac_toe.ui.components.invitations.PartnerPlayerConnectionStatePopUp
 import com.abhijith.tic_tac_toe.ui.components.invitations.PendingRequestBottomSheet
-import com.abhijith.tic_tac_toe.ui.components.toColorInt
 
 @Composable
 internal fun TicTacToeComponent() {
@@ -20,8 +19,6 @@ internal fun TicTacToeComponent() {
         modifier = Modifier.background(color = Color("#27374D".toColorInt())),
         verticalArrangement = Arrangement.Top
     ) {
-        TicTacToeGame()
-        return
         PendingRequestBottomSheet()
         if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
             if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended) {

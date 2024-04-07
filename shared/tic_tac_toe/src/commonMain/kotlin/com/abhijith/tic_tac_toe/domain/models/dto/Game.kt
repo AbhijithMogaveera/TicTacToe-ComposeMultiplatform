@@ -16,9 +16,6 @@ data class Player(
 
 @Serializable
 data class GameEventData(
-    val event: String,
-    val data: GameData,
-    val isAccepted: Boolean,
     val invitation_id:String
 )
 

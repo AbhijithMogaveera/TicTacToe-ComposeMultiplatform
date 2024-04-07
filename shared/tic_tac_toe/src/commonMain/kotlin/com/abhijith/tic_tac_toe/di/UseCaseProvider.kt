@@ -7,6 +7,8 @@ import com.abhijith.tic_tac_toe.domain.useCases.UseCaseSocketToUseCaseMediator
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseGameSession
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseNotifyRejectedPlayRequest
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
+import com.abhijith.tic_tac_toe.domain.useCases.UseCaseStopGame
+import com.abhijith.tic_tac_toe.domain.useCases.UseCaseTapTile
 import org.koin.dsl.module
 
 val UseCaseProvider = module {
@@ -42,12 +44,25 @@ val UseCaseProvider = module {
 
     single<UseCaseGameSession> {
         UseCaseGameSession(
-            socketMediator = get()
+            socketMediator = get(),
+            profileDetails = get()
         )
     }
 
     single<UseCaseNotifyRejectedPlayRequest> {
         UseCaseNotifyRejectedPlayRequest(
+            socketMediator = get()
+        )
+    }
+
+    single<UseCaseStopGame> {
+        UseCaseStopGame(
+            socketMediator = get()
+        )
+    }
+
+    single<UseCaseTapTile> {
+        UseCaseTapTile(
             socketMediator = get()
         )
     }

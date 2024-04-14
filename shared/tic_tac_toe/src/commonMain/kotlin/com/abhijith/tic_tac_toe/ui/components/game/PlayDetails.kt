@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.getOrElse
-import com.abhijith.tic_tac_toe.domain.useCases.PlayerProfile
+import com.abhijith.tic_tac_toe.domain.models.PlayerProfile
 
 @Composable
 fun PlayDetails(

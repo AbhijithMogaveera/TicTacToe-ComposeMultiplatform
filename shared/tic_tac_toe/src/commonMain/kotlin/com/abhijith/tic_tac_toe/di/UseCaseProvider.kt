@@ -1,5 +1,6 @@
 package com.abhijith.tic_tac_toe.di
 
+import com.abhijith.tic_tac_toe.domain.useCases.UseCaseConnectionStateChange
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseReqPlayerPlayWithMe
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseGetAllPlayers
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRespondToPlayWithMeRequest
@@ -14,9 +15,7 @@ import org.koin.dsl.module
 val UseCaseProvider = module {
 
     single<UseCaseSocketToUseCaseMediator> {
-        UseCaseSocketToUseCaseMediator(
-            socketMediator = get()
-        )
+        UseCaseSocketToUseCaseMediator(socketMediator = get())
     }
 
     single<UseCaseRevokePlayRequest> {
@@ -24,46 +23,35 @@ val UseCaseProvider = module {
     }
 
     single<UseCaseGetAllPlayers> {
-        UseCaseGetAllPlayers(
-            socketMediator = get(),
-            profileDetails = get()
-        )
+        UseCaseGetAllPlayers(socketMediator = get(), profileDetails = get())
     }
 
     single<UseCaseReqPlayerPlayWithMe> {
-        UseCaseReqPlayerPlayWithMe(
-            socketMediator = get()
-        )
+        UseCaseReqPlayerPlayWithMe(socketMediator = get())
     }
 
     single<UseCaseRespondToPlayWithMeRequest> {
-        UseCaseRespondToPlayWithMeRequest(
-            socketMediator = get()
-        )
+        UseCaseRespondToPlayWithMeRequest(socketMediator = get())
     }
 
     single<UseCaseGameSession> {
-        UseCaseGameSession(
-            socketMediator = get(),
-            profileDetails = get()
-        )
+        UseCaseGameSession(socketMediator = get(), profileDetails = get())
     }
 
     single<UseCaseNotifyRejectedPlayRequest> {
-        UseCaseNotifyRejectedPlayRequest(
-            socketMediator = get()
-        )
+        UseCaseNotifyRejectedPlayRequest(socketMediator = get())
     }
 
     single<UseCaseStopGame> {
-        UseCaseStopGame(
-            socketMediator = get()
-        )
+        UseCaseStopGame(socketMediator = get())
     }
 
     single<UseCaseTapTile> {
-        UseCaseTapTile(
-            socketMediator = get()
-        )
+        UseCaseTapTile(socketMediator = get())
     }
+
+    single<UseCaseConnectionStateChange> {
+        UseCaseConnectionStateChange(socketMediator = get())
+    }
+
 }

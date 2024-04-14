@@ -37,13 +37,14 @@ import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.some
 import com.abhijith.foundation.koin.rememberInject
-import com.abhijith.tic_tac_toe.domain.useCases.BoardState
-import com.abhijith.tic_tac_toe.domain.useCases.TileState
+import com.abhijith.tic_tac_toe.data.dto.BoardState
+import com.abhijith.tic_tac_toe.domain.models.TileState
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.abhijith.tic_tac_toe.ui.components.ActivePlayerIndicatorColor
 import com.abhijith.tic_tac_toe.ui.components.InActivePlayerIndicatorColor
 import com.abhijith.tic_tac_toe.ui.components.activeStrokeWidth
 import com.abhijith.tic_tac_toe.ui.components.inActiveStrokeWidth
+import com.abhijith.tic_tac_toe.ui.components.invitations.Timer
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
 import com.tictactao.profile.domain.models.User
 import com.tictactao.profile.domain.use_case.UseCaseGetProfileDetails
@@ -183,7 +184,9 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                     strokeWidth = playerOIndicatorColor,
                     playerProfile = boardState.getPlayerO()
                 )
-                Text("winner => ${boardState.winPlayerUsername}")
+                boardState.gameEndsIn.onSome {
+                    Timer(it)
+                }
                 Spacer(modifier = Modifier.weight(1f))
                 Row(
                     modifier = Modifier.fillMaxWidth(),

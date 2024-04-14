@@ -5,7 +5,7 @@ import arrow.core.Option
 import arrow.core.right
 import com.abhijith.foundation.ktor.socket.serializer
 import com.abhijith.tic_tac_toe.domain.models.ActiveParticipantsEvent
-import com.abhijith.tic_tac_toe.domain.models.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
 import com.tictactao.profile.domain.use_case.UseCaseGetProfileDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

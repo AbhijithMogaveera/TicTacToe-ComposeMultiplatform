@@ -3,28 +3,20 @@ package com.example.kmmsample.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.abhijith.foundation.activity.ProvideActivity
-import com.abhijith.tic_tac_toe.setTicTacToeNavigation
 import com.abhijith.auth.setupAuthNavigation
 import com.abhijith.auth.ui.hooks.AuthProtected
+import com.abhijith.foundation.activity.ProvideActivity
+import com.abhijith.tic_tac_toe.setUpTicTacToeNavigation
+import com.abhijith.tic_tac_toe.ui.components.toColorInt
 import com.tictactao.profile.ui.ProfileComponent
-import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
 
@@ -35,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 MyApplicationTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = Color("#27374D".toColorInt())
                     ) {
                         val navController = rememberNavController()
                         NavHost(
@@ -43,7 +35,7 @@ class MainActivity : ComponentActivity() {
                             startDestination = "/profile"
                         ) {
                             setupAuthNavigation(navController)
-                            setTicTacToeNavigation(navController)
+                            setUpTicTacToeNavigation(navController)
                             composable("/profile"){
                                 AuthProtected(
                                     ifNotLogin = {
@@ -52,7 +44,9 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     ProfileComponent(
                                         onLetsPlayClick = {
-                                            navController.navigate("/tic_tac_toe")
+                                            if(navController.currentDestination?.route != "/tic_tac_toe") {
+                                                navController.navigate("/tic_tac_toe")
+                                            }
                                         }
                                     )
                                 }

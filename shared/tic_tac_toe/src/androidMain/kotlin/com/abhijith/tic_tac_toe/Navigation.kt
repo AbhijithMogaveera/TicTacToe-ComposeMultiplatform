@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import com.abhijith.tic_tac_toe.ui.components.TicTacToeComponent
 import com.abhijith.auth.ui.hooks.AuthProtected
 
-fun NavGraphBuilder.setTicTacToeNavigation(navController:NavController){
+fun NavGraphBuilder.setUpTicTacToeNavigation(navController:NavController){
     composable("/tic_tac_toe"){
         AuthProtected(
             ifNotLogin = {

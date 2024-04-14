@@ -2,7 +2,7 @@ package com.abhijith.tic_tac_toe.domain.useCases
 
 import com.abhijith.foundation.ktor.socket.serializer
 import com.abhijith.tic_tac_toe.domain.models.PlayRequest
-import com.abhijith.tic_tac_toe.domain.models.dto.PlayRequestDTO
+import com.abhijith.tic_tac_toe.data.dto.PlayRequestDTO
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.decodeFromJsonElement

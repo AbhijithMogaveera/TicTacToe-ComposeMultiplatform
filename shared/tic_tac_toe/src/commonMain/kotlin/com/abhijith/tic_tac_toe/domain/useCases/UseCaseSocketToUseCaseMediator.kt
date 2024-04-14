@@ -38,6 +38,7 @@ class UseCaseSocketToUseCaseMediator(
     private val socketMediator: UseCaseGetAuthToken
 ) : WebSocketUtil {
     private var scope = CoroutineScope(Dispatchers.IO+ SupervisorJob())
+
     private var isConnected: MutableStateFlow<ConnectionState> =
         MutableStateFlow(ConnectionState.NotConnected)
     private val client = HttpClient {
@@ -127,5 +128,14 @@ class UseCaseSocketToUseCaseMediator(
 
     override fun getIncoming(): Flow<Frame> {
         return framesFlow
+    }
+
+    fun getConnectionState(): Flow<ConnectionState> {
+        return isConnected
+    }
+    init {
+        scope.launch {
+            awaitConnect()
+        }
     }
 }

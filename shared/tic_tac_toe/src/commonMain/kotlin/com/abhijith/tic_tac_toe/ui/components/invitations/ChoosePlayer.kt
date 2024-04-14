@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.None
-import com.abhijith.tic_tac_toe.domain.models.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
 

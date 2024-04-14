@@ -1,7 +1,7 @@
 package com.abhijith.tic_tac_toe.domain.useCases
 
 import com.abhijith.foundation.ktor.socket.serializer
-import com.abhijith.tic_tac_toe.domain.models.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull

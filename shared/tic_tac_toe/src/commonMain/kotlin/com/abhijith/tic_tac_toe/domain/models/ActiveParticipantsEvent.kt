@@ -1,6 +1,6 @@
 package com.abhijith.tic_tac_toe.domain.models
 
-import com.abhijith.tic_tac_toe.domain.models.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -37,7 +38,7 @@ fun QuickDialog(
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = Color("#000000".toColorInt())),
+            colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER),
             shape = RoundedCornerShape(20.dp)
         ) {
             Column(

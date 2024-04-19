@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.domain.useCases.ConnectionState
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.abhijith.tic_tac_toe.ui.components.game.TicTacToeGame
@@ -32,7 +36,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 internal fun TicTacToeComponent() {
     Box(
-        modifier = Modifier.background(color = Color("#27374D".toColorInt())),
+        modifier = Modifier.background(color = AppColors.BACKGROUND),
     ) {
         AnimatedVisibility(
             visible = TicTacToeViewModel.connectionState == ConnectionState.Connected,
@@ -43,15 +47,30 @@ internal fun TicTacToeComponent() {
                 verticalArrangement = Arrangement.Top
             ) {
                 PendingRequestBottomSheet()
-                if (TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted) {
+                AnimatedVisibility(
+                    visible = TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.PlayStarted,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ){
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER),
+                        modifier = Modifier.padding(10.dp),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        TicTacToeGame()
+                    }
+                }
+                AnimatedVisibility(
+                    visible = TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ){
                     if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended) {
                         GoForNextMatch()
                     } else {
                         ChoosePlayer()
                         PartnerPlayerConnectionStatePopUp()
                     }
-                } else {
-                    TicTacToeGame()
                 }
             }
         }

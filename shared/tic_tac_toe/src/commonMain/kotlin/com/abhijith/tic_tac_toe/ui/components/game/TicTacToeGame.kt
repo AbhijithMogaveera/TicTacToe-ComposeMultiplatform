@@ -36,6 +36,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.some
+import com.abhijith.foundation.AppColors
 import com.abhijith.foundation.koin.rememberInject
 import com.abhijith.tic_tac_toe.data.dto.BoardState
 import com.abhijith.tic_tac_toe.domain.models.TileState
@@ -89,7 +90,6 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
         Box {
             Column(
                 modifier = modifier
-                    .background(color = Color("#1B3C73".toColorInt()))
                     .padding(10.dp)
                     .fillMaxSize()
                     .drawBehind {
@@ -184,28 +184,29 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                     strokeWidth = playerOIndicatorColor,
                     playerProfile = boardState.getPlayerO()
                 )
-                boardState.gameEndsIn.onSome {
-                    Timer(it)
-                }
                 Spacer(modifier = Modifier.weight(1f))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    AssistChip(
-                        onClick = {
-                            TicTacToeViewModel.stopOnGoingGame()
-                        },
-                        label = {
-                            Text(
-                                "Exit Game..🧐",
-                                color = Color.White,
-                                fontSize = 18.sp,
-                                modifier = Modifier.padding(10.dp)
-                            )
-                        },
-                        shape = CircleShape,
-                    )
+                boardState.gameEndsIn.onSome {
+                    Timer(it, "Start your next game")
+                }.onNone {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        AssistChip(
+                            onClick = {
+                                TicTacToeViewModel.stopOnGoingGame()
+                            },
+                            label = {
+                                Text(
+                                    "Exit Game..🧐",
+                                    color = Color.White,
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            },
+                            shape = CircleShape,
+                        )
+                    }
                 }
             }
         }

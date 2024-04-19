@@ -26,25 +26,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.domain.Participant
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
 
 @Composable
 fun ProfileCard(
-    profileDetails: ParticipantDTO,
+    profileDetails: Participant,
     onClick: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     modifier: Modifier
 ) {
     Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(0.dp),
+        modifier = modifier.padding(5.dp),
+        shape = RoundedCornerShape(15.dp),
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = Color("#DDE6ED".toColorInt()))
+        colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER_SMALL)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -67,14 +69,14 @@ fun ProfileCard(
                     style = TextStyle(
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        fontSize = 20.sp
                     )
                 )
                 Text(
                     profileDetails.user_name,
                     style = TextStyle(
                         color = Color.Black.copy(alpha = 0.7f),
-                        fontSize = 16.sp
+                        fontSize = 18.sp
                     )
                 )
             }

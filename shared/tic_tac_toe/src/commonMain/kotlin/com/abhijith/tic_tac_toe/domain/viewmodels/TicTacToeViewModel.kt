@@ -8,8 +8,8 @@ import arrow.core.Option
 import arrow.core.some
 import com.abhijith.foundation.viewmodel.SharedViewModel
 import com.abhijith.tic_tac_toe.domain.models.PlayRequest
-import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
 import com.abhijith.tic_tac_toe.data.dto.BoardState
+import com.abhijith.tic_tac_toe.domain.Participant
 import com.abhijith.tic_tac_toe.domain.models.GameState
 import com.abhijith.tic_tac_toe.domain.useCases.ConnectionState
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseConnectionStateChange
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -62,7 +62,7 @@ internal object TicTacToeViewModel : SharedViewModel {
     private val ucTapTile: UseCaseTapTile by inject()
     private val ucConnectionState: UseCaseConnectionStateChange by inject()
 
-    private val _player: MutableStateFlow<List<ParticipantDTO>> = MutableStateFlow(emptyList())
+    private val _player: MutableStateFlow<List<Participant>> = MutableStateFlow(emptyList())
     private val _onPlayerFetchingIssue =
         MutableStateFlow<Option<UseCaseGetAllPlayers.Failure>>(None)
     private val _pendingPlayRequest: MutableStateFlow<List<PlayRequest>> =
@@ -70,7 +70,16 @@ internal object TicTacToeViewModel : SharedViewModel {
     private val _connectionState: MutableStateFlow<ConnectionState> =
         MutableStateFlow(ConnectionState.NotConnected)
 
-    val player = _player.asStateFlow()
+    val player = _player.combine(_pendingPlayRequest) { players, pendingRequests ->
+        players.map { participant ->
+            participant.copy(
+                isRequestingToPlay = pendingRequests
+                    .any { playRequest ->
+                        participant.user_name == playRequest.participant.user_name
+                    }
+            )
+        }
+    }
     val playerFetchingIssue = _onPlayerFetchingIssue.asStateFlow()
     val pendingRequest = _pendingPlayRequest.asStateFlow()
 
@@ -95,8 +104,8 @@ internal object TicTacToeViewModel : SharedViewModel {
     }
 
     private var lastAskToPlayReqID: String? = null
-    fun requestToPlayerToPlay(player: ParticipantDTO) {
-        if(requestState == PlayRequestState.Waiting)
+    fun requestToPlayerToPlay(player: Participant) {
+        if (requestState == PlayRequestState.Waiting)
             return
         requestState = PlayRequestState.Waiting
         coroutineScope.launch {
@@ -111,6 +120,7 @@ internal object TicTacToeViewModel : SharedViewModel {
 
     fun lookForNextMatch() {
         coroutineScope.launch {
+            println(">>>>>>>>>>> Update lookForNextMatch <<<<<<<<<<<<<")
             requestState = PlayRequestState.NotInitiated
         }
     }
@@ -126,18 +136,26 @@ internal object TicTacToeViewModel : SharedViewModel {
     }
 
 
-    private suspend fun monitorNewRequest() {
-        ucRespondToPlayRequest.onNewRequest { newRequest ->
-            _pendingPlayRequest.update { pendingPlayRequests ->
-                pendingPlayRequests + newRequest
+    private suspend fun monitorNewRequest(
+        coroutineScope: CoroutineScope
+    ) {
+        val stream = ucRespondToPlayRequest.onNewRequest(coroutineScope)
+        coroutineScope.launch {
+            stream.collect { newRequest ->
+                _pendingPlayRequest.update { pendingPlayRequests ->
+                    pendingPlayRequests + newRequest
+                }
             }
         }
     }
 
 
-    private suspend fun monitorInvitationRejection() {
+    private suspend fun monitorInvitationRejection(
+        coroutineScope: CoroutineScope
+    ) {
+        val stream = ucNotifyRejectedPlayRequest.onReject()
         coroutineScope.launch {
-            ucNotifyRejectedPlayRequest.onReject { rejectedInvitationId ->
+            stream.collect { rejectedInvitationId ->
                 _pendingPlayRequest.update { playRequests ->
                     playRequests.filter { playRequest ->
                         playRequest.invitationID != rejectedInvitationId
@@ -165,40 +183,51 @@ internal object TicTacToeViewModel : SharedViewModel {
         }
     }
 
-    private suspend fun monitorInvitationRevoke() {
-        ucRevokePlayRequest.onRevoke().collectLatest { revokedInvitationID ->
-            _pendingPlayRequest.update { playRequests ->
-                playRequests.filter { playRequest ->
-                    playRequest.invitationID != revokedInvitationID
+    private suspend fun monitorInvitationRevoke(
+        coroutineScope: CoroutineScope
+    ) {
+        val stream = ucRevokePlayRequest.onRevoke()
+        coroutineScope.launch {
+            stream.collect { revokedInvitationID ->
+                _pendingPlayRequest.update { playRequests ->
+                    playRequests.filter { playRequest ->
+                        playRequest.invitationID != revokedInvitationID
+                    }
                 }
-            }
-            if (revokedInvitationID == lastAskToPlayReqID) {
-                requestState = PlayRequestState.NotInitiated
-                lastAskToPlayReqID = null
+                if (revokedInvitationID == lastAskToPlayReqID) {
+                    requestState = PlayRequestState.NotInitiated
+                    lastAskToPlayReqID = null
+                }
             }
         }
     }
 
 
-    private suspend fun monitorGameSession() {
-        ucGameSession.execute().collectLatest {
-            boardState = it.second.some();
-            when (it.first) {
-                GameState.NotStarted -> {
-                    requestState = PlayRequestState.PlayStarted
-                    lastAskToPlayReqID = null
-                }
+    private suspend fun monitorGameSession(
+        coroutineScope: CoroutineScope
+    ) {
+        val stream = ucGameSession.execute()
+        coroutineScope.launch {
+            stream.collect {
+                boardState = it.second.some();
+                when (it.first) {
+                    GameState.NotStarted -> {
+                        requestState = PlayRequestState.PlayStarted
+                        lastAskToPlayReqID = null
+                    }
 
-                GameState.OnGoing -> {
-                    requestState = PlayRequestState.PlayStarted
-                    lastAskToPlayReqID = null
-                }
+                    GameState.OnGoing -> {
+                        requestState = PlayRequestState.PlayStarted
+                        lastAskToPlayReqID = null
+                    }
 
-                GameState.PlayerLostAboutToEndInOneMinute -> {
-                }
+                    GameState.PlayerLostAboutToEndInOneMinute -> {
+                    }
 
-                GameState.End -> {
-                    lookForNextMatch()
+                    GameState.End -> {
+                        println(">>>>>>>>>>> Update <<<<<<<<<<<<<")
+                        lookForNextMatch()
+                    }
                 }
             }
         }
@@ -206,23 +235,17 @@ internal object TicTacToeViewModel : SharedViewModel {
 
     init {
         coroutineScope.launch {
-            ucConnectionState().collectLatest {
+            ucConnectionState.invoke().collectLatest {
                 connectionState = it
                 coroutineScope {
                     when (it) {
-                        ConnectionState.NotConnected -> {
-
-                        }
-
+                        ConnectionState.Connecting -> {}
+                        ConnectionState.NotConnected -> {}
                         ConnectionState.Connected -> {
-                            launch { monitorGameSession() }
-                            launch { monitorInvitationRevoke() }
-                            launch { monitorInvitationRejection() }
-                            launch { monitorNewRequest() }
-                        }
-
-                        ConnectionState.Connecting -> {
-
+                            monitorInvitationRevoke(this)
+                            monitorInvitationRejection(this)
+                            monitorNewRequest(this)
+                            monitorGameSession(this)
                         }
                     }
                     awaitCancellation()

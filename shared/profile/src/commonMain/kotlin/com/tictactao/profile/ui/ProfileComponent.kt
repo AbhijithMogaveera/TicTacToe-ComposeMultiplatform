@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
+import com.abhijith.foundation.AppColors
 import com.abhijith.foundation.koin.rememberInject
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import com.tictactao.profile.domain.ProfileViewModel
@@ -96,7 +97,7 @@ private fun ProfileDetails(
     val profileViewModel = LocalProfileViewModel.current ?: error("Provide LocalProfileViewModel")
     Box(
         modifier = Modifier.fillMaxSize().background(
-            color = Color("#05445E".toColorInt())
+            color = AppColors.BACKGROUND
         )
     ) {
         Column(
@@ -175,13 +176,13 @@ private fun ProfileDetails(
                     bottomStart = CornerSize(0.dp)
                 )
             ).border(
-                border = BorderStroke(3.dp, color = Color.Black.copy(alpha = 0.9f)),
+                border = BorderStroke(3.dp, color = AppColors.CONTAINER),
                 shape = CircleShape.copy(
                     topStart = CornerSize(0.dp),
                     bottomStart = CornerSize(0.dp)
                 )
             )
-            .background(color = Color.Black.copy(alpha = 0.6f)),
+            .background(color = AppColors.CONTAINER),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Spacer(modifier = Modifier.width(10.dp))
@@ -324,7 +325,7 @@ private fun PrimaryCTAButton(
                     border = BorderStroke(3.dp, color = Color.White),
                     shape = CircleShape
                 )
-                .background(color = Color("#189AB4".toColorInt()), shape = CircleShape)
+                .background(color = AppColors.CONTAINER, shape = CircleShape)
                 .clickable {
                     onCLick()
                 }

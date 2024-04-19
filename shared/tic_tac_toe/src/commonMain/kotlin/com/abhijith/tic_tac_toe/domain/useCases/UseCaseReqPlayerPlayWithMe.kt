@@ -2,6 +2,7 @@ package com.abhijith.tic_tac_toe.domain.useCases
 
 import com.abhijith.foundation.ktor.socket.serializer
 import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.domain.Participant
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
@@ -18,7 +19,7 @@ class UseCaseReqPlayerPlayWithMe constructor(
         val playRequestId: String,
     )
 
-    suspend fun ask(participantDTO: ParticipantDTO, onIdGenerated:(String)->Unit) {
+    suspend fun ask(participantDTO: Participant, onIdGenerated:(String)->Unit) {
         withTimeoutOrNull<Unit>(1.minutes) {
             socketMediator.emmit("ask_to_play", participantDTO.user_name)
             val res = socketMediator.on("ask_to_play").first()

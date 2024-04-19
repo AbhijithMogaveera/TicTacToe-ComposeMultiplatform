@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.abhijith.auth.setupAuthNavigation
 import com.abhijith.auth.ui.hooks.AuthProtected
+import com.abhijith.foundation.AppColors
 import com.abhijith.foundation.activity.ProvideActivity
 import com.abhijith.tic_tac_toe.setUpTicTacToeNavigation
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 MyApplicationTheme {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = Color("#27374D".toColorInt())
+                        color = AppColors.BACKGROUND
                     ) {
                         val navController = rememberNavController()
                         NavHost(

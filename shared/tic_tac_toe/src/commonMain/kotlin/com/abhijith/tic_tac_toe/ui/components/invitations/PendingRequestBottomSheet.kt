@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +71,7 @@ fun PendingRequestBottomSheet() {
             },
             sheetState = modalBottomSheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
+            containerColor = AppColors.CONTAINER_MEDIUM
         ) {
             LazyColumn(
                 modifier = Modifier.defaultMinSize(minHeight = 400.dp)
@@ -87,7 +90,6 @@ fun PendingRequestBottomSheet() {
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 10.dp, vertical = 5.dp)
                     )
                 }
             }

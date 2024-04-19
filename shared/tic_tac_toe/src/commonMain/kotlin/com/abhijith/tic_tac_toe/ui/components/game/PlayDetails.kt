@@ -70,6 +70,7 @@ fun PlayDetails(
                     }
                 ) {
                     //todo: replace with profile image
+                    Spacer(modifier = Modifier.padding(10.dp))
                     if (alignment == PlayerDetailsAlignment.START) {
                         PlayerPic(playerProfile)
                     }
@@ -81,13 +82,13 @@ fun PlayDetails(
                     ) {
                         Text(
                             if (it.userName == playerProfile.user_name) "You" else playerProfile.user_name,
-                            color = indicatorColor,
+                            color = Color.White,
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             playerProfile.bio.getOrElse { "" },
-                            color = indicatorColor,
+                            color = Color.White,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -95,6 +96,7 @@ fun PlayDetails(
                     if (alignment == PlayerDetailsAlignment.END) {
                         PlayerPic(playerProfile)
                     }
+                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
         }

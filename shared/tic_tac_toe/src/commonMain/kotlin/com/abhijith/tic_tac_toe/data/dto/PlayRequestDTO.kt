@@ -8,3 +8,4 @@ data class PlayRequestDTO(
     val participant: ParticipantDTO,
     val invitationID: String
 )
+

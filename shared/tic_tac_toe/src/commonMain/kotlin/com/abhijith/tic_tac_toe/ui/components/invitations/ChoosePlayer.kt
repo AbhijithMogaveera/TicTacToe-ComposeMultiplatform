@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,23 +23,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.None
+import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.domain.Participant
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun ChoosePlayer(
-    players: List<ParticipantDTO> = TicTacToeViewModel.player.collectAsState().value,
-    onPlayerSelected: (ParticipantDTO) -> Unit = {},
     onSearchValueChange: (String) -> Unit = {}
 ) {
     LaunchedEffect(key1 = Unit) {
         TicTacToeViewModel.fetchPlayers(searchKey = None)
     }
-
+    val players: List<Participant> by TicTacToeViewModel.player.collectAsState(emptyList())
     Column {
         Column(
-            modifier = Modifier.background(color = Color("#526D82".toColorInt()))
+            modifier = Modifier.background(color = AppColors.CONTAINER)
         ) {
             Text(
                 text = "Players",
@@ -58,7 +60,12 @@ internal fun ChoosePlayer(
             NoPlayerPresents()
         } else {
             LazyColumn {
-                items(players) {
+                item {
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                items(players, key = {
+                    it.hashCode()
+                }) {
                     ProfileCard(
                         it,
                         modifier = Modifier
@@ -72,7 +79,7 @@ internal fun ChoosePlayer(
                                     }
                                 },
                                 label = {
-                                    Text("Play")
+                                    Text(if (it.isRequestingToPlay) "Accept" else "Play")
                                 },
                                 shape = CircleShape
                             )

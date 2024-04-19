@@ -5,7 +5,7 @@ import arrow.core.Option
 import arrow.core.right
 import com.abhijith.foundation.ktor.socket.serializer
 import com.abhijith.tic_tac_toe.domain.models.ActiveParticipantsEvent
-import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
+import com.abhijith.tic_tac_toe.domain.Participant
 import com.tictactao.profile.domain.use_case.UseCaseGetProfileDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -23,13 +23,20 @@ internal class UseCaseGetAllPlayers(
     }
 
     suspend fun execute(
-        searchKey: Option<String>
-    ): Flow<Either<Failure, List<ParticipantDTO>>> {
+        searchKey: Option<String>,
+    ): Flow<Either<Failure, List<Participant>>> {
         val map = socketMediator
             .on("activeParticipants")
-            .map{
+            .map {
                 serializer.decodeFromJsonElement<ActiveParticipantsEvent>(it).data.filter {
                     it.user_name != profileDetails.getProfileDetails().first().userName
+                }.map {
+                    Participant(
+                        bio = it.bio,
+                        profile_image = it.profile_image,
+                        user_name = it.user_name,
+                        false
+                    )
                 }.right()
             }.catch {
                 it.printStackTrace()

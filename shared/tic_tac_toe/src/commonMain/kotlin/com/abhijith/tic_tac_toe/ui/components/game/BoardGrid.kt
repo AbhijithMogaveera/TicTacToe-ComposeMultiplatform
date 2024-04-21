@@ -115,8 +115,8 @@ fun BoardGrid(modifier: Modifier) {
                         )
                     }
                 }
-                .padding(10.dp)
-                .drawBehind {
+
+                .then(modifier)   .drawBehind {
                     (tilesCoordinates
                         .toList()
                         .takeIf { it.all { option -> option.isSome() } }
@@ -155,8 +155,7 @@ fun BoardGrid(modifier: Modifier) {
                                 )
                             }
                         }
-                }
-                .then(modifier).onGloballyPositioned {
+                }.onGloballyPositioned {
                     boardLayoutCoordinates = it.some()
                 }
         )

@@ -15,6 +15,7 @@ data class BoardState(
     val winTileDiagonalMiddle: Option<Int> = None,
     val winTileDiagonalEnd: Option<Int> = None,
     val winPlayerUsername: Option<String> = None,
+    val prematureGameTerminationBy:Option<String> = None,
     val gameSessionId: String,
     val currentTurnUsername: String,
     val p1Details: PlayerProfile,

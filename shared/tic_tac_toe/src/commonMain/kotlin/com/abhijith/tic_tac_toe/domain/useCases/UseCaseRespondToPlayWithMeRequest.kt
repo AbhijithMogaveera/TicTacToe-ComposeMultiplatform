@@ -22,7 +22,8 @@ class UseCaseRespondToPlayWithMeRequest(
             PlayRequest(
                 participant = Participant(
                     bio = requestDTO.participant.bio,
-                    profile_image = requestDTO.participant.profile_image,
+                    profile_image = requestDTO.participant.profile_image
+                        .replace("localhost", "10.0.2.2"),
                     user_name = requestDTO.participant.user_name,
                     isRequestingToPlay = true
                 ),

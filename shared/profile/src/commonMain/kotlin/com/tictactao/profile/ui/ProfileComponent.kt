@@ -29,11 +29,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,9 +49,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -60,6 +65,7 @@ import com.tictactao.profile.domain.ProfileViewModel
 import com.tictactao.profile.domain.models.User
 import com.tictactao.profile.domain.use_case.UseCaseUpdateProfileDetails
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 
 private val LocalProfileViewModel = staticCompositionLocalOf<ProfileViewModel?> { null }
 
@@ -195,15 +201,28 @@ private fun ProfileDetails(
             AsyncImage(
                 model = user.profilePicture,
                 contentDescription = null,
+                contentScale = ContentScale.Crop
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Text(
-            user.userName,
-            color = Color.White,
-            fontSize = 25.sp,
-            modifier = Modifier.align(Alignment.CenterVertically)
-        )
+        Column(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+        ) {
+            Text(
+                user.userName,
+                color = Color.White,
+                fontSize = 25.sp,
+                modifier = Modifier
+            )
+            Text(
+                user.bio,
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = 20.sp,
+                modifier = Modifier,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
         Spacer(modifier = Modifier.width(10.dp))
         Spacer(modifier = Modifier.weight(1f))
         when (profileViewModel.profileUpdateResult) {
@@ -228,7 +247,7 @@ private fun ProfileDetails(
                 )
             }
         }
-        Spacer(modifier = Modifier.width(10.dp))
+        Spacer(modifier = Modifier.width(20.dp))
     }
 }
 
@@ -236,6 +255,79 @@ private fun ProfileDetails(
 private fun ProfileEditOption() {
     PickProfileImage()
     Menu()
+    EditBio()
+}
+
+@Composable
+fun EditBio() {
+    if (currentProfileComponent == ProfileComponentSection.EditBio) {
+        val vm = LocalProfileViewModel.current!!
+        var bio by remember {
+            mutableStateOf("")
+        }
+        AlertDialog(
+            onDismissRequest = {},
+            confirmButton = {
+                Row {
+                    TextButton(
+                        onClick = {
+                            vm.updateBui(bio)
+                            currentProfileComponent = ProfileComponentSection.MainScreen
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
+                    ) {
+                        Text(text = "Update")
+                    }
+                    TextButton(
+                        onClick = {
+                            currentProfileComponent = ProfileComponentSection.MainScreen
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
+                    ) {
+                        Text(text = "Dismiss")
+                    }
+                }
+            },
+            title = {
+
+                LaunchedEffect(key1 = Unit) {
+                    bio = vm.getProfileDetails().first().bio
+                }
+                val colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    disabledContainerColor = Color.White,
+                    errorContainerColor = Color.White,
+                    focusedIndicatorColor = Color.Black,
+                    disabledIndicatorColor = Color.Black,
+                    errorIndicatorColor = Color.Black,
+                    unfocusedIndicatorColor = Color.Black
+                )
+                OutlinedTextField(
+                    value = bio,
+                    onValueChange = {
+                        bio = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    colors = colors,
+                    shape = RoundedCornerShape(10.dp),
+                    placeholder = {
+                        Text(text = "User id")
+                    },
+                )
+            },
+            properties = DialogProperties(),
+            modifier = Modifier.shadow(
+                elevation = 10.dp, shape = RoundedCornerShape(10.dp)
+            ),
+            containerColor = AppColors.CONTAINER,
+            textContentColor = Color.White,
+            titleContentColor = Color.Black,
+            shape = RoundedCornerShape(10.dp)
+        )
+    }
 }
 
 @Composable
@@ -248,7 +340,7 @@ private fun Menu() {
                     onClick = {
                         currentProfileComponent = ProfileComponentSection.MainScreen
                     },
-                    colors = ButtonDefaults.textButtonColors(contentColor = Color.Red),
+                    colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
                 ) {
                     Text(text = "Dismiss")
                 }
@@ -260,14 +352,23 @@ private fun Menu() {
                             currentProfileComponent = ProfileComponentSection.PickProfileImage
                         }
                     ) {
-                        Text("Choose new profile image", modifier = Modifier)
+                        Icon(Icons.Default.Edit, contentDescription = null, tint = Color.White)
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            "Choose new profile image",
+                            modifier = Modifier,
+                            color = Color.White,
+                            fontSize = 20.sp
+                        )
                     }
                     TextButton(
                         onClick = {
                             currentProfileComponent = ProfileComponentSection.EditBio
                         }
                     ) {
-                        Text("Edit Bio", modifier = Modifier)
+                        Icon(Icons.Default.Edit, contentDescription = null, tint = Color.White)
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text("Edit Bio", modifier = Modifier, color = Color.White, fontSize = 20.sp)
                     }
 
                 }
@@ -275,7 +376,11 @@ private fun Menu() {
             properties = DialogProperties(),
             modifier = Modifier.shadow(
                 elevation = 10.dp, shape = RoundedCornerShape(10.dp)
-            )
+            ),
+            containerColor = AppColors.BACKGROUND,
+            textContentColor = Color.White,
+            titleContentColor = Color.Black,
+            shape = RoundedCornerShape(10.dp)
         )
     }
 }

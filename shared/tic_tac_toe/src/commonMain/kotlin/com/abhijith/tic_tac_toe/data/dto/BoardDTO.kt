@@ -12,7 +12,8 @@ data class BoardDTO(
     val current_turn: String,
     val player_1: PlayerProfileDTO,
     val player_2: PlayerProfileDTO,
-    val gameWillEndIn: Long? = null
+    val gameWillEndIn: Long? = null,
+    val prematureGameTerminationBy: String? = null
 ) {
     fun toBoardState(): BoardState {
         board.apply {
@@ -26,7 +27,8 @@ data class BoardDTO(
                 currentTurnUsername = current_turn,
                 p1Details = player_1.toPlayerDetails(),
                 p2Details = player_2.toPlayerDetails(),
-                gameEndsIn = gameWillEndIn?.some() ?: None
+                gameEndsIn = gameWillEndIn?.some() ?: None,
+                prematureGameTerminationBy = prematureGameTerminationBy?.some() ?: None
             )
         }
     }

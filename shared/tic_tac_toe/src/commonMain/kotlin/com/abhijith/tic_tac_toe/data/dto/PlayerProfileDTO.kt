@@ -17,7 +17,7 @@ data class PlayerProfileDTO(
     fun toPlayerDetails(): PlayerProfile {
         return PlayerProfile(
             bio = bio?.some() ?: None,
-            profile_image = profile_image?.some() ?: None,
+            profile_image = profile_image?.replace("localhost", "10.0.2.2")?.some() ?: None,
             user_name = user_name,
             isActive = isActive,
             tile = tile

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,6 +61,7 @@ fun ProfileCard(
                 AsyncImage(
                     model = profileDetails.profile_image,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop
                 )
             }
             Spacer(modifier = Modifier.width(5.dp))
@@ -73,7 +75,7 @@ fun ProfileCard(
                     )
                 )
                 Text(
-                    profileDetails.user_name,
+                    profileDetails.bio,
                     style = TextStyle(
                         color = Color.Black.copy(alpha = 0.7f),
                         fontSize = 18.sp

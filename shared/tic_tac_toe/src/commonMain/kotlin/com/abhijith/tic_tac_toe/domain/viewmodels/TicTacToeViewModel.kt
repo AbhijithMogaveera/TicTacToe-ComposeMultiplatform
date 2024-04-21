@@ -21,6 +21,7 @@ import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRespondToPlayWithMeReques
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseStopGame
 import com.abhijith.tic_tac_toe.domain.useCases.UseCaseTapTile
+import com.tictactao.profile.domain.use_case.UseCaseGetProfileDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

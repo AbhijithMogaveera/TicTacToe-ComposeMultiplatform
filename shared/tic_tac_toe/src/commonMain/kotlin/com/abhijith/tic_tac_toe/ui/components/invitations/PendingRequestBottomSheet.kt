@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 
@@ -82,10 +83,10 @@ fun PendingRequestBottomSheet() {
                         onClick = {},
                         actions = {
                             TextButton(onClick = accept) {
-                                Text("Accept")
+                                Text("Accept", color = Color.Black, fontSize = 15.sp)
                             }
                             TextButton(onClick = reject) {
-                                Text("Reject")
+                                Text("Reject", color = Color.Black, fontSize = 15.sp)
                             }
                         },
                         modifier = Modifier

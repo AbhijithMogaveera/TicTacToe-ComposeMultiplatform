@@ -12,7 +12,10 @@ import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import kmmsample.shared.tic_tac_toe.generated.resources.Res
 import kmmsample.shared.tic_tac_toe.generated.resources.not_found
 import kmmsample.shared.tic_tac_toe.generated.resources.waiting
+import kmmsample.shared.tic_tac_toe.generated.resources.game_looser
+import kmmsample.shared.tic_tac_toe.generated.resources.game_winner
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PartnerPlayerConnectionStatePopUp() {
@@ -56,9 +59,50 @@ fun PartnerPlayerConnectionStatePopUp() {
                 )
             }
 
+            /*TicTacToeViewModel.PlayRequestState.PlayerExitWithFiningTheGame -> {
+                QuickDialog(
+                    res = Res.drawable.game_looser,
+                    title = "Player exit",
+                    message = "Opps! player exited the game",
+                    actions = {
+                        AssistChip(onClick = {
+                            TicTacToeViewModel.lookForNextMatch()
+                        }, label = {
+                            Text("Dismiss", color = Color.White)
+                        }, shape = CircleShape)
+                    },
+                    onDismissRequest = {
+
+                    }
+                )
+            }
+
+            TicTacToeViewModel.ActiveScreen.GameWin -> {
+                QuickDialog(
+                    res = Res.drawable.game_winner,
+                    title = "Player exit",
+                    message = "Opps! player exited the game",
+                    actions = {
+                        AssistChip(onClick = {
+                            TicTacToeViewModel.lookForNextMatch()
+                        }, label = {
+                            Text("Dismiss", color = Color.White)
+                        }, shape = CircleShape)
+                    },
+                    onDismissRequest = {
+
+                    }
+                )
+            }
+
+            TicTacToeViewModel.ActiveScreen.GameLoose -> {
+
+            }
+
+            TicTacToeViewModel.ActiveScreen.GameSession,
+            TicTacToeViewModel.ActiveScreen.ChoosePlayerToPlayWith -> {
+            }*/
             else -> {}
         }
-
-
     }
 }

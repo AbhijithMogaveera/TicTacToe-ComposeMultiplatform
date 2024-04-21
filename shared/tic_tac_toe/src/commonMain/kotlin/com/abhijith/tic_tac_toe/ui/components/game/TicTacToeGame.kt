@@ -1,11 +1,15 @@
 package com.abhijith.tic_tac_toe.ui.components.game
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -69,7 +73,7 @@ fun CurrentUser(): Option<User> {
     }
     return user
 }
-
+val BoardPadding = 10.dp
 @Composable
 fun TicTacToeGame(modifier: Modifier = Modifier) {
     CurrentUser().onSome { activeUser ->
@@ -106,6 +110,27 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                             }
                         drawLine(
                             start = Offset(
+                                x = 160f,
+                                y = (boardLayoutCoordinates.localToRoot(Offset.Zero).y- BoardPadding.toPx()) + boardLayoutCoordinates.size.height.toFloat()
+                            ),
+                            end = let {
+                                parentLayoutCoordinates
+                                    .localPositionOf(
+                                        playerOneLayoutCoordinates,
+                                        Offset.Zero
+                                    ).let {
+                                        it.copy(
+                                            x = 160f,
+                                            y = it.y
+                                        )
+                                    }
+                            },
+                            color = playerXIndicatorColor,
+                            strokeWidth = playerXStockWidth.toPx(),
+                            cap = StrokeCap.Round
+                        )
+                        drawLine(
+                            start = Offset(
                                 x = boardLayoutCoordinates.size.width.toFloat() - 160f,
                                 y = boardLayoutCoordinates.size.height.toFloat()
                             ),
@@ -125,27 +150,7 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                             strokeWidth = playerOIndicatorColor.toPx(),
                             cap = StrokeCap.Round
                         )
-                        drawLine(
-                            start = Offset(
-                                x = 160f,
-                                y = boardLayoutCoordinates.localToRoot(Offset.Zero).y + boardLayoutCoordinates.size.height.toFloat()
-                            ),
-                            end = let {
-                                parentLayoutCoordinates
-                                    .localPositionOf(
-                                        playerOneLayoutCoordinates,
-                                        Offset.Zero
-                                    ).let {
-                                        it.copy(
-                                            x = 160f,
-                                            y = it.y
-                                        )
-                                    }
-                            },
-                            color = playerXIndicatorColor,
-                            strokeWidth = playerXStockWidth.toPx(),
-                            cap = StrokeCap.Round
-                        )
+
                     }.onGloballyPositioned {
                         parentLayoutCoordinates = it.some()
                     }
@@ -159,9 +164,11 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center
                 )
                 BoardGrid(
-                    modifier = Modifier.onGloballyPositioned {
-                        boardLayoutCoordinates = it.some()
-                    }
+                    modifier = Modifier
+                        .padding(BoardPadding)
+                        .onGloballyPositioned {
+                            boardLayoutCoordinates = it.some()
+                        }
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -185,32 +192,50 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                     playerProfile = boardState.getPlayerO()
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                boardState.gameEndsIn.onSome {
-                    Timer(it, "Start your next game")
-                }.onNone {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        AssistChip(
-                            onClick = {
-                                TicTacToeViewModel.stopOnGoingGame()
-                            },
-                            label = {
-                                Text(
-                                    "Exit Game..🧐",
-                                    color = Color.White,
-                                    fontSize = 18.sp,
-                                    modifier = Modifier.padding(10.dp)
-                                )
-                            },
-                            shape = CircleShape,
-                        )
-                    }
-                }
+                Footer(boardState)
             }
         }
     }
 
+}
+
+@Composable
+private fun Footer(boardState: BoardState) {
+    Box {
+        AnimatedVisibility(
+            enter = fadeIn(),
+            exit = fadeOut(),
+            visible = boardState.gameEndsIn.isSome()
+        ) {
+            boardState.gameEndsIn.onSome {
+                Timer(it, "Start your next game")
+            }
+        }
+        AnimatedVisibility(
+            enter = fadeIn(),
+            exit = fadeOut(),
+            visible = boardState.gameEndsIn.isNone()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                AssistChip(
+                    onClick = {
+                        TicTacToeViewModel.stopOnGoingGame()
+                    },
+                    label = {
+                        Text(
+                            "Exit Game..🧐",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    },
+                    shape = CircleShape,
+                )
+            }
+        }
+    }
 }
 

@@ -1,5 +1,8 @@
 package com.abhijith.tic_tac_toe.ui.components.invitations
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,7 +65,7 @@ fun Timer(
     Column(
         modifier = Modifier.background(
             color = AppColors.CONTAINER_MEDIUM,
-            shape = CircleShape
+            shape = RoundedCornerShape(10.dp)
         ).padding(horizontal = 20.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -33,7 +33,7 @@ internal class UseCaseGetAllPlayers(
                 }.map {
                     Participant(
                         bio = it.bio,
-                        profile_image = it.profile_image,
+                        profile_image = it.profile_image.replace("localhost", "10.0.2.2"),
                         user_name = it.user_name,
                         false
                     )

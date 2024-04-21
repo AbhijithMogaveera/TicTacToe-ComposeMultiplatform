@@ -73,10 +73,8 @@ internal fun ChoosePlayer(
                             .padding(horizontal = 0.dp, vertical = 0.dp),
                         actions = {
                             AssistChip(
-                                onClick = remember {
-                                    {
-                                        TicTacToeViewModel.requestToPlayerToPlay(it)
-                                    }
+                                onClick = {
+                                    TicTacToeViewModel.requestToPlayerToPlay(it)
                                 },
                                 label = {
                                     Text(if (it.isRequestingToPlay) "Accept" else "Play")

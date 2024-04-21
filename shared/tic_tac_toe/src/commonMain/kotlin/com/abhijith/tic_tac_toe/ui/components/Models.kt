@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.dp
 import com.abhijith.foundation.AppColors
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
 
-val ActivePlayerIndicatorColor = AppColors.CONTAINER_MEDIUM
+val ActivePlayerIndicatorColor = AppColors.CONTAINER_SMALL
 val InActivePlayerIndicatorColor = Color.White.copy(alpha = 0.8f)
 val activeStrokeWidth: Dp = 4.dp
 val inActiveStrokeWidth: Dp = 2.dp

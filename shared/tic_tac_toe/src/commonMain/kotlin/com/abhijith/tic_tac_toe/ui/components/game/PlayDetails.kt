@@ -20,11 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.getOrElse
+import coil3.compose.AsyncImage
 import com.abhijith.tic_tac_toe.domain.models.PlayerProfile
 
 @Composable
@@ -33,7 +35,7 @@ fun PlayDetails(
     modifier: Modifier = Modifier,
     indicatorColor: Color,
     strokeWidth: Dp,
-    playerProfile: PlayerProfile
+    playerProfile: PlayerProfile,
 ) {
     CurrentUser().onSome {
         Box(
@@ -69,10 +71,10 @@ fun PlayDetails(
                         }
                     }
                 ) {
-                    //todo: replace with profile image
                     Spacer(modifier = Modifier.padding(10.dp))
                     if (alignment == PlayerDetailsAlignment.START) {
                         PlayerPic(playerProfile)
+                        Spacer(modifier = Modifier.padding(10.dp))
                     }
                     Column(
                         horizontalAlignment = when (alignment) {
@@ -94,9 +96,10 @@ fun PlayDetails(
                         )
                     }
                     if (alignment == PlayerDetailsAlignment.END) {
+                        Spacer(modifier = Modifier.padding(10.dp))
                         PlayerPic(playerProfile)
+                        Spacer(modifier = Modifier.padding(10.dp))
                     }
-                    Spacer(modifier = Modifier.padding(10.dp))
                 }
             }
         }
@@ -105,8 +108,12 @@ fun PlayDetails(
 
 @Composable
 private fun PlayerPic(playerProfile: PlayerProfile) {
-    Spacer(modifier = Modifier.width(20.dp))
     Box(modifier = Modifier.size(54.dp).clip(CircleShape).background(Color.Black)) {
+        AsyncImage(
+            model = playerProfile.profile_image.getOrNull(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
         Text(
             playerProfile.tile.name,
             modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
@@ -114,5 +121,4 @@ private fun PlayerPic(playerProfile: PlayerProfile) {
             fontWeight = FontWeight.Bold
         )
     }
-    Spacer(modifier = Modifier.width(20.dp))
 }

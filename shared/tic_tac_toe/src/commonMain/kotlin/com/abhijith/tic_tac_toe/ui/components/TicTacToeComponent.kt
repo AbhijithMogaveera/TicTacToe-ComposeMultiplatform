@@ -24,7 +24,6 @@ import com.abhijith.tic_tac_toe.domain.useCases.ConnectionState
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.abhijith.tic_tac_toe.ui.components.game.TicTacToeGame
 import com.abhijith.tic_tac_toe.ui.components.invitations.ChoosePlayer
-import com.abhijith.tic_tac_toe.ui.components.invitations.GoForNextMatch
 import com.abhijith.tic_tac_toe.ui.components.invitations.PartnerPlayerConnectionStatePopUp
 import com.abhijith.tic_tac_toe.ui.components.invitations.PendingRequestBottomSheet
 import kmmsample.shared.tic_tac_toe.generated.resources.Res
@@ -51,7 +50,7 @@ internal fun TicTacToeComponent() {
                     visible = TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.PlayStarted,
                     enter = fadeIn(),
                     exit = fadeOut()
-                ){
+                ) {
                     Card(
                         colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER),
                         modifier = Modifier.padding(10.dp),
@@ -64,13 +63,9 @@ internal fun TicTacToeComponent() {
                     visible = TicTacToeViewModel.requestState != TicTacToeViewModel.PlayRequestState.PlayStarted,
                     enter = fadeIn(),
                     exit = fadeOut()
-                ){
-                    if (TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Ended) {
-                        GoForNextMatch()
-                    } else {
-                        ChoosePlayer()
-                        PartnerPlayerConnectionStatePopUp()
-                    }
+                ) {
+                    ChoosePlayer()
+                    PartnerPlayerConnectionStatePopUp()
                 }
             }
         }
@@ -96,5 +91,4 @@ internal fun TicTacToeComponent() {
             }
         }
     }
-
 }

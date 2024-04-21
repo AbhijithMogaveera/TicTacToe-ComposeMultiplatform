@@ -108,10 +108,16 @@ internal object TicTacToeViewModel : SharedViewModel {
 
     private var lastAskToPlayReqID: String? = null
     fun requestToPlayerToPlay(player: Participant) {
-        if (requestState == PlayRequestState.Waiting)
-            return
-        requestState = PlayRequestState.Waiting
         coroutineScope.launch {
+            val playRequestList = pendingRequest.first()
+            if (playRequestList.any { it.participant.user_name == player.user_name }) {
+                playRequestList.first { it.participant.user_name == player.user_name }.accept()
+                return@launch
+            }
+            if (requestState == PlayRequestState.Waiting) {
+                return@launch
+            }
+            requestState = PlayRequestState.Waiting
             ucReqPlayerToPlayWithMe.ask(
                 player,
                 onIdGenerated = {
@@ -123,7 +129,6 @@ internal object TicTacToeViewModel : SharedViewModel {
 
     fun lookForNextMatch() {
         coroutineScope.launch {
-            println(">>>>>>>>>>> Update lookForNextMatch <<<<<<<<<<<<<")
             requestState = PlayRequestState.NotInitiated
         }
     }
@@ -230,17 +235,25 @@ internal object TicTacToeViewModel : SharedViewModel {
                     GameState.End -> {
                         val isOpponentQuits =
                             (newBoardState.prematureGameTerminationBy.getOrNull() != null
-                                    && newBoardState.prematureGameTerminationBy.getOrNull() != ucGetProfileDetails.getProfileDetails().first().userName
-                                    && newBoardState.winPlayerUsername.isNone()
-                                    )
+                                    && newBoardState.prematureGameTerminationBy.getOrNull() != ucGetProfileDetails.getProfileDetails()
+                                .first().userName && newBoardState.winPlayerUsername.isNone())
                         val didIWon =
                             newBoardState.winPlayerUsername.getOrNull() == ucGetProfileDetails.getProfileDetails()
                                 .first().userName
 
-                        _requestState = when {
-                            isOpponentQuits -> PlayRequestState.PrematurePlayerExit
-                            didIWon -> PlayRequestState.Winner
-                            else -> PlayRequestState.Looser
+                        when {
+                            isOpponentQuits -> {
+                                _requestState = PlayRequestState.PrematurePlayerExit
+                            }
+                            didIWon -> {
+                                _requestState = PlayRequestState.Winner
+                            }
+                            newBoardState.winPlayerUsername.isSome() -> {
+                                _requestState = PlayRequestState.Looser
+                            }
+                            else -> {
+                                lookForNextMatch()
+                            }
                         }
                     }
                 }

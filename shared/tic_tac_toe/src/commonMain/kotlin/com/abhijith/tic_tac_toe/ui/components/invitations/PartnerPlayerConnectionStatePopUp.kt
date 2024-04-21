@@ -19,90 +19,93 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun PartnerPlayerConnectionStatePopUp() {
-    val showAlertDialog by remember {
-        derivedStateOf {
-            TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Waiting
-                    || TicTacToeViewModel.requestState == TicTacToeViewModel.PlayRequestState.Declined
+
+    when (TicTacToeViewModel.requestState) {
+        TicTacToeViewModel.PlayRequestState.Waiting -> {
+            QuickDialog(
+                res = Res.drawable.waiting,
+                title = "Waiting..",
+                message = "Waiting for other player to accept your request",
+                actions = {
+                    AssistChip(onClick = {
+                        TicTacToeViewModel.revokeOnGoingReq()
+                    }, label = {
+                        Text("Withdraw request..! 🙂", color = Color.White)
+                    }, shape = CircleShape)
+                },
+                onDismissRequest = {}
+            )
         }
-    }
-    if (showAlertDialog) {
-        when (TicTacToeViewModel.requestState) {
-            TicTacToeViewModel.PlayRequestState.Waiting -> {
-                QuickDialog(
-                    res = Res.drawable.waiting,
-                    title = "Waiting..",
-                    message = "Waiting for other player to accept your request",
-                    actions = {
-                        AssistChip(onClick = {
-                            TicTacToeViewModel.revokeOnGoingReq()
-                        }, label = {
-                            Text("Withdraw request..! 🙂", color = Color.White)
-                        }, shape = CircleShape)
-                    },
-                    onDismissRequest = {}
-                )
-            }
 
-            TicTacToeViewModel.PlayRequestState.Declined -> {
-                QuickDialog(
-                    res = Res.drawable.not_found,
-                    title = "Request Rejected",
-                    message = "Your play request got rejected",
-                    actions = {
-                        AssistChip(onClick = {
-                            TicTacToeViewModel.lookForNextMatch()
-                        }, label = {
-                            Text("Dismiss 😢", color = Color.White)
-                        }, shape = CircleShape)
-                    },
-                    onDismissRequest = {}
-                )
-            }
-
-            /*TicTacToeViewModel.PlayRequestState.PlayerExitWithFiningTheGame -> {
-                QuickDialog(
-                    res = Res.drawable.game_looser,
-                    title = "Player exit",
-                    message = "Opps! player exited the game",
-                    actions = {
-                        AssistChip(onClick = {
-                            TicTacToeViewModel.lookForNextMatch()
-                        }, label = {
-                            Text("Dismiss", color = Color.White)
-                        }, shape = CircleShape)
-                    },
-                    onDismissRequest = {
-
-                    }
-                )
-            }
-
-            TicTacToeViewModel.ActiveScreen.GameWin -> {
-                QuickDialog(
-                    res = Res.drawable.game_winner,
-                    title = "Player exit",
-                    message = "Opps! player exited the game",
-                    actions = {
-                        AssistChip(onClick = {
-                            TicTacToeViewModel.lookForNextMatch()
-                        }, label = {
-                            Text("Dismiss", color = Color.White)
-                        }, shape = CircleShape)
-                    },
-                    onDismissRequest = {
-
-                    }
-                )
-            }
-
-            TicTacToeViewModel.ActiveScreen.GameLoose -> {
-
-            }
-
-            TicTacToeViewModel.ActiveScreen.GameSession,
-            TicTacToeViewModel.ActiveScreen.ChoosePlayerToPlayWith -> {
-            }*/
-            else -> {}
+        TicTacToeViewModel.PlayRequestState.Declined -> {
+            QuickDialog(
+                res = Res.drawable.not_found,
+                title = "Request Rejected",
+                message = "Your play request got rejected",
+                actions = {
+                    AssistChip(onClick = {
+                        TicTacToeViewModel.lookForNextMatch()
+                    }, label = {
+                        Text("Dismiss 😢", color = Color.White)
+                    }, shape = CircleShape)
+                },
+                onDismissRequest = {}
+            )
         }
+
+        TicTacToeViewModel.PlayRequestState.PrematurePlayerExit -> {
+            QuickDialog(
+                res = Res.drawable.game_looser,
+                title = "Player exit",
+                message = "Opps! player exited the game",
+                actions = {
+                    AssistChip(onClick = {
+                        TicTacToeViewModel.lookForNextMatch()
+                    }, label = {
+                        Text("Dismiss", color = Color.White)
+                    }, shape = CircleShape)
+                },
+                onDismissRequest = {
+                    TicTacToeViewModel.lookForNextMatch()
+                }
+            )
+        }
+
+        TicTacToeViewModel.PlayRequestState.Winner -> {
+            QuickDialog(
+                res = Res.drawable.game_winner,
+                title = "Hurry you won 🥳",
+                message = "Winner winner chicken dinner",
+                actions = {
+                    AssistChip(onClick = {
+                        TicTacToeViewModel.lookForNextMatch()
+                    }, label = {
+                        Text("Dismiss", color = Color.White)
+                    }, shape = CircleShape)
+                },
+                onDismissRequest = {
+                    TicTacToeViewModel.lookForNextMatch()
+                }
+            )
+        }
+
+        TicTacToeViewModel.PlayRequestState.Looser -> {
+            QuickDialog(
+                res = Res.drawable.game_looser,
+                title = "You lost the game 😭",
+                message = "Better luck next time",
+                actions = {
+                    AssistChip(onClick = {
+                        TicTacToeViewModel.lookForNextMatch()
+                    }, label = {
+                        Text("Dismiss", color = Color.White)
+                    }, shape = CircleShape)
+                },
+                onDismissRequest = {
+                    TicTacToeViewModel.lookForNextMatch()
+                }
+            )
+        }
+        else -> {}
     }
 }

@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
@@ -45,22 +47,25 @@ fun QuickDialog(
                 modifier = Modifier.padding(all = 20.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     title,
                     color = Color.White,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp)
                 )
                 Text(
                     message,
                     color = Color.White.copy(alpha = 0.7f),
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp)
                 )
+                Spacer(modifier = Modifier.height(10.dp))
                 res?.let { res ->
                     Image(painterResource(res), contentDescription = null)
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
                 Row(
                     content = actions,

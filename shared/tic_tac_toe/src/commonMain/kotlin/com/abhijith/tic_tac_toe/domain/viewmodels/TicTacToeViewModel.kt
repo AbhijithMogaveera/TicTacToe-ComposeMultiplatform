@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.inject
@@ -62,6 +63,7 @@ internal object TicTacToeViewModel : SharedViewModel {
     private val ucStopGame: UseCaseStopGame by inject()
     private val ucTapTile: UseCaseTapTile by inject()
     private val ucConnectionState: UseCaseConnectionStateChange by inject()
+    private val ucGetProfileDetails: UseCaseGetProfileDetails by inject()
 
     private val _player: MutableStateFlow<List<Participant>> = MutableStateFlow(emptyList())
     private val _onPlayerFetchingIssue =
@@ -101,7 +103,7 @@ internal object TicTacToeViewModel : SharedViewModel {
     }
 
     enum class PlayRequestState {
-        Waiting, PlayStarted, Declined, Ended, NotInitiated
+        Waiting, PlayStarted, Declined, NotInitiated, PrematurePlayerExit, Winner, Looser
     }
 
     private var lastAskToPlayReqID: String? = null
@@ -209,9 +211,9 @@ internal object TicTacToeViewModel : SharedViewModel {
     ) {
         val stream = ucGameSession.execute()
         coroutineScope.launch {
-            stream.collect {
-                boardState = it.second.some();
-                when (it.first) {
+            stream.collect { (newGameState, newBoardState) ->
+                boardState = newBoardState.some();
+                when (newGameState) {
                     GameState.NotStarted -> {
                         requestState = PlayRequestState.PlayStarted
                         lastAskToPlayReqID = null
@@ -226,8 +228,20 @@ internal object TicTacToeViewModel : SharedViewModel {
                     }
 
                     GameState.End -> {
-                        println(">>>>>>>>>>> Update <<<<<<<<<<<<<")
-                        lookForNextMatch()
+                        val isOpponentQuits =
+                            (newBoardState.prematureGameTerminationBy.getOrNull() != null
+                                    && newBoardState.prematureGameTerminationBy.getOrNull() != ucGetProfileDetails.getProfileDetails().first().userName
+                                    && newBoardState.winPlayerUsername.isNone()
+                                    )
+                        val didIWon =
+                            newBoardState.winPlayerUsername.getOrNull() == ucGetProfileDetails.getProfileDetails()
+                                .first().userName
+
+                        _requestState = when {
+                            isOpponentQuits -> PlayRequestState.PrematurePlayerExit
+                            didIWon -> PlayRequestState.Winner
+                            else -> PlayRequestState.Looser
+                        }
                     }
                 }
             }

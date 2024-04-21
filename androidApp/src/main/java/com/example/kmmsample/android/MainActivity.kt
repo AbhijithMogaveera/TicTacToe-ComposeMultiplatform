@@ -20,7 +20,6 @@ import com.abhijith.foundation.AppColors
 import com.abhijith.foundation.activity.ProvideActivity
 import com.abhijith.foundation.navigation.navigateSafe
 import com.abhijith.tic_tac_toe.setUpTicTacToeNavigation
-import com.abhijith.tic_tac_toe.ui.components.toColorInt
 import com.tictactao.profile.ui.ProfileComponent
 
 class MainActivity : ComponentActivity() {

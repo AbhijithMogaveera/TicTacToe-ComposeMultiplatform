@@ -15,7 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
@@ -28,16 +30,30 @@ import com.abhijith.tic_tac_toe.data.dto.ParticipantDTO
 import com.abhijith.tic_tac_toe.domain.Participant
 import com.abhijith.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.abhijith.tic_tac_toe.ui.components.toColorInt
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.withContext
 
 @Composable
 internal fun ChoosePlayer(
-    onSearchValueChange: (String) -> Unit = {}
 ) {
     LaunchedEffect(key1 = Unit) {
         TicTacToeViewModel.fetchPlayers(searchKey = None)
     }
     val players: List<Participant> by TicTacToeViewModel.player.collectAsState(emptyList())
+    var filteredPlayers by remember{ mutableStateOf(players) }
+    LaunchedEffect(players, TicTacToeViewModel.searchText){
+        withContext(Dispatchers.IO) {
+            filteredPlayers = if(TicTacToeViewModel.searchText.isBlank()){
+                players
+            }else {
+                players.filter {
+                    it.user_name.contains(TicTacToeViewModel.searchText, ignoreCase = true)
+                }
+            }
+        }
+    }
     Column {
         Column(
             modifier = Modifier.background(color = AppColors.CONTAINER)
@@ -51,19 +67,19 @@ internal fun ChoosePlayer(
                 fontSize = 25.sp
             )
             SearchBar(
-                value = "",
-                onValueChange = onSearchValueChange
+                value = TicTacToeViewModel.searchText,
+                onValueChange = TicTacToeViewModel::onSearchTextChange
             )
             Spacer(Modifier.height(1.dp))
         }
-        if (players.isEmpty()) {
+        if (filteredPlayers.isEmpty()) {
             NoPlayerPresents()
         } else {
             LazyColumn {
                 item {
                     Spacer(modifier = Modifier.height(10.dp))
                 }
-                items(players, key = {
+                items(filteredPlayers, key = {
                     it.hashCode()
                 }) {
                     ProfileCard(

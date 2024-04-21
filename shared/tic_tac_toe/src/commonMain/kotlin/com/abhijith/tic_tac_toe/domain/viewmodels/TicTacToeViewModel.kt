@@ -39,6 +39,7 @@ import org.koin.core.component.inject
 
 internal object TicTacToeViewModel : SharedViewModel {
 
+    var searchText:String by mutableStateOf("")
     var connectionState: ConnectionState by mutableStateOf(ConnectionState.Connecting)
     private var _requestState: PlayRequestState by mutableStateOf(PlayRequestState.NotInitiated)
     var requestState: PlayRequestState
@@ -259,6 +260,10 @@ internal object TicTacToeViewModel : SharedViewModel {
                 }
             }
         }
+    }
+
+    fun onSearchTextChange(s: String) {
+        searchText = s
     }
 
     init {

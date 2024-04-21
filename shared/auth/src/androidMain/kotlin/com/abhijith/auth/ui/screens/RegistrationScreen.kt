@@ -39,6 +39,7 @@ import arrow.core.None
 import arrow.core.Some
 import com.abhijith.auth.viewmodel.AndroidViewModelAuth
 import com.abhijith.auth.models.RegistrationResult
+import com.abhijith.foundation.AppColors
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -80,7 +81,7 @@ fun RegistrationScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color("#05445E".toColorInt()))
+            .background(color = AppColors.BACKGROUND)
     ) {
         Column {
             Box(modifier = Modifier.height(200.dp)) {
@@ -95,7 +96,7 @@ fun RegistrationScreen(
             Card(
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color("#189AB4".toColorInt()),
+                    containerColor = AppColors.CONTAINER,
                 ),
                 modifier = Modifier
                     .weight(1f)

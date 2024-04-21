@@ -54,3 +54,6 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
+dependencies {
+    implementation(project(":shared:foundation-multiplatform-compose"))
+}

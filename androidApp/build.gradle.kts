@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.shared.ticTacToe)
     implementation(projects.shared.auth)
     implementation(projects.shared.profile)
+    implementation(project(":shared:foundation-multiplatform-compose"))
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.koin.core)
     implementation(libs.koin.android)

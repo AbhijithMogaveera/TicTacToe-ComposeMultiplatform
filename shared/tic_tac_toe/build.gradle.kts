@@ -29,8 +29,18 @@ kotlin {
         commonMain.dependencies {
             projects.shared.apply {
                 implementation(foundationMultiplatformCompose)
+                api(compose.components.resources)
+                implementation(compose.runtime)
                 implementation(auth)
                 implementation(profile)
+
+                //
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
             }
         }
         commonTest.dependencies {
@@ -46,6 +56,8 @@ kotlin {
 android {
     namespace = "com.abhijith.tic_tac_toe"
     compileSdk = 34
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
     defaultConfig {
         minSdk = 24
     }

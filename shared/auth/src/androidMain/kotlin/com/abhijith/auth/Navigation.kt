@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.abhijith.auth.ui.screens.LoginScreen
 import com.abhijith.auth.ui.screens.RegistrationScreen
+import com.abhijith.foundation.navigation.navigateSafe
 
 fun NavGraphBuilder.setupAuthNavigation(mainNavController: NavController) {
     composable("/auth") {
@@ -19,7 +20,7 @@ fun NavGraphBuilder.setupAuthNavigation(mainNavController: NavController) {
                 composable("/login") {
                     LoginScreen(
                         onRegistrationBtnClicked = {
-                            authNavyController.navigate("/registration")
+                            authNavyController.navigateSafe("/registration")
                         },
                         onLoginSuccessful = {
                             mainNavController.navigateUp()

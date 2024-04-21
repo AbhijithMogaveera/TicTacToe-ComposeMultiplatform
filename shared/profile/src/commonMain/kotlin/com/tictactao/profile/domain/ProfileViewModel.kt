@@ -37,6 +37,12 @@ internal class ProfileViewModel(
             }.launchIn(coroutineScope)
     }
 
+    fun updateBui(bio: String){
+        coroutineScope.launch {
+            useCaseUpdateProfileDetails.updateBio(bio)
+        }
+    }
+
     fun logout() {
         coroutineScope.launch {
             userCaseLogout.logout()

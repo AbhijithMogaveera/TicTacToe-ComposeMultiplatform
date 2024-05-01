@@ -23,9 +23,10 @@ kotlin {
         it.binaries.framework {
             baseName = "tic_tac_toe"
             isStatic = true
+            binaryOptions["bundleId"] = "com.shared.profile"
         }
     }
-
+    task("testClasses")
     sourceSets {
         androidMain.dependencies {
             implementation(libs.cashsqldeligh.android)
@@ -49,7 +50,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.abhijith.tic_tac_toe"
+    namespace = "com.shared.profile"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
@@ -61,7 +62,7 @@ dependencies {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("com.example")
+            packageName.set("com.shared.profile.sql")
         }
     }
 }

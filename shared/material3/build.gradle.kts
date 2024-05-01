@@ -23,9 +23,10 @@ kotlin {
         it.binaries.framework {
             baseName = "material3"
             isStatic = true
+            binaryOptions["bundleId"] = "com.shared.m3"
         }
     }
-
+    task("testClasses")
     sourceSets {
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -46,7 +47,7 @@ kotlin {
 }
 
 android {
-    namespace = "androidx.compose.material3"
+    namespace = "com.shared.m3"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

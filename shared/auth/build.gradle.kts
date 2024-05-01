@@ -21,9 +21,10 @@ kotlin {
         it.binaries.framework {
             baseName = "auth"
             isStatic = true
+            binaryOptions["bundleId"] = "com.shared.auth"
         }
     }
-
+    task("testClasses")
     sourceSets {
         androidMain.dependencies {
             implementation(libs.koin.android)
@@ -42,7 +43,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.abhijith.auth"
+    namespace = "com.shared.auth"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

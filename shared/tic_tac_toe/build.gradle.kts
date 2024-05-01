@@ -22,9 +22,10 @@ kotlin {
         it.binaries.framework {
             baseName = "tic_tac_toe"
             isStatic = true
+            binaryOptions["bundleId"] = "com.shared.tic_tac_toe"
         }
     }
-
+    task("testClasses")
     sourceSets {
         commonMain.dependencies {
             projects.shared.apply {
@@ -54,7 +55,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.abhijith.tic_tac_toe"
+    namespace = "com.shared.tic_tac_toe"
     compileSdk = 34
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")

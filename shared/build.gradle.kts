@@ -29,12 +29,13 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
+            binaryOptions["bundleId"] = "com.shared"
             export(projects.shared.auth)
             export(projects.shared.foundation)
             export(projects.shared.ticTacToe)
         }
     }
-
+    task("testClasses")
     sourceSets {
         commonMain.dependencies {
             api(projects.shared.auth)
@@ -49,7 +50,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.shared"
+    namespace = "com.shared"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

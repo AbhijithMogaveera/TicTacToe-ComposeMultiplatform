@@ -21,9 +21,10 @@ kotlin {
         it.binaries.framework {
             baseName = "foundation"
             isStatic = true
+            binaryOptions["bundleId"] = "com.shared.compose_foundation"
         }
     }
-
+    task("testClasses")
     sourceSets {
 
         commonMain.dependencies {
@@ -49,7 +50,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.abhijith.foundation"
+    namespace = "com.shared.compose_foundation"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

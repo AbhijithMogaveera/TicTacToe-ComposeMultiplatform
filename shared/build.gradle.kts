@@ -29,9 +29,10 @@ kotlin {
         it.binaries.framework {
             baseName = "shared"
             isStatic = true
-            binaryOptions["bundleId"] = "com.shared"
+            binaryOptions["bundleId"] = "com.ttt"
             export(projects.shared.auth)
             export(projects.shared.foundation)
+            export(projects.shared.iosApp)
             export(projects.shared.ticTacToe)
         }
     }
@@ -40,8 +41,10 @@ kotlin {
         commonMain.dependencies {
             api(projects.shared.auth)
             api(projects.shared.foundation)
-            api(projects.shared.ticTacToe)
+            api(projects.shared.iosApp)
             api(libs.koin.core)
+            api(libs.koin.core)
+            api(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -50,7 +53,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.shared"
+    namespace = "com.ttt"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

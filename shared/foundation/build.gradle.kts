@@ -40,7 +40,7 @@ kotlin {
             api(libs.androidx.activity.compose)
             val nav_version = "2.7.6"
             api("androidx.navigation:navigation-compose:$nav_version")
-            api("io.coil-kt:coil-compose:2.5.0")
+//            api("io.coil-kt:coil-compose:2.5.0")
             implementation(libs.koin.android)
         }
         commonMain.dependencies {

@@ -1,11 +1,11 @@
 package com.example.kmmsample.android
 
 import android.app.Application
-import com.abhijith.auth.AndroidAuthModuleConfig
-import com.abhijith.foundation.SharedFoundationConfig
-import com.abhijith.foundation.platform.KMMContextProvider
-import com.abhijith.tic_tac_toe.TicTacToeConfig
-import com.tictactao.profile.ProfileModuleConfig
+import com.shared.auth.AndroidAuthModuleConfiguration
+import com.shared.compose_foundation.SharedFoundationConfiguration
+import com.shared.compose_foundation.platform.KMMContextProvider
+import com.shared.tic_tac_toe.TicTacToeConfiguration
+import com.shared.profile.ProfileModuleConfiguration
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.KoinApplication
@@ -26,10 +26,10 @@ class App : Application() {
 
     private fun KoinApplication.configModules() {
         listOf(
-            AndroidAuthModuleConfig,
-            SharedFoundationConfig,
-            TicTacToeConfig,
-            ProfileModuleConfig
+            AndroidAuthModuleConfiguration,
+            SharedFoundationConfiguration,
+            TicTacToeConfiguration,
+            ProfileModuleConfiguration
         ).onEach {
             it.configKoinModules(this)
         }.onEach {

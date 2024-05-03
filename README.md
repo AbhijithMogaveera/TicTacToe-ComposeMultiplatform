@@ -1,1 +1,3 @@
-
+```
+./gradlew :shared:compileIosMainKotlinMetadata --stacktrace
+```

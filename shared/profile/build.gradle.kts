@@ -36,7 +36,7 @@ kotlin {
             implementation(projects.shared.auth)
             implementation(libs.file.picker)
             implementation(libs.cashsqldeligh.coroutine)
-            implementation("io.coil-kt.coil3:coil:3.0.0-alpha01")
+//            implementation("io.coil-kt.coil3:coil:3.0.0-alpha01")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

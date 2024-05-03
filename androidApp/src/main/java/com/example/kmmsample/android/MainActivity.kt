@@ -1,26 +1,21 @@
 package com.example.kmmsample.android
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.abhijith.auth.setupAuthNavigation
-import com.abhijith.auth.ui.hooks.AuthProtected
-import com.abhijith.foundation.AppColors
-import com.abhijith.foundation.activity.ProvideActivity
-import com.abhijith.foundation.navigation.navigateSafe
-import com.abhijith.tic_tac_toe.setUpTicTacToeNavigation
-import com.tictactao.profile.ui.ProfileComponent
+import com.shared.auth.setupAuthNavigation
+import com.shared.auth.ui.hooks.AuthProtected
+import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.activity.ProvideActivity
+import com.shared.compose_foundation.navigation.navigateSafe
+import com.shared.tic_tac_toe.setUpTicTacToeNavigation
+import com.shared.profile.ui.ProfileComponent
 
 class MainActivity : ComponentActivity() {
 

@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -55,7 +56,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-//import coil3.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.shared.compose_foundation.AppColors
 import com.shared.compose_foundation.koin.rememberInject
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
@@ -196,11 +197,11 @@ private fun ProfileDetails(
                 shape = CircleShape
             ).size(70.dp).align(Alignment.CenterVertically).background(color = Color.Black)
         ) {
-           /* AsyncImage(
+            AsyncImage(
                 model = user.profilePicture,
                 contentDescription = null,
                 contentScale = ContentScale.Crop
-            )*/
+            )
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column(

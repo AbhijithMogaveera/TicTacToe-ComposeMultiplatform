@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,11 +36,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.None
 import arrow.core.Some
+import com.shared.auth.R
 import com.shared.auth.viewmodel.AndroidViewModelAuth
 import com.shared.auth.models.LoginResult
 import com.shared.compose_foundation.AppColors
@@ -57,7 +66,7 @@ fun LoginScreen(
     val context = LocalContext.current
     LaunchedEffect(key1 = Unit, block = {
         viewModel.getLoginState().collectLatest {
-            when(it){
+            when (it) {
                 None -> {}
                 is Some -> onLoginSuccessful()
             }
@@ -132,7 +141,9 @@ fun LoginScreen(
                         Text(text = "User id")
                     },
                 )
-                OutlinedTextField(value = password,
+                var passwordVisible by rememberSaveable { mutableStateOf(false) }
+                OutlinedTextField(
+                    value = password,
                     onValueChange = {
                         password = it
                     },
@@ -143,7 +154,20 @@ fun LoginScreen(
                     shape = RoundedCornerShape(20.dp),
                     placeholder = {
                         Text(text = "Password")
-                    })
+                    },
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    trailingIcon = {
+                        val image = if (passwordVisible)
+                            painterResource(id = R.drawable.hide_password)
+                        else
+                            painterResource(id = R.drawable.show_password)
+                        val description = if (passwordVisible) "Hide password" else "Show password"
+                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Icon(painter = image, description)
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                )
                 TextButton(
                     onClick = onRegistrationBtnClicked,
                     modifier = Modifier.align(Alignment.End)

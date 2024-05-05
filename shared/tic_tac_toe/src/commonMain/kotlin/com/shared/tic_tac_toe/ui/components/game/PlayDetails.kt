@@ -19,12 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.getOrElse
-//import coil3.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.shared.tic_tac_toe.domain.models.PlayerProfile
 
 @Composable
@@ -107,11 +108,11 @@ fun PlayDetails(
 @Composable
 private fun PlayerPic(playerProfile: PlayerProfile) {
     Box(modifier = Modifier.size(54.dp).clip(CircleShape).background(Color.Black)) {
-       /* AsyncImage(
+        AsyncImage(
             model = playerProfile.profile_image.getOrNull(),
             contentDescription = null,
             contentScale = ContentScale.Crop
-        )*/
+        )
         Text(
             playerProfile.tile.name,
             modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),

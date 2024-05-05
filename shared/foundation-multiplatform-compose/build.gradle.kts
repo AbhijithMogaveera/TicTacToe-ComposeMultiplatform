@@ -35,12 +35,12 @@ kotlin {
                 api(ui)
                 api(components.resources)
             }
-//            api("io.coil-kt.coil3:coil-compose:3.0.0-alpha03")
-//            api("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha03")
+            api("io.coil-kt.coil3:coil-compose:3.0.0-alpha03")
+            api("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha03")
             libs.apply {
                 api(projects.shared.foundation)
                 api(libs.file.picker)
-//                api("io.coil-kt:coil-compose:2.5.0")
+                api("io.coil-kt:coil-compose:2.5.0")
             }
         }
         commonTest.dependencies {

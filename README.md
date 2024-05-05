@@ -5,7 +5,7 @@
 * Lang (Kotlin and Swift)
 
 # Backend
-Express+TS with Websockets
+Express+TS with Websockets (https://github.com/AbhijithMogaveera/TicTacToe-BE)
 
 # Development 
 - [x] ANDROID

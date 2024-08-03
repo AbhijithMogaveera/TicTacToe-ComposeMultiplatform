@@ -1,13 +1,15 @@
 #<!----------------------------VERSIONS--------------------------->
 [versions]
-agp = "8.2.0"
-buildkonfigGradlePlugin = "0.15.1"
-koinAndroid = "3.2.0"
-kotlin = "1.9.22"
+agp = "8.2.2"
+coilCompose = "3.0.0-alpha03"
+foundation = "1.6.8"
+kmmViewmodelCore = "1.0.0-ALPHA-19"
+kotlin = "2.0.0"
 compose = "1.6.7"
-compose-compiler = "1.5.8"
-compose-material3 = "1.1.2"
+compose-material3 = "1.2.1"
 androidx-activityCompose = "1.8.0"
+kotlinxDatetime = "0.6.0"
+kotlinxSerializationJson = "1.7.1"
 ktor = "2.3.7"
 coroutines = "1.8.0"
 arrwow = "1.2.1"
@@ -18,16 +20,26 @@ espresso-core = "3.5.1"
 appcompat = "1.6.1"
 material = "1.11.0"
 navigationCompose = "2.7.0-rc01"
+navigationComposeVersion = "2.7.6"
 sqldelight = "2.0.1"
+ui = "1.5.4"
 uiTooling = "1.6.2"
 koin-bom = "3.5.3"
-compose-plugin = "1.6.0"
+compose-plugin = "1.6.11"
 mf-file-picker = "3.1.0"
 org-jetbrains-kotlin-jvm = "1.9.22"
+uiToolingPreview = "1.5.4"
 #<!----------------------------librARIES--------------------------->
 [libraries]
+androidx-foundation-v168 = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-buildkonfig-gradle-plugin = { module = "com.codingfeline.buildkonfig:buildkonfig-gradle-plugin", version.ref = "buildkonfigGradlePlugin" }
+androidx-navigation-compose-v276 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+androidx-ui-tooling-preview-v154 = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+androidx-ui-v154 = { module = "androidx.compose.ui:ui", version.ref = "ui" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+
+kmm-viewmodel-core = { module = "com.rickclephas.kmm:kmm-viewmodel-core", version.ref = "kmmViewmodelCore" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -41,6 +53,8 @@ arrow-core = {module = "io.arrow-kt:arrow-core" , version.ref = "arrwow"}
 arrow-fx-corutine = {module = "io.arrow-kt:arrow-fx-coroutines" , version.ref = "arrwow"}
 
 #Ktor
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
@@ -75,8 +89,8 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
-buildkonfig = {id = "com.codingfeline.buildkonfig"}
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 cashsqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+

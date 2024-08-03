@@ -2,13 +2,14 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -35,13 +36,12 @@ kotlin {
                 api(ui)
                 api(components.resources)
             }
-            api("io.coil-kt.coil3:coil-compose:3.0.0-alpha03")
-            api("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha03")
-            libs.apply {
-                api(projects.shared.foundation)
-                api(libs.file.picker)
-                api("io.coil-kt:coil-compose:2.5.0")
-            }
+            api(libs.coil.compose)
+//            api(libs.coil.network.ktor)
+//            api(libs.coil.kt.coil.compose)
+            api(projects.shared.foundation)
+            api(libs.file.picker)
+//            api(libs.androidx.foundation.v168)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -58,8 +58,9 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

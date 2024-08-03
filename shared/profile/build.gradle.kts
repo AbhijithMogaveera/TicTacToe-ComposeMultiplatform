@@ -4,13 +4,14 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.cashsqldelight)
     kotlin("plugin.serialization")
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -55,9 +56,13 @@ android {
     defaultConfig {
         minSdk = 24
     }
-}
-dependencies {
-    implementation(project(":shared:auth"))
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    buildFeatures {
+        compose = true
+    }
 }
 sqldelight {
     databases {

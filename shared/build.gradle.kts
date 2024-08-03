@@ -6,7 +6,8 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsCompose)
+//    alias(libs.plugins.jetbrainsCompose)
+//    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -16,7 +17,7 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -44,7 +45,7 @@ kotlin {
             api(projects.shared.iosApp)
             api(libs.koin.core)
             api(libs.koin.core)
-            api(compose.components.resources)
+//            api(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -58,7 +59,15 @@ android {
     defaultConfig {
         minSdk = 24
     }
+    buildFeatures {
+        compose =  true
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
+/*
 plugins.removeAll { it is ComposeCompilerKotlinSupportPlugin }
 class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompilerKotlinSupportPlugin() {
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
@@ -68,4 +77,4 @@ class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompil
         }
     }
 }
-apply<ComposeNoNativePlugin>()
+apply<ComposeNoNativePlugin>()*/

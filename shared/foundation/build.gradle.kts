@@ -3,13 +3,14 @@ plugins {
     alias(libs.plugins.androidLibrary)
     id("kotlin-kapt")
     kotlin("plugin.serialization")
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "17"
             }
         }
     }
@@ -34,13 +35,13 @@ kotlin {
             api(libs.core.ktx)
             api(libs.appcompat)
             api(libs.material)
-            api("androidx.compose.ui:ui:1.5.4")
-            api("androidx.compose.ui:ui-tooling-preview:1.5.4")
+            api(libs.androidx.ui.v154)
+            api(libs.androidx.ui.tooling.preview.v154)
             api(libs.compose.material3)
             api(libs.androidx.activity.compose)
             val nav_version = "2.7.6"
-            api("androidx.navigation:navigation-compose:$nav_version")
-            api("io.coil-kt:coil-compose:2.5.0")
+            api(libs.androidx.navigation.compose.v276)
+//            api(libs.coil.compose.v250)
             implementation(libs.koin.android)
         }
         commonMain.dependencies {
@@ -52,9 +53,9 @@ kotlin {
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.ktor.client.content.negotiation)
             api(libs.koin.core)
-            api("com.rickclephas.kmm:kmm-viewmodel-core:1.0.0-ALPHA-19")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
-            api("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+            api(libs.kmm.viewmodel.core)
+            implementation(libs.kotlinx.serialization.json)
+            api(libs.kotlinx.datetime)
         }
         iosMain.dependencies {
             api(libs.ktor.client.darwin)
@@ -78,7 +79,8 @@ android {
         compose = true
         viewBinding = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

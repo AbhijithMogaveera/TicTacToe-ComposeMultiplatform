@@ -1,13 +1,15 @@
 import org.jetbrains.compose.ComposeCompilerKotlinSupportPlugin
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-//    alias(libs.plugins.jetbrainsCompose)
-//    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -31,21 +33,21 @@ kotlin {
             baseName = "shared"
             isStatic = true
             binaryOptions["bundleId"] = "com.ttt"
-            export(projects.shared.auth)
-            export(projects.shared.foundation)
-            export(projects.shared.iosApp)
-            export(projects.shared.ticTacToe)
+            export(projects.shared.featureAuth)
+            export(projects.shared.foundationKotlin)
+            export(projects.shared.platformCommon)
+            export(projects.shared.featureTicTacToe)
         }
     }
     task("testClasses")
     sourceSets {
         commonMain.dependencies {
-            api(projects.shared.auth)
-            api(projects.shared.foundation)
-            api(projects.shared.iosApp)
+            api(projects.shared.featureAuth)
+            api(projects.shared.foundationKotlin)
+            api(projects.shared.platformCommon)
             api(libs.koin.core)
             api(libs.koin.core)
-//            api(compose.components.resources)
+            api(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -67,8 +69,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
-/*
+project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
+    targets
+        .filterIsInstance<KotlinNativeTarget>()
+        .flatMap { it.binaries }
+        .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
+}
 plugins.removeAll { it is ComposeCompilerKotlinSupportPlugin }
+/*
 class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompilerKotlinSupportPlugin() {
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
         return when (kotlinCompilation.target.platformType) {
@@ -77,4 +85,5 @@ class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompil
         }
     }
 }
-apply<ComposeNoNativePlugin>()*/
+apply<ComposeNoNativePlugin>()
+*/

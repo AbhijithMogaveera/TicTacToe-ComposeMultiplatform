@@ -39,13 +39,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.shared.foundation)
-    implementation(projects.shared.ticTacToe)
-    implementation(projects.shared.auth)
-    implementation(projects.shared.profile)
-    implementation(projects.shared.foundationMultiplatformCompose)
-    debugImplementation(libs.androidx.ui.tooling)
+    implementation(projects.shared.platformCommon)
+    implementation(projects.shared.foundationCompose)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
-    implementation(libs.compose.material3)
 }

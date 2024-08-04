@@ -14,7 +14,8 @@ struct iOSApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView{
-                TicTacToeContentView()
+                SharedContentView()
+                .edgesIgnoringSafeArea(.all)
             }
         }
     }

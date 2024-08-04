@@ -18,11 +18,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "KMMSample"
 include(":shared")
-include(":shared:iosApp")
+include(":shared:platform_common")
 include(":androidApp")
-include(":shared:auth")
-include(":shared:foundation")
-include(":shared:profile")
-include(":shared:tic_tac_toe")
-include(":shared:material3")
-include(":shared:foundation-multiplatform-compose")
+include(":shared:feature_auth")
+include(":shared:foundation_kotlin")
+include(":shared:feature_profile")
+include(":shared:feature_tic_tac_toe")
+include(":shared:lib_material3")
+include(":shared:foundation_compose")

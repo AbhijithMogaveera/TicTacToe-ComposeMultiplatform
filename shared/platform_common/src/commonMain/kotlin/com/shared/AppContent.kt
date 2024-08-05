@@ -34,8 +34,7 @@ fun AppContent() {
                     composable("/profile") {
                         AuthProtected(
                             ifNotLogin = {
-                                navController.popBackStack()
-                                navController.navigate("/auth")
+                                navController.navigate("/auth/login")
                             }
                         ) {
                             ProfileComponent(

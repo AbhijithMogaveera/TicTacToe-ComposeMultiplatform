@@ -36,7 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import arrow.core.None
 import arrow.core.Some
 import com.shared.auth.models.RegistrationResult
-import com.shared.auth.viewmodel.SharedAuthViewModel
+import com.shared.auth.viewmodel.AuthViewModel
 import com.shared.compose_foundation.AppColors
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 fun RegistrationScreen(
     onLoginBtnClick: () -> Unit = {},
     onRegistrationSuccessFul: () -> Unit,
-    androidViewModelAuth: SharedAuthViewModel = viewModel { SharedAuthViewModel() }
+    androidViewModelAuth: AuthViewModel = viewModel { AuthViewModel() }
 ) {
     LaunchedEffect(key1 = Unit, block = {
         androidViewModelAuth

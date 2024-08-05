@@ -4,19 +4,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import arrow.core.None
 import arrow.core.Some
-import com.shared.auth.viewmodel.SharedAuthViewModel
+import com.shared.auth.viewmodel.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AuthProtected(
-    vm: SharedAuthViewModel = viewModel{ SharedAuthViewModel()},
+    vm: AuthViewModel = viewModel{ AuthViewModel()},
     ifNotLogin: () -> Unit = {},
     protected: Boolean = true,
-    loading: @Composable () -> Unit = { CircularProgressIndicator() },
     content: @Composable () -> Unit = {}
 ) {
     if (protected) {

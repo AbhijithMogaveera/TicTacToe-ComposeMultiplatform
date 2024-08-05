@@ -11,7 +11,7 @@ fun NavGraphBuilder.setUpTicTacToeNavigation(navController: NavController) {
     composable("/tic_tac_toe") {
         AuthProtected(
             ifNotLogin = {
-                navController.navigateSafe("/auth")
+                navController.navigateSafe("/auth/login")
             }
         ) {
             TicTacToeComponent(navController::navigateUp)

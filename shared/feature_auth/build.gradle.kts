@@ -30,6 +30,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(projects.shared.foundationCompose)
             implementation(libs.lifecycle.viewmodel.compose)
+            implementation(compose.components.resources)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

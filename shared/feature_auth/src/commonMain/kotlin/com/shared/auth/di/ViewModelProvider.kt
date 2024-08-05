@@ -1,10 +1,10 @@
 package com.shared.auth.di
 
-import com.shared.auth.viewmodel.SharedAuthViewModel
+import com.shared.auth.viewmodel.AuthViewModel
 import org.koin.dsl.module
 
 val DefaultViewModelProvider = module {
-    factory<SharedAuthViewModel> {
-        SharedAuthViewModel()
+    factory<AuthViewModel> {
+        AuthViewModel()
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+/*todo: replace with koin compose injection*/
 @Composable
 inline fun<reified T : Any> rememberInject():T {
     return remember {

@@ -10,9 +10,9 @@ data class BoardStateDTO(
             add(TileState.NONE)
         }
     },
-    val winTileDiagonalStart: Int? = null,
-    val winTileDiagonalMiddle: Int? = null,
-    val winTileDiagonalEnd: Int? = null,
+    val winTileStart: Int? = null,
+    val winTileMiddle: Int? = null,
+    val winTileEnd: Int? = null,
     val winPlayerUsername: String? = null,
     val activePlayerUserName: String? = null,
     val activePlayerTile: TileState = TileState.NONE,

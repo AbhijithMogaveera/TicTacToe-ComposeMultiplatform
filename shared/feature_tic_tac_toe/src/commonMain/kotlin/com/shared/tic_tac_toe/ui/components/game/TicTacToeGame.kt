@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -39,6 +40,7 @@ import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.some
 import com.shared.compose_foundation.koin.rememberInject
+import com.shared.compose_foundation.platform.Platform
 import com.shared.tic_tac_toe.data.dto.BoardState
 import com.shared.tic_tac_toe.domain.models.TileState
 import com.shared.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
@@ -50,6 +52,7 @@ import com.shared.tic_tac_toe.ui.components.invitations.Timer
 import com.shared.profile.domain.models.User
 import com.shared.profile.domain.use_case.UseCaseGetProfileDetails
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.math.abs
 
 
 enum class PlayerDetailsAlignment {
@@ -69,7 +72,9 @@ fun CurrentUser(): Option<User> {
     }
     return user
 }
+
 val BoardPadding = 10.dp
+
 @Composable
 fun TicTacToeGame(modifier: Modifier = Modifier) {
     CurrentUser().onSome { activeUser ->
@@ -93,63 +98,58 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                     .padding(10.dp)
                     .fillMaxSize()
                     .drawBehind {
-                        val boardLayoutCoordinates = boardLayoutCoordinates
-                            .getOrElse { return@drawBehind }
-                        val playerOneLayoutCoordinates = playerOneLayoutCoordinates
-                            .getOrElse { return@drawBehind }
+                        val boardLayoutCoordinates =
+                            boardLayoutCoordinates.getOrElse { return@drawBehind }
+                        val playerOneLayoutCoordinates =
+                            playerOneLayoutCoordinates.getOrElse { return@drawBehind }
                         val playerTwoLayoutCoordinates =
-                            playerTwoLayoutCoordinates
-                                .getOrElse { return@drawBehind }
+                            playerTwoLayoutCoordinates.getOrElse { return@drawBehind }
                         val parentLayoutCoordinates =
-                            parentLayoutCoordinates.getOrElse {
-                                return@drawBehind
-                            }
+                            parentLayoutCoordinates.getOrElse { return@drawBehind }
+                        val startLineY =
+                            (boardLayoutCoordinates.localToRoot(Offset.Zero).y - BoardPadding.toPx()) + boardLayoutCoordinates.size.height.toFloat()
+                        val startLineStart = Offset(
+                            x = 160f,
+                            y = startLineY
+                        )
+                        val startLineEnd = let {
+                            parentLayoutCoordinates
+                                .localPositionOf(
+                                    playerOneLayoutCoordinates,
+                                    Offset.Zero
+                                ).let {
+                                    it.copy(
+                                        x = 160f,
+                                        y = it.y
+                                    )
+                                }
+                        }
                         drawLine(
-                            start = Offset(
-                                x = 160f,
-                                y = (boardLayoutCoordinates.localToRoot(Offset.Zero).y- BoardPadding.toPx()) + boardLayoutCoordinates.size.height.toFloat()
-                            ),
-                            end = let {
-                                parentLayoutCoordinates
-                                    .localPositionOf(
-                                        playerOneLayoutCoordinates,
-                                        Offset.Zero
-                                    ).let {
-                                        it.copy(
-                                            x = 160f,
-                                            y = it.y
-                                        )
-                                    }
-                            },
+                            start = if(Platform.isIphone) startLineEnd else startLineStart,
+                            end = if(Platform.isIphone) startLineEnd+(startLineEnd-startLineStart) else startLineEnd,
                             color = playerXIndicatorColor,
                             strokeWidth = playerXStockWidth.toPx(),
                             cap = StrokeCap.Round
                         )
+                        val end = parentLayoutCoordinates
+                            .localPositionOf(playerTwoLayoutCoordinates, Offset.Zero).let {
+                                it.copy(
+                                    x = boardLayoutCoordinates.size.width.toFloat() - 160f,
+                                    y = it.y
+                                )
+                            }
                         drawLine(
                             start = Offset(
                                 x = boardLayoutCoordinates.size.width.toFloat() - 160f,
                                 y = boardLayoutCoordinates.size.height.toFloat()
                             ),
-                            end = let {
-                                parentLayoutCoordinates
-                                    .localPositionOf(
-                                        playerTwoLayoutCoordinates,
-                                        Offset.Zero
-                                    ).let {
-                                        it.copy(
-                                            x = boardLayoutCoordinates.size.width.toFloat() - 160f,
-                                            y = it.y
-                                        )
-                                    }
-                            },
+                            end = end,
                             color = player0IndicatorColor,
                             strokeWidth = playerOIndicatorColor.toPx(),
                             cap = StrokeCap.Round
                         )
 
-                    }.onGloballyPositioned {
-                        parentLayoutCoordinates = it.some()
-                    }
+                    }.onGloballyPositioned { parentLayoutCoordinates = it.some() }
             ) {
                 Text(
                     text = "Tic Tac Toe",
@@ -162,11 +162,8 @@ fun TicTacToeGame(modifier: Modifier = Modifier) {
                 BoardGrid(
                     modifier = Modifier
                         .padding(BoardPadding)
-                        .onGloballyPositioned {
-                            boardLayoutCoordinates = it.some()
-                        }
+                        .onGloballyPositioned { boardLayoutCoordinates = it.some() }
                 )
-
                 Spacer(modifier = Modifier.height(10.dp))
                 PlayDetails(
                     alignment = PlayerDetailsAlignment.START,

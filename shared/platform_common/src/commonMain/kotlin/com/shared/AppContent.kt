@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,14 +28,15 @@ fun AppContent() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "/profile"
+                    startDestination = "/profile",
+                    modifier = Modifier.background(AppColors.BACKGROUND)
                 ) {
                     setupAuthNavigation(navController)
                     setUpTicTacToeNavigation(navController)
                     composable("/profile") {
                         AuthProtected(
                             ifNotLogin = {
-                                navController.navigate("/auth/login")
+                                navController.navigate("/auth")
                             }
                         ) {
                             ProfileComponent(

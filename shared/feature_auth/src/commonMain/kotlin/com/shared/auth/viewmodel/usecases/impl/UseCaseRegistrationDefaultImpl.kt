@@ -1,11 +1,11 @@
 package com.shared.auth.viewmodel.usecases.impl
 
-import com.shared.auth.util.UserAccountUtil
+import com.shared.auth.util.UserAccountsManager
 import com.shared.auth.models.RegistrationResult
 import com.shared.auth.viewmodel.usecases.UseCaseRegistration
 
 internal class UseCaseRegistrationDefaultImpl(
-    private val userAccountUtil: UserAccountUtil
+    private val userAccountsManager: UserAccountsManager
 ) : UseCaseRegistration {
 
     companion object {
@@ -18,7 +18,7 @@ internal class UseCaseRegistrationDefaultImpl(
         userName: String,
         password: String
     ): RegistrationResult {
-        userAccountUtil.register(userName, password).onLeft {
+        userAccountsManager.register(userName, password).onLeft {
             it.exception.printStackTrace()
             it.isClientSideError { clientSideError ->
                 if (clientSideError.issue.key == USER_ALREADY_EXISTS) {

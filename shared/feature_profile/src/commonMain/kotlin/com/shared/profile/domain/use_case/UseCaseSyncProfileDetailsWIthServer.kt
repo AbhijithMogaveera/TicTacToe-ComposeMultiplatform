@@ -1,18 +1,18 @@
 package com.shared.profile.domain.use_case
 
 import com.shared.auth.viewmodel.usecases.UseCaseGetAuthToken
-import com.shared.compose_foundation.usecase.SyncUseCase
+import com.shared.compose_foundation.StartUpTask
 import com.shared.profile.domain.repo.ProfileRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-internal class UseCaseSyncProfileDetailsWIthServer(
+class UseCaseSyncProfileDetailsWIthServer(
     val useCaseGetAuthToken: UseCaseGetAuthToken,
     val appScope: CoroutineScope,
     val profileRepo: ProfileRepo
-) : SyncUseCase {
-    override fun startSync() {
+) : StartUpTask {
+    private fun startSync() {
         appScope.launch {
             useCaseGetAuthToken.getToken().collectLatest { token ->
                 token.onSome {
@@ -27,8 +27,7 @@ internal class UseCaseSyncProfileDetailsWIthServer(
         }
     }
 
-    override fun stopSyncs() {
-
+    override fun execute() {
+        startSync()
     }
-
 }

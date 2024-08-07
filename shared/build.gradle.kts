@@ -1,8 +1,5 @@
 import org.jetbrains.compose.ComposeCompilerKotlinSupportPlugin
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
@@ -76,14 +73,3 @@ project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
         .forEach { compilationUnit -> compilationUnit.linkerOpts("-lsqlite3") }
 }
 plugins.removeAll { it is ComposeCompilerKotlinSupportPlugin }
-/*
-class ComposeNoNativePlugin : KotlinCompilerPluginSupportPlugin by ComposeCompilerKotlinSupportPlugin() {
-    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
-        return when (kotlinCompilation.target.platformType) {
-            KotlinPlatformType.native -> false
-            else -> true
-        }
-    }
-}
-apply<ComposeNoNativePlugin>()
-*/

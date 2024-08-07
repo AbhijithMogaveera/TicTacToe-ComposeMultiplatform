@@ -71,10 +71,6 @@ class UseCaseSocketToUseCaseMediator(
         }
     }
 
-    suspend fun off(event: String) {
-        session?.off(event)
-    }
-
 
     private suspend fun connect() {
         isConnected.emit(ConnectionState.Connecting)

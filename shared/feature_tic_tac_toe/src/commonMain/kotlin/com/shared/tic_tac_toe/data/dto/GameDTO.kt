@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GameDTO(
     val board: List<List<Int>>,
+    /*0 or X*/
     val currentPlayer: Int
 )
 

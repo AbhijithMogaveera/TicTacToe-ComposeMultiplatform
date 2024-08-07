@@ -8,9 +8,7 @@ import org.koin.dsl.module
 val ProfileUseCaseProvider = module {
     single<UseCaseGetProfileDetails> {
         UseCaseGetProfileDetails(
-            profileRepo = get(),
-            useCaseGetAuthToken = get(),
-            appScope = get()
+            profileRepo = get()
         )
     }
     single<UseCaseSyncProfileDetailsWIthServer> {

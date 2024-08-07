@@ -90,9 +90,9 @@ fun BoardGrid(modifier: Modifier) {
                         }.clickable {
                             TicTacToeViewModel.onTileClick(index)
                         },
-                        isFocused = boardState.winTileDiagonalStart.isSome { it == index }
-                                || boardState.winTileDiagonalMiddle.isSome { it == index }
-                                || boardState.winTileDiagonalEnd.isSome { it == index },
+                        isFocused = boardState.winTileStart.isSome { it == index }
+                                || boardState.winTileMiddle.isSome { it == index }
+                                || boardState.winTileEnd.isSome { it == index },
                         nonStateScale = animatedValue
                     )
                 }
@@ -123,12 +123,12 @@ fun BoardGrid(modifier: Modifier) {
                         ?.mapNotNull { it.getOrNull() }
                         ?.some() ?: None)
                         .onSome { tilesCoordinates ->
-                            val winTileDiagonalStart =
-                                boardState.winTileDiagonalStart.getOrElse { return@drawBehind }
-                            val winTileDiagonalEnd =
-                                boardState.winTileDiagonalEnd.getOrElse { return@drawBehind }
-                            val fromCoordinate = tilesCoordinates[winTileDiagonalStart]
-                            val toCoordinate = tilesCoordinates[winTileDiagonalEnd]
+                            val winTileStart =
+                                boardState.winTileStart.getOrElse { return@drawBehind }
+                            val winTileEnd =
+                                boardState.winTileEnd.getOrElse { return@drawBehind }
+                            val fromCoordinate = tilesCoordinates[winTileStart]
+                            val toCoordinate = tilesCoordinates[winTileEnd]
                             boardLayoutCoordinates.onSome { parentLayoutCoordinates ->
                                 drawLine(
                                     end = parentLayoutCoordinates.localPositionOf(

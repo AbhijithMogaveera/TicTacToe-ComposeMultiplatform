@@ -33,14 +33,10 @@ kotlin {
             api(compose.foundation)
             api(compose.material3)
             api(compose.ui)
-            api(compose.components.resources)
-            api(libs.coil.compose)
-//            api(libs.coil.network.ktor)
-//            api(libs.coil.kt.coil.compose)
+            api(libs.bundles.coil)
             api(projects.shared.foundationKotlin)
             api(libs.file.picker)
-            api("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
-//            api(libs.androidx.foundation.v168)
+            api(libs.jetbrains.navigation.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

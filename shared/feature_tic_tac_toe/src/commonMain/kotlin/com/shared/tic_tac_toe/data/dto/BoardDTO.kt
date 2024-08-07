@@ -19,9 +19,9 @@ data class BoardDTO(
         board.apply {
             return BoardState(
                 board = board,
-                winTileDiagonalStart = winTileDiagonalStart?.some() ?: None,
-                winTileDiagonalMiddle = winTileDiagonalMiddle?.some() ?: None,
-                winTileDiagonalEnd = winTileDiagonalEnd?.some() ?: None,
+                winTileStart = winTileStart?.some() ?: None,
+                winTileMiddle = winTileMiddle?.some() ?: None,
+                winTileEnd = winTileEnd?.some() ?: None,
                 winPlayerUsername = winPlayerUsername?.some() ?: None,
                 gameSessionId = invitation_id,
                 currentTurnUsername = current_turn,

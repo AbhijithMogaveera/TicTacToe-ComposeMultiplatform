@@ -26,7 +26,7 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.shared.foundationKotlin)
-            implementation(projects.shared.libMaterial3)
+            implementation(projects.shared.libUiComponents)
             implementation(libs.koin.core)
             implementation(projects.shared.foundationCompose)
             implementation(libs.lifecycle.viewmodel.compose)

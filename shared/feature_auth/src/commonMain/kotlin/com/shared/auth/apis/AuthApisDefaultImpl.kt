@@ -11,7 +11,7 @@ import io.ktor.client.request.setBody
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-internal class AuthApisDefaultImpl constructor(
+internal class AuthApisDefaultImpl(
     val httpClient: HttpClient
 ) : AuthApis {
 

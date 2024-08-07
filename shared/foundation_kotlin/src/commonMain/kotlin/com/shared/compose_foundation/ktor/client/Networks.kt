@@ -1,7 +1,6 @@
 package com.shared.compose_foundation.ktor.client
 
-import com.shared.compose_foundation.ktor.TokenInterceptorPlugin
-import com.shared.compose_foundation.platform.Platform
+import com.shared.compose_foundation.ktor.RestInterceptors
 import com.shared.compose_foundation.platform.getHostAddress
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -14,7 +13,6 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.util.PlatformUtils
 import kotlinx.serialization.json.Json
 
 expect fun getClient(
@@ -24,7 +22,7 @@ expect fun getClient(
 val httpClient: HttpClient by lazy {
     getClient(
         config = {
-            install(TokenInterceptorPlugin)
+            install(RestInterceptors)
             defaultRequest {
                 headers["Content-Type"] = "application/json"
                 host = getHostAddress()

@@ -11,9 +11,9 @@ data class BoardState(
             add(TileState.NONE)
         }
     },
-    val winTileDiagonalStart: Option<Int> = None,
-    val winTileDiagonalMiddle: Option<Int> = None,
-    val winTileDiagonalEnd: Option<Int> = None,
+    val winTileStart: Option<Int> = None,
+    val winTileMiddle: Option<Int> = None,
+    val winTileEnd: Option<Int> = None,
     val winPlayerUsername: Option<String> = None,
     val prematureGameTerminationBy:Option<String> = None,
     val gameSessionId: String,

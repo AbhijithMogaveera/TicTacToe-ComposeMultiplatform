@@ -36,6 +36,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,48 +60,51 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.shared.compose_foundation.AppColors
-import com.shared.compose_foundation.koin.rememberInject
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
+import com.darkrockstudios.libraries.mpfilepicker.MPFile
 import com.shared.profile.domain.ProfileViewModel
+import com.shared.profile.domain.models.ProfileUpdateState
 import com.shared.profile.domain.models.User
 import com.shared.profile.domain.use_case.UseCaseUpdateProfileDetails
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 
-private val LocalProfileViewModel = staticCompositionLocalOf<ProfileViewModel?> { null }
+interface ProfileHandler {
+    val currentComponent: StateFlow<ProfileComponentSection>
+    val profileUpdateResult: Flow<UseCaseUpdateProfileDetails.UpdateState>
+    fun updateComponent(profileComponentSection: ProfileComponentSection)
+    fun updateBui(bio: String)
+    fun getProfileDetails(): Flow<User>
+    fun uploadProfileImage(file: MPFile<Any>)
+    fun logout()
+}
 
-private enum class ProfileComponentSection {
+enum class ProfileComponentSection {
     MainScreen,
     DialogChooseEditOption,
     PickProfileImage,
     EditBio
 }
 
-private var currentProfileComponent by mutableStateOf(ProfileComponentSection.MainScreen)
-
 @Composable
 fun ProfileComponent(
     onLetsPlayClick: () -> Unit
 ) {
     val profileViewModel = viewModel { ProfileViewModel() }
-    CompositionLocalProvider(LocalProfileViewModel provides profileViewModel) {
-        ProfileEditOption()
-        ProfileDetails(
-            onLetsPlayClick = onLetsPlayClick,
-            onShowProfileEditOptionRequest = {
-                currentProfileComponent = ProfileComponentSection.DialogChooseEditOption
-            }
-        )
-    }
-
+    ProfileEditOption(profileHandler = profileViewModel)
+    ProfileDetails(
+        onLetsPlayClick = onLetsPlayClick,
+        profileHandler = profileViewModel
+    )
 }
 
 @Composable
 private fun ProfileDetails(
     onLetsPlayClick: () -> Unit,
-    onShowProfileEditOptionRequest: () -> Unit
+    profileHandler: ProfileHandler
 ) {
-    val profileViewModel = LocalProfileViewModel.current ?: error("Provide LocalProfileViewModel")
     Box(
         modifier = Modifier.fillMaxSize().background(
             color = AppColors.BACKGROUND
@@ -111,7 +115,7 @@ private fun ProfileDetails(
             }
         ) {
             Spacer(modifier = Modifier.height(40.dp))
-            ProfileDetails(onShowProfileEditOptionRequest)
+            ProfileDetails(profileHandler)
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 "Tic Tac Toe",
@@ -130,7 +134,7 @@ private fun ProfileDetails(
             Spacer(modifier = Modifier.height(10.dp))
             TextButton(
                 onClick = {
-                    profileViewModel.logout()
+                    profileHandler.logout()
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(0.9f)
             ) {
@@ -142,46 +146,33 @@ private fun ProfileDetails(
 }
 
 @Composable
-private fun ProfileDetails(onShowProfileEditOptionRequest: () -> Unit) {
+private fun ProfileDetails(
+    profileHandler: ProfileHandler
+) {
     var user: User? by remember { mutableStateOf(null) }
-    val profileViewModel = LocalProfileViewModel.current ?: error("Provide LocalProfileViewModel")
     LaunchedEffect(
         key1 = Unit
     ) {
-        profileViewModel
+        profileHandler
             .getProfileDetails()
             .collectLatest {
                 user = it
             }
     }
-    user?.let { ProfileDetails(it, onShowProfileEditOptionRequest) }
+    user?.let { ProfileDetails(it, profileHandler = profileHandler) }
 }
 
 @Composable
 private fun ProfileDetails(
     user: User,
-    onShowProfileEditOptionRequest: () -> Unit
+    profileHandler: ProfileHandler
 ) {
-    val profileViewModel = LocalProfileViewModel.current ?: error("Provide LocalProfileViewModel")
-    LaunchedEffect(
-        key1 = profileViewModel.profileUpdateResult
-    ) {
-        when (profileViewModel.profileUpdateResult) {
-            UseCaseUpdateProfileDetails.UpdateState.Failed -> {}
-            UseCaseUpdateProfileDetails.UpdateState.Success -> {}
-            else -> {}
-        }
-    }
     Row(
         modifier = Modifier
             .fillMaxWidth(0.9f)
             .height(100.dp)
-            .clip(
-                CircleShape.copy(
-                    topStart = CornerSize(0.dp),
-                    bottomStart = CornerSize(0.dp)
-                )
-            ).border(
+            .clip(CircleShape.copy(topStart = CornerSize(0.dp), bottomStart = CornerSize(0.dp)))
+            .border(
                 border = BorderStroke(3.dp, color = AppColors.CONTAINER),
                 shape = CircleShape.copy(
                     topStart = CornerSize(0.dp),
@@ -208,6 +199,7 @@ private fun ProfileDetails(
         Column(
             modifier = Modifier
                 .align(Alignment.CenterVertically)
+                .weight(1f)
         ) {
             Text(
                 user.userName,
@@ -224,13 +216,15 @@ private fun ProfileDetails(
             )
         }
         Spacer(modifier = Modifier.width(10.dp))
-        Spacer(modifier = Modifier.weight(1f))
-        when (profileViewModel.profileUpdateResult) {
+        val profileUpdateResult by profileHandler.profileUpdateResult.collectAsState(initial = UseCaseUpdateProfileDetails.UpdateState.Ideal)
+        when (profileUpdateResult) {
             UseCaseUpdateProfileDetails.UpdateState.Ideal,
             UseCaseUpdateProfileDetails.UpdateState.Failed,
             UseCaseUpdateProfileDetails.UpdateState.Success -> {
                 IconButton(
-                    onClick = onShowProfileEditOptionRequest,
+                    onClick = {
+                        profileHandler.updateComponent(ProfileComponentSection.DialogChooseEditOption)
+                    },
                     modifier = Modifier.align(Alignment.CenterVertically)
                 ) {
                     Icon(
@@ -247,21 +241,24 @@ private fun ProfileDetails(
                 )
             }
         }
-        Spacer(modifier = Modifier.width(20.dp))
     }
 }
 
 @Composable
-private fun ProfileEditOption() {
-    PickProfileImage()
-    Menu()
-    EditBio()
+private fun ProfileEditOption(
+    profileHandler: ProfileHandler
+) {
+    PickProfileImage(
+        profileHandler
+    )
+    Menu(profileHandler)
+    EditBio(profileHandler)
 }
 
 @Composable
-fun EditBio() {
+fun EditBio(profileHandler: ProfileHandler) {
+    val currentProfileComponent by profileHandler.currentComponent.collectAsState()
     if (currentProfileComponent == ProfileComponentSection.EditBio) {
-        val vm = LocalProfileViewModel.current!!
         var bio by remember {
             mutableStateOf("")
         }
@@ -271,8 +268,8 @@ fun EditBio() {
                 Row {
                     TextButton(
                         onClick = {
-                            vm.updateBui(bio)
-                            currentProfileComponent = ProfileComponentSection.MainScreen
+                            profileHandler.updateBui(bio)
+                            profileHandler.updateComponent(ProfileComponentSection.MainScreen)
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
                     ) {
@@ -280,7 +277,7 @@ fun EditBio() {
                     }
                     TextButton(
                         onClick = {
-                            currentProfileComponent = ProfileComponentSection.MainScreen
+                            profileHandler.updateComponent(ProfileComponentSection.MainScreen)
                         },
                         colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
                     ) {
@@ -291,7 +288,7 @@ fun EditBio() {
             title = {
 
                 LaunchedEffect(key1 = Unit) {
-                    bio = vm.getProfileDetails().first().bio
+                    bio = profileHandler.getProfileDetails().first().bio
                 }
                 val colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -331,14 +328,15 @@ fun EditBio() {
 }
 
 @Composable
-private fun Menu() {
+private fun Menu(profileHandler: ProfileHandler) {
+    val currentProfileComponent by profileHandler.currentComponent.collectAsState()
     if (currentProfileComponent == ProfileComponentSection.DialogChooseEditOption) {
         AlertDialog(
             onDismissRequest = {},
             confirmButton = {
                 TextButton(
                     onClick = {
-                        currentProfileComponent = ProfileComponentSection.MainScreen
+                        profileHandler.updateComponent(ProfileComponentSection.MainScreen)
                     },
                     colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
                 ) {
@@ -349,7 +347,7 @@ private fun Menu() {
                 Column {
                     TextButton(
                         onClick = {
-                            currentProfileComponent = ProfileComponentSection.PickProfileImage
+                            profileHandler.updateComponent(ProfileComponentSection.MainScreen)
                         }
                     ) {
                         Icon(Icons.Default.Edit, contentDescription = null, tint = Color.White)
@@ -363,7 +361,7 @@ private fun Menu() {
                     }
                     TextButton(
                         onClick = {
-                            currentProfileComponent = ProfileComponentSection.EditBio
+                            profileHandler.updateComponent(ProfileComponentSection.EditBio)
                         }
                     ) {
                         Icon(Icons.Default.Edit, contentDescription = null, tint = Color.White)
@@ -386,15 +384,15 @@ private fun Menu() {
 }
 
 @Composable
-private fun PickProfileImage() {
-    val profileViewModel = LocalProfileViewModel.current ?: error("Provide ProfileViewModel")
+private fun PickProfileImage(profileHandler: ProfileHandler) {
+    val currentProfileComponent by profileHandler.currentComponent.collectAsState()
     FilePicker(
         show = currentProfileComponent == ProfileComponentSection.PickProfileImage,
         fileExtensions = listOf("jpg", "png")
     ) { mpFile ->
-        currentProfileComponent = ProfileComponentSection.MainScreen
+        profileHandler.updateComponent(ProfileComponentSection.MainScreen)
         if (mpFile != null) {
-            profileViewModel.uploadProfileImage(mpFile)
+            profileHandler.uploadProfileImage(mpFile)
         }
     }
 }
@@ -445,18 +443,5 @@ private fun PrimaryCTAButton(
             )
         }
     }
-}
-
-private fun String.toColorInt(): Int {
-    if (this[0] == '#') {
-        var color = substring(1).toLong(16)
-        if (length == 7) {
-            color = color or 0x00000000ff000000L
-        } else if (length != 9) {
-            throw IllegalArgumentException("Unknown color")
-        }
-        return color.toInt()
-    }
-    throw IllegalArgumentException("Unknown color")
 }
 

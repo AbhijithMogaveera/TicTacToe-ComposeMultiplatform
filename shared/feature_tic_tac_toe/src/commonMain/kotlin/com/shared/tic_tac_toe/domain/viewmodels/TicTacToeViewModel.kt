@@ -39,9 +39,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-internal object TicTacToeViewModel : ViewModel(), KoinComponent{
+internal object TicTacToeViewModel : ViewModel(), KoinComponent {
 
-    var searchText:String by mutableStateOf("")
+    var searchText: String by mutableStateOf("")
     var connectionState: ConnectionState by mutableStateOf(ConnectionState.Connecting)
     private var _requestState: PlayRequestState by mutableStateOf(PlayRequestState.NotInitiated)
     var requestState: PlayRequestState
@@ -145,11 +145,11 @@ internal object TicTacToeViewModel : ViewModel(), KoinComponent{
     }
 
 
-    private suspend fun monitorNewRequest(
+    private fun monitorNewRequest(
         coroutineScope: CoroutineScope
     ) {
-        val stream = ucRespondToPlayRequest.onNewRequest(coroutineScope)
         coroutineScope.launch {
+            val stream = ucRespondToPlayRequest.onNewRequest(coroutineScope)
             stream.collect { newRequest ->
                 _pendingPlayRequest.update { pendingPlayRequests ->
                     pendingPlayRequests + newRequest
@@ -159,11 +159,11 @@ internal object TicTacToeViewModel : ViewModel(), KoinComponent{
     }
 
 
-    private suspend fun monitorInvitationRejection(
+    private fun monitorInvitationRejection(
         coroutineScope: CoroutineScope
     ) {
-        val stream = ucNotifyRejectedPlayRequest.onReject()
         coroutineScope.launch {
+            val stream = ucNotifyRejectedPlayRequest.onReject()
             stream.collect { rejectedInvitationId ->
                 _pendingPlayRequest.update { playRequests ->
                     playRequests.filter { playRequest ->
@@ -192,11 +192,11 @@ internal object TicTacToeViewModel : ViewModel(), KoinComponent{
         }
     }
 
-    private suspend fun monitorInvitationRevoke(
+    private fun monitorInvitationRevoke(
         coroutineScope: CoroutineScope
     ) {
-        val stream = ucRevokePlayRequest.onRevoke()
         coroutineScope.launch {
+            val stream = ucRevokePlayRequest.onRevoke()
             stream.collect { revokedInvitationID ->
                 _pendingPlayRequest.update { playRequests ->
                     playRequests.filter { playRequest ->
@@ -212,11 +212,11 @@ internal object TicTacToeViewModel : ViewModel(), KoinComponent{
     }
 
 
-    private suspend fun monitorGameSession(
+    private fun monitorGameSession(
         coroutineScope: CoroutineScope
     ) {
-        val stream = ucGameSession.execute()
         coroutineScope.launch {
+            val stream = ucGameSession.execute()
             stream.collect { (newGameState, newBoardState) ->
                 boardState = newBoardState.some();
                 when (newGameState) {
@@ -234,24 +234,28 @@ internal object TicTacToeViewModel : ViewModel(), KoinComponent{
                     }
 
                     GameState.End -> {
-                        val isOpponentQuits =
-                            (newBoardState.prematureGameTerminationBy.getOrNull() != null
-                                    && newBoardState.prematureGameTerminationBy.getOrNull() != ucGetProfileDetails.getProfileDetails()
-                                .first().userName && newBoardState.winPlayerUsername.isNone())
+                        val isOpponentQuits = (
+                                    newBoardState.prematureGameTerminationBy.getOrNull() != null
+                                            && newBoardState.prematureGameTerminationBy.getOrNull()
+                                            != ucGetProfileDetails.getProfileDetails().first().userName
+                                            && newBoardState.winPlayerUsername.isNone()
+                                    )
                         val didIWon =
-                            newBoardState.winPlayerUsername.getOrNull() == ucGetProfileDetails.getProfileDetails()
-                                .first().userName
+                            newBoardState.winPlayerUsername.getOrNull() == ucGetProfileDetails.getProfileDetails().first().userName
 
                         when {
                             isOpponentQuits -> {
                                 _requestState = PlayRequestState.PrematurePlayerExit
                             }
+
                             didIWon -> {
                                 _requestState = PlayRequestState.Winner
                             }
+
                             newBoardState.winPlayerUsername.isSome() -> {
                                 _requestState = PlayRequestState.Looser
                             }
+
                             else -> {
                                 lookForNextMatch()
                             }

@@ -10,7 +10,7 @@ interface RequestResponseInterceptor{
     fun onClose(){}
 }
 private var interceptors:MutableList<RequestResponseInterceptor> = mutableListOf()
-object TokenInterceptorPlugin :ClientPlugin<Unit> by createClientPlugin("TokenPlugin", body = {
+object RestInterceptors :ClientPlugin<Unit> by createClientPlugin("TokenPlugin", body = {
     onRequest { request, _ ->
        interceptors.forEach {
            it.onRequest(request)
@@ -28,12 +28,12 @@ object TokenInterceptorPlugin :ClientPlugin<Unit> by createClientPlugin("TokenPl
     }
 })
 
-fun TokenInterceptorPlugin.addInterceptor(
+fun RestInterceptors.addInterceptor(
     requestResponseInterceptor: RequestResponseInterceptor
 ){
     interceptors.add(requestResponseInterceptor)
 }
-fun TokenInterceptorPlugin.removeInterceptor(
+fun RestInterceptors.removeInterceptor(
     requestResponseInterceptor: RequestResponseInterceptor
 ){
     interceptors.remove(requestResponseInterceptor)

@@ -1,11 +1,11 @@
 package com.shared.auth.viewmodel.usecases.impl
 
-import com.shared.auth.util.UserAccountUtil
+import com.shared.auth.util.UserAccountsManager
 import com.shared.auth.models.LoginResult
 import com.shared.auth.viewmodel.usecases.UseCaseLogin
 
 internal class UseCaseLoginDefaultImpl(
-    private val userAccountUtil: UserAccountUtil
+    private val userAccountsManager: UserAccountsManager
 ) : UseCaseLogin {
 
     companion object {
@@ -17,7 +17,7 @@ internal class UseCaseLoginDefaultImpl(
     override suspend fun login(
         userName: String, password: String
     ): LoginResult {
-        userAccountUtil.login(
+        userAccountsManager.login(
             userName, password
         ).onLeft {
             it.isClientSideError { clientSideError ->

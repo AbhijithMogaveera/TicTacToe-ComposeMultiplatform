@@ -71,15 +71,16 @@ interface WebSocketUtil {
     fun getIncoming(): Flow<Frame>
 
     suspend fun WebSocketSession.on(event: String): Flow<JsonObject> {
-        event asTagAndLog "ON"
         send(OnOffEventPayload(event, EventType.ON).toFrame())
         return getIncoming()
             .onEach {
+                // lgo everything
                 if(it is Frame.Text){
                   println(it.readText())
                 } else println(it.toString())
             }
             .onEach {
+                //log with event name
                 if (it is Frame.Text) {
                     event asTagAndLog it.readText()
                 }
@@ -102,10 +103,6 @@ interface WebSocketUtil {
                 }
             }
 
-    }
-
-    suspend fun WebSocketSession.off(event: String) {
-        send(OnOffEventPayload(event, EventType.OFF).toFrame())
     }
 
     fun errorInActiveSocket(): Nothing = error("Socket session is not active")

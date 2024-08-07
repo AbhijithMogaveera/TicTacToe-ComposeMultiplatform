@@ -37,7 +37,7 @@ kotlin {
             implementation(projects.shared.featureAuth)
             implementation(libs.file.picker)
             implementation(libs.cashsqldeligh.coroutine)
-            implementation("io.coil-kt.coil3:coil:3.0.0-alpha01")
+            implementation(libs.coil.v300alpha01)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -45,7 +45,6 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.cashsqldeligh.native)
-            implementation(compose.foundation)
         }
     }
 }

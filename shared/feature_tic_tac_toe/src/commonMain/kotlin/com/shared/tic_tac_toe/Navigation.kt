@@ -10,11 +10,9 @@ import com.shared.compose_foundation.navigation.navigateSafe
 fun NavGraphBuilder.setUpTicTacToeNavigation(navController: NavController) {
     composable("/tic_tac_toe") {
         AuthProtected(
-            ifNotLogin = {
-                navController.navigateSafe("/auth/login")
-            }
+            ifNotLogin = { navController.navigateSafe("/auth") }
         ) {
-            TicTacToeComponent(navController::navigateUp)
+            TicTacToeComponent (onNavigateUp =  navController::navigateUp )
         }
     }
 }

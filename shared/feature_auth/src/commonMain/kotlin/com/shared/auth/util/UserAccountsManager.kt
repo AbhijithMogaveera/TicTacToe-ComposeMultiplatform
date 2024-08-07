@@ -8,26 +8,18 @@ import arrow.core.raise.either
 import arrow.core.some
 import com.shared.auth.apis.AuthApis
 import com.shared.auth.apis.JwtToken
+import com.shared.compose_foundation.StartUpTask
 import com.shared.compose_foundation.ktor.exceptions.RequestFailure
 import com.shared.compose_foundation.prefrence.KmmPreference
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-internal class UserAccountUtil constructor(
+class UserAccountsManager(
     private val preference: KmmPreference,
     private val authApis: AuthApis,
-) {
+) : StartUpTask {
 
     var token: MutableStateFlow<Option<String>> = MutableStateFlow(None)
-
-    init {
-        token.update {
-            when (val it = preference.getString(KEY_TOKEN)) {
-                null -> None
-                else -> it.some()
-            }
-        }
-    }
 
     companion object {
         private const val KEY_TOKEN = "UserDetails::Token"
@@ -62,5 +54,14 @@ internal class UserAccountUtil constructor(
     suspend fun logout() {
         token.emit(None)
         preference.removeKey(KEY_TOKEN)
+    }
+
+    override fun execute() {
+        token.update {
+            when (val it = preference.getString(KEY_TOKEN)) {
+                null -> None
+                else -> it.some()
+            }
+        }
     }
 }

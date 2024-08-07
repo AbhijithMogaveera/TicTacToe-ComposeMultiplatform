@@ -1,3 +1,5 @@
+import org.jetbrains.compose.compose
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -35,7 +37,6 @@ kotlin {
             api(libs.appcompat)
             api(libs.material)
             api(libs.androidx.ui.v154)
-            api(libs.androidx.ui.tooling.preview.v154)
             api(libs.compose.material3)
             api(libs.androidx.activity.compose)
             val nav_version = "2.7.6"

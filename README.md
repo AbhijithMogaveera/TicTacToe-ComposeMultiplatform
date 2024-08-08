@@ -1,17 +1,11 @@
-# 🚨 Still In Development
 
-# FrontEnd
-* KMP and CMP (Login, Registration screen and Navgation are platfrom specific (KMP) and Game UI in shared btween platfrom usig CMP)
-* Compose UI
-* Swift UI
-* Lang (Kotlin and Swift)
-
-# Backend
-Express+TS with Websockets (https://github.com/AbhijithMogaveera/TicTacToe-BE)
-
-# Development 
-- [x] ANDROID
-- [ ] IOS (Exploreing Swift UI)
+## FrontEnd 
+Android
+and
+IOS
+with #ComposeMultiplatform
+## Backend
+* Express+TS with Websockets (https://github.com/AbhijithMogaveera/TicTacToe-BE)
 
 # Demo
 

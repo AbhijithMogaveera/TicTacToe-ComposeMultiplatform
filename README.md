@@ -9,10 +9,4 @@ with #ComposeMultiplatform
 
 # Demo
 
-https://github.com/AbhijithMogaveera/TicTacToe-FE-IOS-ANDROID/assets/46936065/17bbef62-186e-4cb7-bc93-f7ef37363cb6
-
-
-```shell
-mkdir -p ./shared/build/compose/cocoapods/compose-resources
-./gradlew podInstall
-```
+https://github.com/user-attachments/assets/280feda4-632d-4330-b4df-425f9f163d8d

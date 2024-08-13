@@ -6,7 +6,7 @@ object Platform{
     val isAndroid = getPlatformName() == "ANDROID"
     val isIphone = getPlatformName() == "IOS"
 }
-
+//todo: make build configs
 fun getHostAddress() = if (Platform.isIphone) {
     "127.0.0.1"
 } else {

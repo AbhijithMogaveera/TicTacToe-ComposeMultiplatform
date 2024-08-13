@@ -6,18 +6,18 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.decodeFromJsonElement
 
 class UseCaseRevokePlayRequest(
-   private val socketMediator: UseCaseSocketToUseCaseMediator
+   private val sessionHandler: TicTacToeSessionHandler
 ){
     @Serializable
     data class PlayRequestRevokeDTO(
         val playReqId: String
     )
     suspend fun revoke(playReqId:String){
-        socketMediator.emmit("play_request_revoke", playReqId)
+        sessionHandler.emmit("play_request_revoke", playReqId)
     }
 
     suspend fun onRevoke() =
-        socketMediator.on("play_request_revoke").map {
+        sessionHandler.on("play_request_revoke").map {
             val response:PlayRequestRevokeDTO = serializer.decodeFromJsonElement(it)
             response.playReqId
         }

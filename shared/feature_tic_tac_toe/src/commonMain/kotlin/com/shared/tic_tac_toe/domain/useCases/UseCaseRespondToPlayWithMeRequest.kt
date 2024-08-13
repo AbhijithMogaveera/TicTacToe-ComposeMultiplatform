@@ -11,11 +11,11 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.decodeFromJsonElement
 
 class UseCaseRespondToPlayWithMeRequest(
-    val socketMediator: UseCaseSocketToUseCaseMediator
+    val sessionHandler: TicTacToeSessionHandler
 ) {
     suspend fun onNewRequest(
         coroutineScope: CoroutineScope,
-    ) = socketMediator
+    ) = sessionHandler
         .on("play_request")
         .map {
             val requestDTO = serializer.decodeFromJsonElement<PlayRequestDTO>(it)
@@ -29,7 +29,7 @@ class UseCaseRespondToPlayWithMeRequest(
                 ),
                 accept = {
                     coroutineScope.launch {
-                        this@UseCaseRespondToPlayWithMeRequest.socketMediator.emmit(
+                        this@UseCaseRespondToPlayWithMeRequest.sessionHandler.emmit(
                             event = "play_request_accept",
                             payload = requestDTO.invitationID
                         )
@@ -37,7 +37,7 @@ class UseCaseRespondToPlayWithMeRequest(
                 },
                 reject = {
                     coroutineScope.launch {
-                        this@UseCaseRespondToPlayWithMeRequest.socketMediator.emmit(
+                        this@UseCaseRespondToPlayWithMeRequest.sessionHandler.emmit(
                             event = "play_request_reject",
                             payload = requestDTO.invitationID
                         )

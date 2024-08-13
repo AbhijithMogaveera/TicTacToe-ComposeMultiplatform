@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.decodeFromJsonElement
 
 class UseCaseGameSession(
-    private val socketMediator: UseCaseSocketToUseCaseMediator,
+    private val sessionHandler: TicTacToeSessionHandler,
     private val profileDetails: UseCaseGetProfileDetails
 )  {
     suspend fun execute(): Flow<Pair<GameState, BoardState>> {
-        return socketMediator
+        return sessionHandler
             .on("game")
             .map {
                 val decodeFromJsonElement = serializer.decodeFromJsonElement<BoardDTO>(it)

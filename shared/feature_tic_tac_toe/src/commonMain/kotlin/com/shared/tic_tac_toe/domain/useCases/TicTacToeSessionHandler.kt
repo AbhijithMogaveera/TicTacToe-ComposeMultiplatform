@@ -35,8 +35,8 @@ enum class ConnectionState {
     Connecting
 }
 
-class UseCaseSocketToUseCaseMediator(
-    private val socketMediator: UseCaseGetAuthToken
+class TicTacToeSessionHandler(
+    private val sessionHandler: UseCaseGetAuthToken
 ) : WebSocketUtil {
     private var scope = CoroutineScope(Dispatchers.IO+ SupervisorJob())
 
@@ -75,7 +75,7 @@ class UseCaseSocketToUseCaseMediator(
     private suspend fun connect() {
         isConnected.emit(ConnectionState.Connecting)
         scope.launch {
-            socketMediator.getToken().collectLatest { optionOption ->
+            sessionHandler.getToken().collectLatest { optionOption ->
                 optionOption.onSome { token ->
                     connectWithToken(token)
                 }
@@ -100,7 +100,7 @@ class UseCaseSocketToUseCaseMediator(
                         isConnected.emit(ConnectionState.Connected)
                         while (true) {
                             val received = incoming.receive() as? Frame ?: break
-                            println("SocketMediator => $received")
+                            println("sessionHandler => $received")
                             launch {
                                 framesFlow.emit(received)
                             }

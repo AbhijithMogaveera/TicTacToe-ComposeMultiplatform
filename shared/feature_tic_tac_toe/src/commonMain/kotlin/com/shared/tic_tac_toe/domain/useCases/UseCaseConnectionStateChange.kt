@@ -3,10 +3,10 @@ package com.shared.tic_tac_toe.domain.useCases
 import kotlinx.coroutines.flow.Flow
 
 class UseCaseConnectionStateChange(
-    val socketMediator:UseCaseSocketToUseCaseMediator
+    val sessionHandler:TicTacToeSessionHandler
 ) {
 
     suspend operator fun invoke():Flow<ConnectionState> {
-        return socketMediator.getConnectionState()
+        return sessionHandler.getConnectionState()
     }
 }

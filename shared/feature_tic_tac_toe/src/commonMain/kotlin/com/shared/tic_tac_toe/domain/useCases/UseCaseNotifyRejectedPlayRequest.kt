@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.decodeFromJsonElement
 
 class UseCaseNotifyRejectedPlayRequest(
-    val socketMediator: UseCaseSocketToUseCaseMediator
+    val sessionHandler: TicTacToeSessionHandler
 ) {
     @Serializable
     data class OnRejectDTO(
@@ -16,7 +16,7 @@ class UseCaseNotifyRejectedPlayRequest(
     )
 
     suspend fun onReject(
-    ) = socketMediator
+    ) = sessionHandler
         .on("play_request_reject")
         .map {
             val response: OnRejectDTO = serializer.decodeFromJsonElement(it)

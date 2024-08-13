@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.minutes
 
 
 class UseCaseReqPlayerPlayWithMe constructor(
-    val socketMediator: UseCaseSocketToUseCaseMediator
+    val sessionHandler: TicTacToeSessionHandler
 ) {
     @Serializable
     data class PayerPlayReqResponse(
@@ -20,8 +20,8 @@ class UseCaseReqPlayerPlayWithMe constructor(
 
     suspend fun ask(participantDTO: Participant, onIdGenerated:(String)->Unit) {
         withTimeoutOrNull<Unit>(1.minutes) {
-            socketMediator.emmit("ask_to_play", participantDTO.user_name)
-            val res = socketMediator.on("ask_to_play").first()
+            sessionHandler.emmit("ask_to_play", participantDTO.user_name)
+            val res = sessionHandler.on("ask_to_play").first()
             val decodeFromJsonElement = serializer.decodeFromJsonElement<PayerPlayReqResponse>(res)
             onIdGenerated(decodeFromJsonElement.playRequestId)
             awaitCancellation()

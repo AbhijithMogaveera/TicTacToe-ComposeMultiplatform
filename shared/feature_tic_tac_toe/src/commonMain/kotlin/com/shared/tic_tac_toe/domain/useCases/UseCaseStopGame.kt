@@ -1,9 +1,9 @@
 package com.shared.tic_tac_toe.domain.useCases
 
 class UseCaseStopGame(
-    private val socketMediator: UseCaseSocketToUseCaseMediator
+    private val sessionHandler: TicTacToeSessionHandler
 ) {
     suspend operator fun invoke(gameKey: String) {
-        socketMediator.emmit("game_stop", gameKey)
+        sessionHandler.emmit("game_stop", gameKey)
     }
 }

@@ -4,7 +4,7 @@ import com.shared.tic_tac_toe.domain.useCases.UseCaseConnectionStateChange
 import com.shared.tic_tac_toe.domain.useCases.UseCaseReqPlayerPlayWithMe
 import com.shared.tic_tac_toe.domain.useCases.UseCaseGetAllPlayers
 import com.shared.tic_tac_toe.domain.useCases.UseCaseRespondToPlayWithMeRequest
-import com.shared.tic_tac_toe.domain.useCases.UseCaseSocketToUseCaseMediator
+import com.shared.tic_tac_toe.domain.useCases.TicTacToeSessionHandler
 import com.shared.tic_tac_toe.domain.useCases.UseCaseGameSession
 import com.shared.tic_tac_toe.domain.useCases.UseCaseNotifyRejectedPlayRequest
 import com.shared.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
@@ -14,44 +14,44 @@ import org.koin.dsl.module
 
 val UseCaseProvider = module {
 
-    single<UseCaseSocketToUseCaseMediator> {
-        UseCaseSocketToUseCaseMediator(socketMediator = get())
+    single<TicTacToeSessionHandler> {
+        TicTacToeSessionHandler(sessionHandler = get())
     }
 
     single<UseCaseRevokePlayRequest> {
-        UseCaseRevokePlayRequest(socketMediator = get())
+        UseCaseRevokePlayRequest(sessionHandler = get())
     }
 
     single<UseCaseGetAllPlayers> {
-        UseCaseGetAllPlayers(socketMediator = get(), profileDetails = get())
+        UseCaseGetAllPlayers(sessionHandler = get(), profileDetails = get())
     }
 
     single<UseCaseReqPlayerPlayWithMe> {
-        UseCaseReqPlayerPlayWithMe(socketMediator = get())
+        UseCaseReqPlayerPlayWithMe(sessionHandler = get())
     }
 
     single<UseCaseRespondToPlayWithMeRequest> {
-        UseCaseRespondToPlayWithMeRequest(socketMediator = get())
+        UseCaseRespondToPlayWithMeRequest(sessionHandler = get())
     }
 
     single<UseCaseGameSession> {
-        UseCaseGameSession(socketMediator = get(), profileDetails = get())
+        UseCaseGameSession(sessionHandler = get(), profileDetails = get())
     }
 
     single<UseCaseNotifyRejectedPlayRequest> {
-        UseCaseNotifyRejectedPlayRequest(socketMediator = get())
+        UseCaseNotifyRejectedPlayRequest(sessionHandler = get())
     }
 
     single<UseCaseStopGame> {
-        UseCaseStopGame(socketMediator = get())
+        UseCaseStopGame(sessionHandler = get())
     }
 
     single<UseCaseTapTile> {
-        UseCaseTapTile(socketMediator = get())
+        UseCaseTapTile(sessionHandler = get())
     }
 
     single<UseCaseConnectionStateChange> {
-        UseCaseConnectionStateChange(socketMediator = get())
+        UseCaseConnectionStateChange(sessionHandler = get())
     }
 
 }

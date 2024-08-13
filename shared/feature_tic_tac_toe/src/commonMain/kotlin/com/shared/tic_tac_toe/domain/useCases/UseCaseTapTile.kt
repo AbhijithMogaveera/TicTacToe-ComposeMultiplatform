@@ -2,9 +2,9 @@ package com.shared.tic_tac_toe.domain.useCases
 
 
 class UseCaseTapTile(
-    val socketMediator: UseCaseSocketToUseCaseMediator
+    val sessionHandler: TicTacToeSessionHandler
 ) {
     suspend fun tap(position: Int) {
-        socketMediator.emmit("game_tap_tile", position)
+        sessionHandler.emmit("game_tap_tile", position)
     }
 }

@@ -1,7 +1,7 @@
 package com.shared.tic_tac_toe.domain.useCases
 
 import com.shared.compose_foundation.ktor.socket.serializer
-import com.shared.profile.domain.use_case.UseCaseGetProfileDetails
+import com.shared.feature_profile.domain.use_case.UseCaseGetProfileDetails
 import com.shared.tic_tac_toe.data.dto.BoardDTO
 import com.shared.tic_tac_toe.data.dto.BoardState
 import com.shared.tic_tac_toe.domain.models.GameState

@@ -39,10 +39,6 @@ kotlin {
             implementation(libs.cashsqldeligh.coroutine)
             implementation(libs.coil.v300alpha01)
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
-
         iosMain.dependencies {
             implementation(libs.cashsqldeligh.native)
         }
@@ -66,8 +62,10 @@ android {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set("com.shared.profile.sql")
+            packageName.set("com.shared.feature_profile.sql")
         }
     }
 }
-
+compose.resources {
+    packageOfResClass = "com.shared.cmm.feature_profile.res"
+}

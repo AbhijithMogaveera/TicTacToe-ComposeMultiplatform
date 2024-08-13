@@ -15,7 +15,7 @@ val UseCaseProvider = module {
 
     single<UseCaseLogin> {
         UseCaseLoginDefaultImpl(
-            userAccountsManager = get()
+            authManger = get()
         )
     }
 
@@ -26,12 +26,12 @@ val UseCaseProvider = module {
     }
 
     single <UseCaseRegistration>{
-        UseCaseRegistrationDefaultImpl(userAccountsManager = get())
+        UseCaseRegistrationDefaultImpl(authManger = get())
     }
 
     single<UseCaseLogout> {
         UseCaseLogoutDefaultImpl(
-            userAccountsManager = get()
+            authManger = get()
         )
     }
 }

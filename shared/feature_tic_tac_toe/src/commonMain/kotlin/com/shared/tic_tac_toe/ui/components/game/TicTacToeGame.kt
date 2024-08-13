@@ -18,13 +18,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -35,11 +33,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.some
-import com.shared.compose_foundation.koin.rememberInject
 import com.shared.compose_foundation.platform.Platform
 import com.shared.tic_tac_toe.data.dto.BoardState
 import com.shared.tic_tac_toe.domain.models.TileState
@@ -49,10 +47,8 @@ import com.shared.tic_tac_toe.ui.components.InActivePlayerIndicatorColor
 import com.shared.tic_tac_toe.ui.components.activeStrokeWidth
 import com.shared.tic_tac_toe.ui.components.inActiveStrokeWidth
 import com.shared.tic_tac_toe.ui.components.invitations.Timer
-import com.shared.profile.domain.models.User
-import com.shared.profile.domain.use_case.UseCaseGetProfileDetails
-import kotlinx.coroutines.flow.collectLatest
-import kotlin.math.abs
+import com.shared.feature_profile.domain.models.User
+import com.shared.tic_tac_toe.domain.viewmodels.ProfileViewModel
 
 
 enum class PlayerDetailsAlignment {
@@ -61,16 +57,8 @@ enum class PlayerDetailsAlignment {
 
 @Composable
 fun CurrentUser(): Option<User> {
-    var user: Option<User> by remember {
-        mutableStateOf(None)
-    }
-    val useCaseGetProfileDetails: UseCaseGetProfileDetails = rememberInject()
-    LaunchedEffect(None) {
-        useCaseGetProfileDetails.getProfileDetails().collectLatest {
-            user = it.some()
-        }
-    }
-    return user
+    val vm = viewModel { ProfileViewModel() }
+    return vm.loggedInUserDetails
 }
 
 val BoardPadding = 10.dp

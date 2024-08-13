@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,13 +24,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.getOrElse
 import coil3.compose.AsyncImage
-import com.shared.profile.domain.models.User
+import com.shared.feature_profile.domain.models.User
 import com.shared.tic_tac_toe.domain.models.PlayerProfile
 
 @Composable
@@ -159,7 +161,7 @@ private fun PlayDetailsOnEnd(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "asdfasfdasdfasdfasdfasdf"?:playerProfile.bio.getOrElse { "" },
+                        text = playerProfile.bio.getOrElse { "" },
                         color = Color.White,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
@@ -185,9 +187,10 @@ private fun PlayerPic(playerProfile: PlayerProfile) {
         )
         Text(
             playerProfile.tile.name,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp),
+            modifier = Modifier.align(Alignment.BottomEnd).padding(5.dp).size(20.dp).background(color = Color.Black, shape = CircleShape),
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
         )
     }
 }

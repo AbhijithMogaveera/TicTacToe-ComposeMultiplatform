@@ -1,10 +1,10 @@
 package com.shared.auth.models
 
-public enum class LoginResult {
-    LoginSuccessful,
+enum class LoginResult {
+    LOGIN_SUCCESSFUL,
     INVALID_PASSWORD,
     INVALID_EMAIL_ID,
     CLIENT_SIDE_ERROR,
     SERVER_SIDE_ISSUE,
-    UNKNOWN_ERROR
+    UNKNOWN_ERROR,
 }

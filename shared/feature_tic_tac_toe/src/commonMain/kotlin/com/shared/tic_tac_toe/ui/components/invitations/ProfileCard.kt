@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import com.shared.tic_tac_toe.domain.Participant
 
 @Composable
@@ -41,7 +41,7 @@ fun ProfileCard(
         modifier = modifier.padding(5.dp),
         shape = RoundedCornerShape(15.dp),
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER_SMALL)
+        colors = CardDefaults.cardColors(containerColor = AppTheme.ContainerSmall)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

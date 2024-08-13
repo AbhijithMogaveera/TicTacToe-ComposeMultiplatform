@@ -13,70 +13,67 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.extension.ButtonWithProgressbar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import arrow.core.None
-import arrow.core.Some
 import com.shared.auth.models.RegistrationResult
 import com.shared.auth.viewmodel.AuthViewModel
-import com.shared.compose_foundation.AppColors
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import com.shared.compose_foundation.AppTheme
 
+/**
+ * A Composable function that displays the registration screen and handles user sign-up.
+ *
+ * This function allows the user to register a new account and navigate to the appropriate screen upon successful registration.
+ * It also provides an option to navigate to the login screen.
+ *
+ * @param onLoginBtnClick A lambda function that is triggered when the login button is clicked.
+ *                        Defaults to an empty function.
+ * @param onRegistrationSuccessFul A lambda function that is triggered when the registration process is successful.
+ * @param viewModel The `AuthViewModel` instance that handles the registration logic.
+ *                  Defaults to a newly created `AuthViewModel`.
+ */
 @Composable
 fun RegistrationScreen(
     onLoginBtnClick: () -> Unit = {},
     onRegistrationSuccessFul: () -> Unit,
-    androidViewModelAuth: AuthViewModel = viewModel { AuthViewModel() }
+    viewModel: AuthViewModel = viewModel { AuthViewModel() }
 ) {
-    LaunchedEffect(key1 = Unit, block = {
-        androidViewModelAuth
-            .getLoginState()
-            .collect { response ->
-                when(response){
-                    None -> {}
-                    is Some -> onRegistrationSuccessFul()
-                    else -> {}
-                }
-            }
-    })
-
-    var userName: String by remember {
-        mutableStateOf("")
+    val snackbarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(viewModel.registrationResult) {
+        viewModel.registrationResult.onSome {
+            if (it == RegistrationResult.SUCCESS) {
+                onRegistrationSuccessFul()
+            } else snackbarHostState.showSnackbar(mapToStringMessage(it))
+            viewModel.registrationResult = None
+        }
     }
 
-    var password: String by remember {
-        mutableStateOf("")
-    }
-
-    var isRegistrationIsInProgress by remember {
-        mutableStateOf(false)
-    }
-
-    val scope = rememberCoroutineScope()
+    var userName: String by remember { mutableStateOf("") }
+    var password: String by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = AppColors.BACKGROUND)
+            .background(color = AppTheme.Background)
     ) {
         Column {
             Box(modifier = Modifier.height(200.dp)) {
@@ -91,7 +88,7 @@ fun RegistrationScreen(
             Card(
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = AppColors.CONTAINER,
+                    containerColor = AppTheme.Container,
                 ),
                 modifier = Modifier
                     .weight(1f)
@@ -107,43 +104,14 @@ fun RegistrationScreen(
                         .align(Alignment.CenterHorizontally)
                 )
                 Spacer(modifier = Modifier.height(60.dp))
-                val colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    disabledContainerColor = Color.White,
-                    errorContainerColor = Color.White,
-
-                    focusedIndicatorColor = Color.Black,
-                    disabledIndicatorColor = Color.Black,
-                    errorIndicatorColor = Color.Black,
-                    unfocusedIndicatorColor = Color.Black
+                UserNameTextField(
+                    onUserNameChange = { userName = it },
+                    userName = userName
                 )
-                OutlinedTextField(
-                    value = userName,
-                    onValueChange = {
-                        userName = it
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    colors = colors,
-                    shape = RoundedCornerShape(20.dp),
-                    placeholder = {
-                        Text(text = "User id")
-                    },
+                UserPasswordTextField(
+                    password = password,
+                    onPasswordChange = { password = it }
                 )
-                OutlinedTextField(value = password,
-                    onValueChange = {
-                        password = it
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    colors = colors,
-                    shape = RoundedCornerShape(20.dp),
-                    placeholder = {
-                        Text(text = "Password")
-                    })
                 TextButton(
                     onClick = onLoginBtnClick,
                     modifier = Modifier.align(Alignment.End)
@@ -152,19 +120,10 @@ fun RegistrationScreen(
                 }
                 ButtonWithProgressbar(
                     bgColor = Color.Black.copy(alpha = 0.7f),
-                    inProgress = isRegistrationIsInProgress,
-                    onClick = remember {
-                        {
-                            scope.launch {
-                                if (!isRegistrationIsInProgress) {
-                                    isRegistrationIsInProgress = true
-                                    val res =
-                                        androidViewModelAuth.register(userName, password).first()
-                                    val msg = mapToStringMessage(res)
-                                    isRegistrationIsInProgress = false
-                                }
-                            }
-                        }
+                    inProgress = viewModel.isRegistrationIsInProgress,
+                    onClick = {
+                        keyboardController?.hide()
+                        viewModel.register(userName, password)
                     },
                     modifier = Modifier.fillMaxWidth(),
                     content = {
@@ -177,6 +136,10 @@ fun RegistrationScreen(
                 )
             }
         }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 

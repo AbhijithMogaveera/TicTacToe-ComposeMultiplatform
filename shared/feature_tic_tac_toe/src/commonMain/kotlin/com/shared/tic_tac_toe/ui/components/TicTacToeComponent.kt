@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.abhijith.cmm.feature_tictactoe.Res
 import com.abhijith.cmm.feature_tictactoe.connecting
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import com.shared.tic_tac_toe.domain.useCases.ConnectionState
 import com.shared.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import com.shared.tic_tac_toe.ui.components.game.TicTacToeGame
@@ -39,7 +39,7 @@ internal fun TicTacToeComponent(
     onNavigateUp: () -> Unit
 ) {
     Box(
-        modifier = Modifier.background(color = AppColors.BACKGROUND),
+        modifier = Modifier.background(color = AppTheme.Background),
     ) {
         AnimatedVisibility(
             visible = TicTacToeViewModel.connectionState == ConnectionState.Connected,
@@ -56,7 +56,7 @@ internal fun TicTacToeComponent(
                     exit = fadeOut()
                 ) {
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER),
+                        colors = CardDefaults.cardColors(containerColor = AppTheme.Container),
                         modifier = Modifier.padding(10.dp),
                         shape = RoundedCornerShape(10.dp)
                     ) {

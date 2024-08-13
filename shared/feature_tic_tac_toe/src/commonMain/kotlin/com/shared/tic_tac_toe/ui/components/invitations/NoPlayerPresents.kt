@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.abhijith.cmm.feature_tictactoe.Res
 import com.abhijith.cmm.feature_tictactoe.no_content
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -60,7 +60,7 @@ fun Timer(
 ) {
     Column(
         modifier = Modifier.background(
-            color = AppColors.CONTAINER_MEDIUM,
+            color = AppTheme.ContainerMedium,
             shape = RoundedCornerShape(10.dp)
         ).padding(horizontal = 20.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.Center,
@@ -82,8 +82,8 @@ fun Timer(
             progress = { progress },
             modifier = Modifier.fillMaxWidth().height(10.dp),
             strokeCap = StrokeCap.Round,
-            trackColor = AppColors.BACKGROUND,
-            color = AppColors.CONTAINER_SMALL
+            trackColor = AppTheme.Background,
+            color = AppTheme.ContainerSmall
         )
         Spacer(modifier = Modifier.height(5.dp))
     }

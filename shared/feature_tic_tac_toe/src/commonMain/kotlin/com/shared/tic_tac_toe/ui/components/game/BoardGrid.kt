@@ -43,7 +43,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.some
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import com.shared.tic_tac_toe.domain.models.TileState
 import com.shared.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 
@@ -102,12 +102,12 @@ fun BoardGrid(modifier: Modifier) {
                 .fillMaxWidth()
                 .drawBehind {
                     drawRoundRect(
-                        color = AppColors.BACKGROUND,
+                        color = AppTheme.Background,
                         cornerRadius = CornerRadius(60f, 60f)
                     )
                     if (currentUser.userName == boardState.currentTurnUsername) {
                         drawRoundRect(
-                            color = AppColors.CONTAINER_SMALL,
+                            color = AppTheme.ContainerSmall,
                             style = Stroke(
                                 width = 4.dp.toPx(),
                             ),
@@ -182,7 +182,7 @@ fun Tile(
                     it
             }
             .background(
-                color = AppColors.CONTAINER_SMALL.copy(
+                color = AppTheme.ContainerSmall.copy(
                     alpha = when (tileState) {
                         TileState.NONE -> 0.5f
                         TileState.O, TileState.X -> 1f
@@ -211,6 +211,7 @@ fun Tile(
             ),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
+            color = AppTheme.Background
         )
     }
 }

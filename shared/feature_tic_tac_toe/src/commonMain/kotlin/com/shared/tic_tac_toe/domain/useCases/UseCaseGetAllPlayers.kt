@@ -7,7 +7,7 @@ import com.shared.compose_foundation.ktor.socket.serializer
 import com.shared.compose_foundation.platform.getHostAddress
 import com.shared.tic_tac_toe.domain.models.ActiveParticipantsEvent
 import com.shared.tic_tac_toe.domain.Participant
-import com.shared.profile.domain.use_case.UseCaseGetProfileDetails
+import com.shared.feature_profile.domain.use_case.UseCaseGetProfileDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first

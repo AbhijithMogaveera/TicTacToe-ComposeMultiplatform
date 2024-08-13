@@ -1,11 +1,11 @@
 package com.shared
 
-import com.shared.auth.FeatureAuthInitilizer
-import com.shared.auth.util.UserAccountsManager
+import com.shared.auth.FeatureAuthInitializer
+import com.shared.auth.util.AuthManager
 import com.shared.compose_foundation.FoundationModuleInitilizer
 import com.shared.compose_foundation.StartUpTask
-import com.shared.profile.FeatureProfileModuleConfiguration
-import com.shared.profile.domain.use_case.UseCaseSyncProfileDetailsWIthServer
+import com.shared.feature_profile.FeatureProfileModuleConfiguration
+import com.shared.feature_profile.domain.use_case.UseCaseSyncProfileDetailsWIthServer
 import com.shared.tic_tac_toe.FeatureTicTacToeConfiguration
 import org.koin.core.KoinApplication
 import org.koin.core.component.KoinComponent
@@ -18,7 +18,7 @@ fun KoinApplication.configCommonModules() {
 
 private fun KoinApplication.setUpDI() {
     listOf(
-        FeatureAuthInitilizer,
+        FeatureAuthInitializer,
         FoundationModuleInitilizer,
         FeatureProfileModuleConfiguration,
         FeatureTicTacToeConfiguration,
@@ -37,7 +37,7 @@ class StartUpHandler : KoinComponent {
 
     private fun getStartUpTasks(): List<StartUpTask> {
         val profileDetailsSync: UseCaseSyncProfileDetailsWIthServer by inject()
-        val accountsManager: UserAccountsManager by inject()
+        val accountsManager: AuthManager by inject()
         return listOf(profileDetailsSync, accountsManager)
     }
 }

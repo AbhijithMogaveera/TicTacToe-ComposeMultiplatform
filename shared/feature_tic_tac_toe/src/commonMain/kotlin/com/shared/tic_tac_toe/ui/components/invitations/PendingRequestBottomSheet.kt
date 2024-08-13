@@ -27,7 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import com.shared.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +70,7 @@ fun PendingRequestBottomSheet() {
             },
             sheetState = modalBottomSheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
-            containerColor = AppColors.CONTAINER_MEDIUM
+            containerColor = AppTheme.ContainerMedium
         ) {
             LazyColumn(
                 modifier = Modifier.defaultMinSize(minHeight = 400.dp)

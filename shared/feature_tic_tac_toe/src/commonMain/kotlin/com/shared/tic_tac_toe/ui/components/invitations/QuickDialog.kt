@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -39,7 +39,7 @@ fun QuickDialog(
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = AppColors.CONTAINER),
+            colors = CardDefaults.cardColors(containerColor = AppTheme.Container),
             shape = RoundedCornerShape(20.dp)
         ) {
             Column(

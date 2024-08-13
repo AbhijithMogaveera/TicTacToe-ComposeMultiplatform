@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ChipDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import arrow.core.None
-import com.shared.compose_foundation.AppColors
+import com.shared.compose_foundation.AppTheme
 import com.shared.tic_tac_toe.domain.Participant
 import com.shared.tic_tac_toe.domain.viewmodels.TicTacToeViewModel
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +62,7 @@ internal fun ChoosePlayer(
     }
     Column {
         Column(
-            modifier = Modifier.background(color = AppColors.CONTAINER)
+            modifier = Modifier.background(color = AppTheme.Container)
         ) {
             Row (
                 verticalAlignment = Alignment.CenterVertically
@@ -114,7 +114,8 @@ internal fun ChoosePlayer(
                                 label = {
                                     Text(if (it.isRequestingToPlay) "Accept" else "Play")
                                 },
-                                shape = CircleShape
+                                shape = CircleShape,
+                                colors = AppTheme.DefaultAssistChipColor
                             )
                         }
                     )

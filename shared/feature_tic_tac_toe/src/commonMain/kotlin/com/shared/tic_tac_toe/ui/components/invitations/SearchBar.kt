@@ -12,6 +12,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.shared.compose_foundation.AppTheme
 import com.shared.tic_tac_toe.ui.components.borderColor
 
 @Composable
@@ -33,9 +34,6 @@ fun SearchBar(
         placeholder = {
             Text("Your friend name...")
         },
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = borderColor,
-            unfocusedIndicatorColor = borderColor
-        )
+        colors = AppTheme.defaultTextFieldColors,
     )
 }

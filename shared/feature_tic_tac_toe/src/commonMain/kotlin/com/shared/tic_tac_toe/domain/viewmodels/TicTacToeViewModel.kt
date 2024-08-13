@@ -22,7 +22,7 @@ import com.shared.tic_tac_toe.domain.useCases.UseCaseRespondToPlayWithMeRequest
 import com.shared.tic_tac_toe.domain.useCases.UseCaseRevokePlayRequest
 import com.shared.tic_tac_toe.domain.useCases.UseCaseStopGame
 import com.shared.tic_tac_toe.domain.useCases.UseCaseTapTile
-import com.shared.profile.domain.use_case.UseCaseGetProfileDetails
+import com.shared.feature_profile.domain.use_case.UseCaseGetProfileDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -230,8 +230,7 @@ internal object TicTacToeViewModel : ViewModel(), KoinComponent {
                         lastAskToPlayReqID = null
                     }
 
-                    GameState.PlayerLostAboutToEndInOneMinute -> {
-                    }
+                    GameState.PlayerLostAboutToEndInOneMinute -> {}
 
                     GameState.End -> {
                         val isOpponentQuits = (
